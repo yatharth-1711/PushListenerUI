@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
+
+namespace MeterReader.NicConfiguration.Enum
+{
+    public enum NICNetworkMode
+    {
+        [XmlEnum("0")]
+        Networ_2G = 0,
+        [XmlEnum("1")]
+        Networ_3G = 1,
+        [XmlEnum("2")]
+        Networ_Auto = 2,
+        [XmlEnum("3")]
+        Networ_4G = 3,
+        [XmlEnum("4")]
+        Networ_NBIoT = 4
+    }
+}

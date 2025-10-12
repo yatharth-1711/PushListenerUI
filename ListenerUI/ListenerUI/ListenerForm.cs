@@ -16,7 +16,6 @@ namespace ListenerUI
         {
             InitializeComponent();
             InitializeDynamicProfiles();
-            HookButtonEvents();
         }
 
         private void InitializeDynamicProfiles()
@@ -71,14 +70,6 @@ namespace ListenerUI
             }
         }
 
-        private void HookButtonEvents()
-        {
-            btnStartListener.Click += (s, e) => AppendLog("Listener started.", Color.LightGreen);
-            btnStopListener.Click += (s, e) => AppendLog("Listener stopped.", Color.Red);
-            btnClearLogs.Click += (s, e) => rtbLogs.Clear();
-            btnSaveData.Click += (s, e) => AppendLog("Data saved successfully.", Color.LightBlue);
-        }
-
         // Append log with timestamp + color
         public void AppendLog(string message, Color color)
         {
@@ -94,6 +85,21 @@ namespace ListenerUI
             rtbLogs.ScrollToCaret();
         }
 
-        
+        private void btnStartListener_Click(object sender, EventArgs e)
+        {
+            AppendLog("Listener started.", Color.LightGreen);
+        }
+        private void btnStopListener_Click(object sender, EventArgs e)
+        {
+            AppendLog("Listener stopped.", Color.Red);
+        }
+        private void btnClearLogs_Click(object sender, EventArgs e)
+        {
+            rtbLogs.Clear();
+        }
+        private void btnSaveData_Click(object sender, EventArgs e)
+        {
+            AppendLog("Data saved successfully.", Color.LightBlue);
+        }
     }
 }

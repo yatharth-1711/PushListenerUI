@@ -1,0 +1,126 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace MeterReader.NicConfiguration
+{
+    public class NicConfigIDs
+    {
+        #region Properties
+        public static Dictionary<int, string> refIds { get; } = new Dictionary<int, string>();
+        public static Dictionary<int, string> currentNicIds { get; set; } = new Dictionary<int, string>();
+        #endregion
+
+        #region Constructor
+        public NicConfigIDs() { }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Get the all the refIds
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<int, string> GetRefIds() { return refIds; }
+        /// <summary>
+        /// Get the all the currentNicIds
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<int, string> GetCurrentIds() { return currentNicIds; }
+
+        /// <summary>
+        /// Clear all existing Ids in currentNicIds and insert the new ids from passed data.
+        /// </summary>
+        /// <param name="IdsArrayData"> It should be DLMS Array type data in HEX format</param>
+        public void AssignAllCurrentIds(string IdsArrayData)
+        {
+            IdsArrayData = IdsArrayData.Trim().Replace(" ", "");
+            if (IdsArrayData.Substring(2, 2) == "00")
+                return;
+            currentNicIds.Clear();
+            string[] splittedIds = Regex.Split(IdsArrayData, "020211");
+            for (int i = 1; i < splittedIds.Length; i++)
+            {
+                currentNicIds.Add(int.Parse(splittedIds[i].Substring(0, 2), NumberStyles.HexNumber),
+                    splittedIds[i].Substring(6));
+            }
+        }
+
+        /// <summary>
+        /// If passed id contains then update the value else add as new id in currentMicIds
+        /// </summary>
+        /// <param name="idsToUpdate">If should be key value pair of (id in int, value in HEX String)</param>
+        public void UpdateSelectedIds(Dictionary<int, string> idsToUpdate)
+        {
+            foreach (var selectedId in idsToUpdate)
+            {
+                if (!currentNicIds.ContainsKey(selectedId.Key))
+                {
+                    currentNicIds[selectedId.Key] = selectedId.Value;
+                }
+                else
+                {
+                    currentNicIds.Add(selectedId.Key, selectedId.Value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// If IdsArray not passed then it will make Pkt of all ids available in currentNicIds else make Pkt of passed IdsArray.
+        /// </summary>
+        /// <param name="notSet">This provide which Ids not available in currentNicIds for set.</param>
+        /// <param name="IdsArray">Int Array of ids which you want to set. </param>
+        /// <returns>Set data string in HEX format</returns>
+        public string MakeIdsPkt(out List<int> notSet, int[] IdsArray = null)
+        {
+            notSet = new List<int>();
+            StringBuilder sb = new StringBuilder();
+            sb.Append("01");
+            if (IdsArray == null)
+            {
+                sb.Append(currentNicIds.Count.ToString("X2"));
+                foreach (var id in currentNicIds)
+                {
+                    sb.Append($"020211{id.Key}09{(id.Value.Length / 2).ToString("X2")}{id.Value}");
+                }
+            }
+            else
+            {
+                int idsCount = IdsArray.Length;
+                StringBuilder sb2 = new StringBuilder();
+                foreach (int id in IdsArray)
+                {
+                    if (currentNicIds.ContainsKey(id))
+                    {
+                        string hexValue = currentNicIds.FirstOrDefault(x => x.Key == id).Value;
+                        sb2.Append($"020211{id.ToString("X2")}09{(hexValue.Length / 2).ToString("X2")}{hexValue}");
+                    }
+                    else
+                    {
+                        notSet.Add(id);
+                    }
+                }
+                if (notSet.Count > 0)
+                {
+                    idsCount = idsCount - notSet.Count;
+                }
+                sb.Append(idsCount.ToString("X2"));
+                sb.Append(sb2.ToString());
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Clear All currentNicIds
+        /// </summary>
+        public void ClearCurrentNicIds()
+        {
+            currentNicIds.Clear();
+        }
+        #endregion
+    }
+}

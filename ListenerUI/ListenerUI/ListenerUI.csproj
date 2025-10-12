@@ -33,8 +33,108 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AesLib">
+      <HintPath>..\..\..\..\Indali on SVN\MeterComm\Lib\AesLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=8.2.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.8.2.1\lib\net462\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.Interfaces, Version=8.1.0.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.Interfaces.8.1.0\lib\net462\EPPlus.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.Common, Version=8.4.2503.602, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.Common.8.4.2503.602\lib\net462\Gurux.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.DLMS, Version=9.0.2508.2201, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.DLMS.9.0.2508.2201\lib\net472\Gurux.DLMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.DLMS.AMI.Messages, Version=8.1.2302.601, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.DLMS.AMI.Messages.8.1.2302.601\lib\net462\Gurux.DLMS.AMI.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.DLMS.AMI.UI, Version=8.1.2302.601, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.DLMS.AMI.UI.8.1.2302.601\lib\net462\Gurux.DLMS.AMI.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.DLMS.UI, Version=9.0.2508.2701, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.DLMS.UI.9.0.2508.2701\lib\portable-win+net40\Gurux.DLMS.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.Net, Version=8.4.2503.1001, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.Net.8.4.2503.1001\lib\net462\Gurux.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.Serial, Version=8.4.2503.603, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.Serial.8.4.2503.603\lib\net462\Gurux.Serial.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.Service, Version=1.1.2109.3001, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.Service.1.1.2109.3001\lib\net46\Gurux.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurux.Terminal, Version=8.1.2109.2401, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gurux.Terminal.8.1.2109.2401\lib\net46\Gurux.Terminal.dll</HintPath>
+    </Reference>
+    <Reference Include="ISymWrapper" />
+    <Reference Include="log4net, Version=3.2.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.3.2.0\lib\net462\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.3.0.1\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=9.0.0.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.9.0.2\lib\net462\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Formats.Nrbf, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Formats.Nrbf.9.0.2\lib\net462\System.Formats.Nrbf.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Ports, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Ports.6.0.0\lib\net461\System.IO.Ports.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=9.0.0.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.9.0.2\lib\net462\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Resources.Extensions, Version=9.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Resources.Extensions.9.0.2\lib\net462\System.Resources.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Xml, Version=8.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Xml.8.0.2\lib\net462\System.Security.Cryptography.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +146,65 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DLMSNetSerialComunication\AesGcmParameter.cs" />
+    <Compile Include="DLMSNetSerialComunication\DLMSAssociationLN.cs" />
+    <Compile Include="DLMSNetSerialComunication\GXCommonNotDefinedMethods.cs" />
+    <Compile Include="DLMSNetSerialComunication\GXDLMSCiphering.cs" />
+    <Compile Include="DLMSNetSerialComunication\GXDLMSCipheringStream.cs" />
+    <Compile Include="DLMSNetSerialComunication\NetworkHelper.cs" />
+    <Compile Include="DLMSNetSerialComunication\SerialComm.cs" />
+    <Compile Include="DLMSNetSerialComunication\TSTCommon.cs" />
+    <Compile Include="DLMSNetSerialComunication\WrapperComm.cs" />
+    <Compile Include="DLMSNetSerialComunication\WrapperInfo.cs" />
+    <Compile Include="DLMS\CommonHelper.cs" />
+    <Compile Include="DLMS\Constants.cs" />
+    <Compile Include="DLMS\DLMSClass.cs" />
+    <Compile Include="DLMS\DLMSComm.cs" />
+    <Compile Include="DLMS\DLMSInfo.cs" />
+    <Compile Include="DLMS\MeterSerialCommunication.cs" />
+    <Compile Include="HelperClasses\CloneableDictionary.cs" />
+    <Compile Include="HelperClasses\DataTableOperations.cs" />
+    <Compile Include="HelperClasses\DLMSParser.cs" />
+    <Compile Include="HelperClasses\MeterIdentity.cs" />
+    <Compile Include="HelperClasses\ProfileGenericInfo.cs" />
+    <Compile Include="HelperClasses\ProfileSheetConfiguration.cs" />
+    <Compile Include="HelperClasses\PushPacketManager.cs" />
+    <Compile Include="HelperClasses\PushSetupInfo.cs" />
+    <Compile Include="HelperClasses\SetGetFromMeter.cs" />
+    <Compile Include="HelperClasses\TCPListener.cs" />
+    <Compile Include="HelperClasses\TCPTestNotifier.cs" />
+    <Compile Include="HelperClasses\TestConfiguration.cs" />
+    <Compile Include="HelperClasses\TestLogService .cs" />
+    <Compile Include="HelperClasses\TestStopWatch.cs" />
+    <Compile Include="HelperClasses\WrapperParser.cs" />
+    <Compile Include="interfaces\IDlmsTest.cs" />
+    <Compile Include="interfaces\ITestLogger.cs" />
+    <Compile Include="manufacturerconfigurableparameters\ManufacturerConfigParameterCollection.cs" />
+    <Compile Include="manufacturerconfigurableparameters\ManufacturerParameterInfo.cs" />
+    <Compile Include="manufacturerconfigurableparameters\ManufConfigParamHelper.cs" />
+    <Compile Include="nicconfiguration\Enum\FOTAEnumInfo.cs" />
+    <Compile Include="nicconfiguration\Enum\MODULEFOTAStatus.cs" />
+    <Compile Include="nicconfiguration\Enum\NICAPNProtocol.cs" />
+    <Compile Include="nicconfiguration\Enum\NICDNSConfiguration.cs" />
+    <Compile Include="nicconfiguration\Enum\NICFOTAStatus.cs" />
+    <Compile Include="nicconfiguration\Enum\NICIMSFeature.cs" />
+    <Compile Include="nicconfiguration\Enum\NICKeepAliveFeature.cs" />
+    <Compile Include="nicconfiguration\Enum\NICMasterNumberEnableDisableForSMS.cs" />
+    <Compile Include="nicconfiguration\Enum\NICNetworkMode.cs" />
+    <Compile Include="nicconfiguration\Enum\NICNetworkTypeConfiguration.cs" />
+    <Compile Include="nicconfiguration\Enum\NICNSConfiguration.cs" />
+    <Compile Include="nicconfiguration\Enum\NICPowerOutageAlertPush.cs" />
+    <Compile Include="nicconfiguration\Enum\NICPullWithPushFeature.cs" />
+    <Compile Include="nicconfiguration\Enum\NICPushDataOrAlertLink.cs" />
+    <Compile Include="nicconfiguration\Enum\NICPushDataOrAlertSeparatePortFeature.cs" />
+    <Compile Include="nicconfiguration\Enum\NICReset.cs" />
+    <Compile Include="nicconfiguration\Enum\NICSelfAdaptaion.cs" />
+    <Compile Include="nicconfiguration\Enum\NICServerMode.cs" />
+    <Compile Include="nicconfiguration\Enum\NICSimCardSelection.cs" />
+    <Compile Include="nicconfiguration\FOTAHelper.cs" />
+    <Compile Include="nicconfiguration\FOTAInfo.cs" />
+    <Compile Include="nicconfiguration\NicConfigIDs.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="ListenerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,8 +217,17 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="objects\CountType.cs" />
+    <Compile Include="objects\GXDLMSTranslatorStructure.cs" />
+    <Compile Include="objects\SecuritySuite.cs" />
+    <Compile Include="objects\Standard.cs" />
+    <Compile Include="profilegeneric\DLMSProfileGeneric.cs" />
+    <Compile Include="profilegeneric\DLMSProfileGenericCollection.cs" />
+    <Compile Include="profilegeneric\DLMSProfileGenericHelper.cs" />
+    <Compile Include="profilegeneric\DLMSProfileGenericObisCodes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
     <EmbeddedResource Include="ListenerForm.resx">
       <DependentUpon>ListenerForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -75,6 +243,67 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="manufacturerconfigurableparameters\.svn\entries" />
+    <None Include="manufacturerconfigurableparameters\.svn\format" />
+    <None Include="manufacturerconfigurableparameters\.svn\pristine\2e\2ed5fee8ca44f5cd5fbd39a4e96de0c023d72d7c.svn-base" />
+    <None Include="manufacturerconfigurableparameters\.svn\pristine\b6\b623e164e265baa0d230393fe8abd898b8c05680.svn-base" />
+    <None Include="manufacturerconfigurableparameters\.svn\pristine\d9\d9ee1595e2e2eef4c3e663c951ee8dc9373f0f3e.svn-base" />
+    <None Include="manufacturerconfigurableparameters\.svn\wc.db" />
+    <None Include="manufacturerconfigurableparameters\.svn\wc.db-journal" />
+    <None Include="nicconfiguration\.svn\entries" />
+    <None Include="nicconfiguration\.svn\format" />
+    <None Include="nicconfiguration\.svn\pristine\0c\0c49fcbf1c915d15f9e4cf101211bd7924cdcd79.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\16\16e393bc50a7a13514abe98c76969d48e372828f.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\18\18efd96dcc89e135da963ecb901f5649508a6096.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\1e\1ea0705b2ba73bef55ac91f4b212a622ea867039.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\1f\1f2971598c7c499cfa90294455dd4e0cf010a632.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\21\218550bf394291bc34d1d1cc77fc5efa512106c2.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\31\31decb543de17c5d13f7012fd33fb36bb7d1c71a.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\34\347bf652d2286e1bb190e565a060225e69aebf00.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\35\35e9c1c30614125697592db98af471d9708e143d.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\36\3650cf3065cabb431a85d41ec9f6b08dc2019a60.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\37\3758fb4a9ec930a939216f865aa7e3220dcf3d25.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\37\37da8e01d15c45b46c03b4cf62b6f17fa49cd7ce.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\39\393ff3beb9aead3a7e28169be8d38d289cd7a56c.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\4f\4fafb68935bf3430ad4b4180a5e5328609cff03e.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\72\72b8fabab1628f794bc3e1c4088418807eb6a870.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\74\7420edaa6eccadb6cf084a9d561b0b0e0e404f39.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\88\88026f748b3311cc365e04708820df9efd4960aa.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\8b\8bb5fc7f32630cacda54c87069c601229e650f76.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\8c\8ca421315e1701d1bdfb9c37263f410b140917c1.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\90\90dd1b2c355fed26b28cb569593ab6e2cc37a672.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\92\926f586d3c749e3e4e80fdc607c36a63ae14b43e.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\95\95cce54691519d7c84a3f0a4f75ff6c597c43bc5.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\97\97867689da0bd4ff7d1a17c9c371fcbd618692c2.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\9c\9c8fc07e77088f0a1f8092ebe34c0fcf6af33b49.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\9f\9fb6a5ec039d62421f22e12f81752bf503a1bb81.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\aa\aa646c0dc8223d3967d10f0e7da3b2b054326ba4.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\b2\b2190efa0dd71caa16ed3fd5854340a7501614bd.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\b6\b6e04cab349cc81d32206bb8a80dad5f5436ed71.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\bd\bd91ed2fd7834c0bc31c2e441abd5806584335aa.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\c2\c2192eb7ad9ce18c586aa7ca6c8aa376e0f9b299.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\c5\c551aa89880022cdad3ec4fb76bfb1c0138c42d0.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\ce\ce31361a3301da56754c2435940d851ac88b5e42.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\e1\e1baffad5dd6dd159caf1dbd4a53733b4793fdd7.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\e4\e4e013446b47dd722cfd2b77b7e37afeade8a6bb.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\f0\f0960c83253b28bc6d165f088e5cf3d84d5c05d1.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\f7\f74a98d9bdff428afa424e09e5013cb39fbd0eaf.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\f9\f97fabc4e6ab9a074150b7e7edf41f3d5b0d8f20.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\fb\fbe3667d52b8d848f59daa89522f89c84c018dac.svn-base" />
+    <None Include="nicconfiguration\.svn\pristine\fe\fe56c4b4dfad94da19c44203588b2579bcdf4c28.svn-base" />
+    <None Include="nicconfiguration\.svn\wc.db" />
+    <None Include="nicconfiguration\.svn\wc.db-journal" />
+    <None Include="packages.config" />
+    <None Include="profilegeneric\.svn\entries" />
+    <None Include="profilegeneric\.svn\format" />
+    <None Include="profilegeneric\.svn\pristine\08\0889dff6c2f6ba6b1efaee8c9a242efa160cf289.svn-base" />
+    <None Include="profilegeneric\.svn\pristine\1e\1e69367dc1760a8c4e83ea91e2a670ac7bf9a0f7.svn-base" />
+    <None Include="profilegeneric\.svn\pristine\36\36695373ea4360d69a53cef0200f380cd2e3ec90.svn-base" />
+    <None Include="profilegeneric\.svn\pristine\38\3833eee6a60b9b028ba10ce46df84d241705c67e.svn-base" />
+    <None Include="profilegeneric\.svn\pristine\89\89372ba17ab66aef8cdb8d569c46f5344c8d7077.svn-base" />
+    <None Include="profilegeneric\.svn\pristine\bc\bc64e88793cae9b98bcc2f3cb37c8be48eab801d.svn-base" />
+    <None Include="profilegeneric\.svn\wc.db" />
+    <None Include="profilegeneric\.svn\wc.db-journal" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -87,6 +316,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="profilegeneric\ProfileGeneric.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="manufacturerconfigurableparameters\.svn\tmp\" />
+    <Folder Include="nicconfiguration\.svn\tmp\" />
+    <Folder Include="profilegeneric\.svn\tmp\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

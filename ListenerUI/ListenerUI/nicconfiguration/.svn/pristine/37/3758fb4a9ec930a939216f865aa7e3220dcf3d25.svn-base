@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MeterReader.NicConfiguration
+{
+    public class FOTAInfo
+    {
+        public string FWFileName { get; set; }
+        public string TestFWFileName { get; set; }
+        public string FTPUserName { get; set; }
+        public string FTPAddress { get; set; }
+        public string FTPPassword { get; set; }
+        public int FTPPort { get; set; }
+        public string FTPTransactionMode { get; set; }
+        public string FileFW { get; set; }
+        public string TestFileFW { get; set; }
+    }
+    public class FOTARoot
+    {
+        public FOTAInfo NICFOTA { get; set; }
+        public FOTAInfo MODULEFOTA { get; set; }
+    }
+}
