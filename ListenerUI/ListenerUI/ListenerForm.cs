@@ -126,5 +126,10 @@ namespace ListenerUI
                 btnPushprofileSettings.ForeColor = Color.Black;
             }
         }
+
+        private void btnCommSettings_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
