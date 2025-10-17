@@ -69,11 +69,11 @@ namespace MeterComm.DLMS
         /// <summary>
         ///  Window Size Tx
         /// </summary>
-        public static string WSTx = "";
+        public static string WSTx = "1";
         /// <summary>
         ///  Window Size Rx
         /// </summary>
-        public static string WSRx = "";
+        public static string WSRx = "1";
         /// <summary>
         ///  Information Field Tx
         ///  Default
@@ -119,7 +119,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// System Title
         /// </summary>
-        public static string TxtSysT = "";
+        public static string TxtSysT = "GOE00000";
 
         /// <summary>
         /// Default Propose all Services "62FEDF"

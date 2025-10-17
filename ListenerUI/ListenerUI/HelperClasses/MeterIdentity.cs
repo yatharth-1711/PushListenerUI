@@ -56,7 +56,7 @@ namespace MeterReader.TestHelperClasses
         public static string SIMHostName = "";
         #endregion
 
-        /*public static bool AssignMeterDetails(TestConfiguration _testConfig, CancellationToken token)
+        public static bool AssignMeterDetails(TestConfiguration _testConfig, CancellationToken token)
         {
             bool result = true;
             bool SignOnDLMSStatus = false;
@@ -123,7 +123,7 @@ namespace MeterReader.TestHelperClasses
                     {
                         FirmwareVersion = Utilities.GetCompanyName(meterRatingData);
                         string temphexString = FirmwareVersion.Substring(6, FirmwareVersion.Length - 6);
-                        temphexString = MeterForm.DecimalToHexadimalPostTab(temphexString);
+                        temphexString = DecimalToHexadimalPostTab(temphexString);
                         meterDetails = Utilities.ConvertMeterType(int.Parse(temphexString, NumberStyles.HexNumber));
                     }
                     else
@@ -208,7 +208,13 @@ namespace MeterReader.TestHelperClasses
                 SetGetFromMeter.Wait(_testConfig.DISCToNDMTimeout);
             }
             return result;
-        }*/
+        }
+        public static string DecimalToHexadimalPostTab(string _inputString)
+        {
+            string temp = string.Empty;
+            temp = Convert.ToInt64(_inputString).ToString("X");
+            return temp;
+        }
         public static void PrintIdentificationToSummary(string resultFile)
         {
             File.AppendAllText(resultFile, $"******************" + Environment.NewLine);

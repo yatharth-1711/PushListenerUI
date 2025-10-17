@@ -31,6 +31,7 @@ using meterReader.AesGcmParameter;
 using Indali.Common;
 using System.Runtime.InteropServices.ComTypes;
 using System.IO;
+using ListenerUI.HelperClasses;
 
 
 namespace MeterReader.DLMSNetSerialCommunication
@@ -101,7 +102,7 @@ namespace MeterReader.DLMSNetSerialCommunication
             // Configure Ciphering
             dlmsClient.Ciphering.SystemTitle = GXCommon.GetAsByteArray(DLMSInfo.TxtSysT);
             dlmsClient.Ciphering.Security = Gurux.DLMS.Enums.Security.AuthenticationEncryption;
-            dlmsClient.Ciphering.BlockCipherKey = GXCommon.GetAsByteArray(DLMSInfo.TxtEK); ;
+            dlmsClient.Ciphering.BlockCipherKey = GXCommon.GetAsByteArray(DLMSInfo.TxtEK);
             dlmsClient.Ciphering.AuthenticationKey = GXCommon.GetAsByteArray(DLMSInfo.TxtAK);
             listenerThread = new Thread(StartServer);
             listenerThread.IsBackground = true;
@@ -213,9 +214,9 @@ namespace MeterReader.DLMSNetSerialCommunication
                                 LogControlEventHandler($"     Packet Generated in meter: {packetGenerateTime.ToString("dd/MM/yyyy hh:mm:ss tt")}\t\tPacket Sent by meter: {packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}", Color.Red);
                             }
                             //Line Traffic
-                            LineTrafficControlEventHandler($"\n     Push Packet Received:  {typeOfData} {timeStamp}", "Send");
-                            LineTrafficControlEventHandler($"     CIPHERED DATA", "Send");
-                            LineTrafficControlEventHandler($"     {recEncryptedHex} {timeStamp}", "Receive");
+                            //LineTrafficControlEventHandler($"\n     Push Packet Received:  {typeOfData} {timeStamp}", "Send");
+                            //LineTrafficControlEventHandler($"     CIPHERED DATA", "Send");
+                            //LineTrafficControlEventHandler($"     {recEncryptedHex} {timeStamp}", "Receive");
                             string decodedXml = DecodePushDataToXML(receivedBytes.ToArray(), receivedBytes.Count);
                             ListenerDataTable.Rows.Add($"{timeStamp}-{typeOfData}-{DeviceID}", packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt"), recEncryptedHex, decodedHex, DecryptedData, decodedXml);
                             ListenerDataTable.AcceptChanges();

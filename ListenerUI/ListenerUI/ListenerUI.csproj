@@ -189,6 +189,12 @@
     <Compile Include="manufacturerconfigurableparameters\ManufacturerConfigParameterCollection.cs" />
     <Compile Include="manufacturerconfigurableparameters\ManufacturerParameterInfo.cs" />
     <Compile Include="manufacturerconfigurableparameters\ManufConfigParamHelper.cs" />
+    <Compile Include="MeterSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MeterSettings.Designer.cs">
+      <DependentUpon>MeterSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="nicconfiguration\Enum\FOTAEnumInfo.cs" />
     <Compile Include="nicconfiguration\Enum\MODULEFOTAStatus.cs" />
     <Compile Include="nicconfiguration\Enum\NICAPNProtocol.cs" />
@@ -240,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MeterSettings.resx">
+      <DependentUpon>MeterSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

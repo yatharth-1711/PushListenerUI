@@ -37,7 +37,7 @@ using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace MeterReader.TestHelperClasses
+namespace ListenerUI.HelperClasses
 {
     public class PushPacketManager
     {

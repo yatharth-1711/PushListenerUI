@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace MeterReader.TestHelperClasses
+namespace ListenerUI.HelperClasses
 {
     public class TestLogService : ITestLogger
     {
