@@ -19,6 +19,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace ListenerUI
@@ -39,7 +40,15 @@ namespace ListenerUI
                                                                                               //Delegate for Execution traffic messages 
         public delegate void AppendColoredTextControl(string message, Color color, bool isBold = false);
         public static event AppendColoredTextControl AppendColoredTextControlEventHandler = delegate { }; // add empty delegate!;
-
+        private readonly ConcurrentQueue<(string Message, Color Color, bool IsBold)> _logBuffer2 = new ConcurrentQueue<(string, Color, bool)>();
+        private readonly Font BoldFont11 = new Font("Courier New", 11f, FontStyle.Bold);
+        private readonly Font RegularFont11 = new Font("Courier New", 11f, FontStyle.Regular);
+        private const int MaxLines = 1000;
+        private const int TrimLines = 200;
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        private const int EM_GETFIRSTVISIBLELINE = 0xCE;
+        private readonly System.Timers.Timer _flushTimer2;
         #endregion
 
         private TestLogService logService;
@@ -52,15 +61,21 @@ namespace ListenerUI
         private DataTable receivedPushData = new DataTable();
         public DataTable finalDataTable = new DataTable();
         private int lastPushRowCount = 0;
-        private readonly ConcurrentQueue<(string Message, Color Color, bool IsBold)> _logBuffer2 = new ConcurrentQueue<(string, Color, bool)>();
-
         public ListenerForm()
         {
             InitializeComponent();
             InitializeLoggerAndConfigurations();
             PushPacketManager.DeviceID = "GOE12043714";
             finalDataTable.RowChanged += FinalDataTable_RowChanged;
+            // Bind log event
+            TestLogService.AppendColoredTextControlEventHandler += TestLogService_AppendColoredTextControlEventHandler;
+
+            // Start background flush timer
+            _flushTimer2 = new System.Timers.Timer(500); // flush every 500ms
+            _flushTimer2.Elapsed += FlushLogBuffer2;
+            _flushTimer2.Start();
         }
+
         private void InitializeLoggerAndConfigurations()
         {
             logService = new TestLogService(rtbPushLogs);
@@ -68,7 +83,6 @@ namespace ListenerUI
         }
         private void btnStartListener_Click(object sender, EventArgs e)
         {
-            TestLogService.AppendColoredTextControlEventHandler += TestLogService_AppendColoredTextControlEventHandler;
             logService = new TestLogService(rtbPushLogs);
             logBox = rtbPushLogs;
             DLMSComm dlmsReader = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
@@ -78,7 +92,6 @@ namespace ListenerUI
                 logService.LogMessage(rtbPushLogs, "Sign ON Failure", Color.Red, true);
             }
             logService.LogMessage(rtbPushLogs, "Meter Sign On Successful", Color.Green);
-            //rtbPushLogs.AppendText("Meter Sign On: Successful");
         }
         private void btnStopListener_Click(object sender, EventArgs e)
         {
@@ -219,6 +232,64 @@ namespace ListenerUI
 
                 btnRawData.Text = "Raw Data View";
             }
+        }
+        private void FlushLogBuffer2(object sender, ElapsedEventArgs e)
+        {
+            if (IsDisposed) return;
+
+            if (_logBuffer2.IsEmpty) return;
+
+            BeginInvoke(new Action(() =>
+            {
+                // Check if user is at bottom before appending
+                bool atBottom = false;
+                int visibleLines = rtbPushLogs.ClientSize.Height / rtbPushLogs.Font.Height;
+                int firstVisibleLine = SendMessage(rtbPushLogs.Handle, EM_GETFIRSTVISIBLELINE, 0, 0);
+                int lastVisibleLine = firstVisibleLine + visibleLines;
+                atBottom = (lastVisibleLine >= rtbPushLogs.Lines.Length - 1);
+
+                // Stop repainting until all logs are appended
+                rtbPushLogs.SuspendLayout();
+
+                while (_logBuffer2.TryDequeue(out var log))
+                {
+                    rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
+                    rtbPushLogs.SelectionLength = 0;
+
+                    // Set font (cached)
+                    rtbPushLogs.SelectionFont = log.IsBold ? BoldFont11 : RegularFont11;
+
+                    // Set color
+                    rtbPushLogs.SelectionColor = log.Color;
+
+                    //// Append text
+                    //rtbPushLogs.AppendText(log.Message);
+                    // Append text with style preserved
+                    rtbPushLogs.SelectedText = log.Message;
+                }
+
+                //// Reset to default
+                //rtbPushLogs.SelectionColor = rtbPushLogs.ForeColor;
+
+
+                // Trim old lines if needed
+                if (rtbPushLogs.Lines.Length > MaxLines)
+                {
+                    int cutOffIndex = rtbPushLogs.GetFirstCharIndexFromLine(TrimLines);
+                    rtbPushLogs.Select(0, cutOffIndex);
+                    rtbPushLogs.SelectedText = string.Empty;
+                }
+
+                // If user was already at bottom, auto-scroll
+                if (atBottom)
+                {
+                    rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
+                    rtbPushLogs.ScrollToCaret();
+                }
+
+                // Resume painting
+                rtbPushLogs.ResumeLayout();
+            }));
         }
         private void TestLogService_AppendColoredTextControlEventHandler(string message, Color color, bool isBold = false)
         {
