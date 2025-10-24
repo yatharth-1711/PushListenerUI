@@ -17,9 +17,9 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rtbPushLogs = new System.Windows.Forms.RichTextBox();
@@ -46,6 +46,10 @@
             this.pnlProfileSettings = new System.Windows.Forms.Panel();
             this.grpProfileConfig = new System.Windows.Forms.GroupBox();
             this.tblProfileSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.cbTestProfileType = new System.Windows.Forms.ComboBox();
+            this.lblProfile = new System.Windows.Forms.Label();
+            this.btnSet_PS_AS = new System.Windows.Forms.Button();
+            this.btnGet_PS_AS = new System.Windows.Forms.Button();
             this.txt_Random_CB = new System.Windows.Forms.TextBox();
             this.txt_Random_LS = new System.Windows.Forms.TextBox();
             this.txt_Random_DE = new System.Windows.Forms.TextBox();
@@ -99,14 +103,14 @@
             this.tblMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.Controls.Add(this.splitContainer1, 0, 0);
             this.tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblMain.Location = new System.Drawing.Point(0, 351);
+            this.tblMain.Location = new System.Drawing.Point(0, 391);
             this.tblMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tblMain.Name = "tblMain";
             this.tblMain.RowCount = 2;
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblMain.Size = new System.Drawing.Size(1693, 571);
+            this.tblMain.Size = new System.Drawing.Size(1693, 531);
             this.tblMain.TabIndex = 0;
             // 
             // splitContainer1
@@ -125,7 +129,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.PanelProfileandRawData);
             this.splitContainer1.Panel2MinSize = 50;
-            this.splitContainer1.Size = new System.Drawing.Size(1687, 521);
+            this.splitContainer1.Size = new System.Drawing.Size(1687, 481);
             this.splitContainer1.SplitterDistance = 823;
             this.splitContainer1.TabIndex = 5;
             // 
@@ -138,7 +142,7 @@
             this.rtbPushLogs.Margin = new System.Windows.Forms.Padding(0);
             this.rtbPushLogs.Name = "rtbPushLogs";
             this.rtbPushLogs.ReadOnly = true;
-            this.rtbPushLogs.Size = new System.Drawing.Size(823, 521);
+            this.rtbPushLogs.Size = new System.Drawing.Size(823, 481);
             this.rtbPushLogs.TabIndex = 4;
             this.rtbPushLogs.Text = "";
             this.rtbPushLogs.WordWrap = false;
@@ -151,7 +155,7 @@
             this.PanelProfileandRawData.Location = new System.Drawing.Point(0, 0);
             this.PanelProfileandRawData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PanelProfileandRawData.Name = "PanelProfileandRawData";
-            this.PanelProfileandRawData.Size = new System.Drawing.Size(860, 521);
+            this.PanelProfileandRawData.Size = new System.Drawing.Size(860, 481);
             this.PanelProfileandRawData.TabIndex = 0;
             // 
             // tabConProfileTabs
@@ -169,7 +173,7 @@
             this.tabConProfileTabs.Margin = new System.Windows.Forms.Padding(0);
             this.tabConProfileTabs.Name = "tabConProfileTabs";
             this.tabConProfileTabs.SelectedIndex = 0;
-            this.tabConProfileTabs.Size = new System.Drawing.Size(860, 521);
+            this.tabConProfileTabs.Size = new System.Drawing.Size(860, 481);
             this.tabConProfileTabs.TabIndex = 0;
             // 
             // tbpInstant
@@ -182,7 +186,7 @@
             this.tbpInstant.Name = "tbpInstant";
             this.tbpInstant.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpInstant.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tbpInstant.Size = new System.Drawing.Size(852, 492);
+            this.tbpInstant.Size = new System.Drawing.Size(852, 452);
             this.tbpInstant.TabIndex = 0;
             this.tbpInstant.Text = "Instant";
             // 
@@ -268,18 +272,18 @@
             // 
             this.dgRawData.AllowUserToAddRows = false;
             this.dgRawData.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightSkyBlue;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgRawData.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.LightSkyBlue;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgRawData.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dgRawData.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dgRawData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgRawData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgRawData.GridColor = System.Drawing.SystemColors.AppWorkspace;
@@ -287,21 +291,21 @@
             this.dgRawData.Margin = new System.Windows.Forms.Padding(0);
             this.dgRawData.Name = "dgRawData";
             this.dgRawData.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.dgRawData.RowHeadersVisible = false;
             this.dgRawData.RowHeadersWidth = 50;
             this.dgRawData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White;
             this.dgRawData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgRawData.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.dgRawData.RowTemplate.Height = 24;
-            this.dgRawData.Size = new System.Drawing.Size(860, 521);
+            this.dgRawData.Size = new System.Drawing.Size(860, 481);
             this.dgRawData.TabIndex = 1;
             // 
             // btnStartListener
@@ -383,7 +387,7 @@
             this.tblHeader.RowCount = 2;
             this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tblHeader.Size = new System.Drawing.Size(1693, 70);
+            this.tblHeader.Size = new System.Drawing.Size(1693, 110);
             this.tblHeader.TabIndex = 9;
             // 
             // flowPanelButtons
@@ -399,7 +403,7 @@
             this.flowPanelButtons.Location = new System.Drawing.Point(0, 34);
             this.flowPanelButtons.Margin = new System.Windows.Forms.Padding(0);
             this.flowPanelButtons.Name = "flowPanelButtons";
-            this.flowPanelButtons.Size = new System.Drawing.Size(1693, 36);
+            this.flowPanelButtons.Size = new System.Drawing.Size(1693, 76);
             this.flowPanelButtons.TabIndex = 5;
             // 
             // btnPushprofileSettings
@@ -432,7 +436,7 @@
             // 
             this.pnlProfileSettings.Controls.Add(this.grpProfileConfig);
             this.pnlProfileSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 70);
+            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 110);
             this.pnlProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlProfileSettings.MaximumSize = new System.Drawing.Size(2000, 281);
             this.pnlProfileSettings.MinimumSize = new System.Drawing.Size(1700, 281);
@@ -458,11 +462,15 @@
             // tblProfileSettings
             // 
             this.tblProfileSettings.ColumnCount = 5;
-            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 255F));
-            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 257F));
-            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblProfileSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tblProfileSettings.Controls.Add(this.cbTestProfileType, 4, 1);
+            this.tblProfileSettings.Controls.Add(this.lblProfile, 4, 0);
+            this.tblProfileSettings.Controls.Add(this.btnSet_PS_AS, 4, 7);
+            this.tblProfileSettings.Controls.Add(this.btnGet_PS_AS, 4, 6);
             this.tblProfileSettings.Controls.Add(this.txt_Random_CB, 3, 7);
             this.tblProfileSettings.Controls.Add(this.txt_Random_LS, 3, 6);
             this.tblProfileSettings.Controls.Add(this.txt_Random_DE, 3, 5);
@@ -511,15 +519,67 @@
             this.tblProfileSettings.Size = new System.Drawing.Size(1694, 254);
             this.tblProfileSettings.TabIndex = 0;
             // 
+            // cbTestProfileType
+            // 
+            this.cbTestProfileType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbTestProfileType.FormattingEnabled = true;
+            this.cbTestProfileType.Items.AddRange(new object[] {
+            "All",
+            "Instant",
+            "Load Survey",
+            "Daily Energy",
+            "Self Registration",
+            "Billing",
+            "Current Bill",
+            "Tamper"});
+            this.cbTestProfileType.Location = new System.Drawing.Point(1355, 34);
+            this.cbTestProfileType.Name = "cbTestProfileType";
+            this.cbTestProfileType.Size = new System.Drawing.Size(336, 31);
+            this.cbTestProfileType.TabIndex = 67;
+            this.cbTestProfileType.SelectedIndexChanged += new System.EventHandler(this.cbTestProfileType_SelectedIndexChanged);
+            // 
+            // lblProfile
+            // 
+            this.lblProfile.AutoSize = true;
+            this.lblProfile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblProfile.Location = new System.Drawing.Point(1355, 0);
+            this.lblProfile.Name = "lblProfile";
+            this.lblProfile.Size = new System.Drawing.Size(336, 31);
+            this.lblProfile.TabIndex = 66;
+            this.lblProfile.Text = "Test Profile";
+            this.lblProfile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnSet_PS_AS
+            // 
+            this.btnSet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSet_PS_AS.Location = new System.Drawing.Point(1355, 220);
+            this.btnSet_PS_AS.Name = "btnSet_PS_AS";
+            this.btnSet_PS_AS.Size = new System.Drawing.Size(336, 31);
+            this.btnSet_PS_AS.TabIndex = 63;
+            this.btnSet_PS_AS.Text = "Set";
+            this.btnSet_PS_AS.UseVisualStyleBackColor = true;
+            this.btnSet_PS_AS.Click += new System.EventHandler(this.btnSet_PS_AS_Click);
+            // 
+            // btnGet_PS_AS
+            // 
+            this.btnGet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnGet_PS_AS.Location = new System.Drawing.Point(1355, 189);
+            this.btnGet_PS_AS.Name = "btnGet_PS_AS";
+            this.btnGet_PS_AS.Size = new System.Drawing.Size(336, 25);
+            this.btnGet_PS_AS.TabIndex = 62;
+            this.btnGet_PS_AS.Text = "Get";
+            this.btnGet_PS_AS.UseVisualStyleBackColor = true;
+            this.btnGet_PS_AS.Click += new System.EventHandler(this.btnGet_PS_AS_Click);
+            // 
             // txt_Random_CB
             // 
             this.txt_Random_CB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_CB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_CB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_CB.Location = new System.Drawing.Point(858, 219);
+            this.txt_Random_CB.Location = new System.Drawing.Point(1017, 219);
             this.txt_Random_CB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_CB.Name = "txt_Random_CB";
-            this.txt_Random_CB.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_CB.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_CB.TabIndex = 55;
             // 
             // txt_Random_LS
@@ -527,10 +587,10 @@
             this.txt_Random_LS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_LS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_LS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_LS.Location = new System.Drawing.Point(858, 188);
+            this.txt_Random_LS.Location = new System.Drawing.Point(1017, 188);
             this.txt_Random_LS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_LS.Name = "txt_Random_LS";
-            this.txt_Random_LS.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_LS.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_LS.TabIndex = 54;
             // 
             // txt_Random_DE
@@ -538,10 +598,10 @@
             this.txt_Random_DE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_DE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_DE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_DE.Location = new System.Drawing.Point(858, 157);
+            this.txt_Random_DE.Location = new System.Drawing.Point(1017, 157);
             this.txt_Random_DE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_DE.Name = "txt_Random_DE";
-            this.txt_Random_DE.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_DE.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_DE.TabIndex = 53;
             // 
             // txt_Random_SR
@@ -549,10 +609,10 @@
             this.txt_Random_SR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_SR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_SR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_SR.Location = new System.Drawing.Point(858, 126);
+            this.txt_Random_SR.Location = new System.Drawing.Point(1017, 126);
             this.txt_Random_SR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_SR.Name = "txt_Random_SR";
-            this.txt_Random_SR.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_SR.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_SR.TabIndex = 52;
             // 
             // txt_Random_Bill
@@ -560,10 +620,10 @@
             this.txt_Random_Bill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Bill.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Bill.Location = new System.Drawing.Point(858, 95);
+            this.txt_Random_Bill.Location = new System.Drawing.Point(1017, 95);
             this.txt_Random_Bill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Bill.Name = "txt_Random_Bill";
-            this.txt_Random_Bill.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_Bill.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_Bill.TabIndex = 51;
             // 
             // txt_Random_Alert
@@ -571,10 +631,10 @@
             this.txt_Random_Alert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Alert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Alert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Alert.Location = new System.Drawing.Point(858, 64);
+            this.txt_Random_Alert.Location = new System.Drawing.Point(1017, 64);
             this.txt_Random_Alert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Alert.Name = "txt_Random_Alert";
-            this.txt_Random_Alert.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_Alert.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_Alert.TabIndex = 50;
             // 
             // txt_Random_Instant
@@ -582,19 +642,19 @@
             this.txt_Random_Instant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Instant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Instant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Instant.Location = new System.Drawing.Point(858, 33);
+            this.txt_Random_Instant.Location = new System.Drawing.Point(1017, 33);
             this.txt_Random_Instant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Instant.Name = "txt_Random_Instant";
-            this.txt_Random_Instant.Size = new System.Drawing.Size(251, 27);
+            this.txt_Random_Instant.Size = new System.Drawing.Size(332, 27);
             this.txt_Random_Instant.TabIndex = 49;
             // 
             // lblRandomHeader
             // 
             this.lblRandomHeader.AutoSize = true;
             this.lblRandomHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRandomHeader.Location = new System.Drawing.Point(858, 0);
+            this.lblRandomHeader.Location = new System.Drawing.Point(1017, 0);
             this.lblRandomHeader.Name = "lblRandomHeader";
-            this.lblRandomHeader.Size = new System.Drawing.Size(251, 31);
+            this.lblRandomHeader.Size = new System.Drawing.Size(332, 31);
             this.lblRandomHeader.TabIndex = 48;
             this.lblRandomHeader.Text = "Randomisation (In Min)";
             this.lblRandomHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -606,7 +666,7 @@
             this.lblCBProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCBProfile.Location = new System.Drawing.Point(3, 217);
             this.lblCBProfile.Name = "lblCBProfile";
-            this.lblCBProfile.Size = new System.Drawing.Size(249, 37);
+            this.lblCBProfile.Size = new System.Drawing.Size(332, 37);
             this.lblCBProfile.TabIndex = 45;
             this.lblCBProfile.Text = "Current Bill Profile";
             this.lblCBProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -616,10 +676,10 @@
             this.txt_CB_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_CB_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_CB_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_CB_DestIP.Location = new System.Drawing.Point(258, 219);
+            this.txt_CB_DestIP.Location = new System.Drawing.Point(341, 219);
             this.txt_CB_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_CB_DestIP.Name = "txt_CB_DestIP";
-            this.txt_CB_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_CB_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_CB_DestIP.TabIndex = 46;
             this.txt_CB_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -630,10 +690,10 @@
             this.cb_CB_Frequency.FormattingEnabled = true;
             this.cb_CB_Frequency.Items.AddRange(new object[] {
             "*/*/* 00:00:00 (Midnight)"});
-            this.cb_CB_Frequency.Location = new System.Drawing.Point(558, 219);
+            this.cb_CB_Frequency.Location = new System.Drawing.Point(679, 219);
             this.cb_CB_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_CB_Frequency.Name = "cb_CB_Frequency";
-            this.cb_CB_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_CB_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_CB_Frequency.TabIndex = 47;
             // 
             // lblInstant
@@ -643,7 +703,7 @@
             this.lblInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInstant.Location = new System.Drawing.Point(3, 31);
             this.lblInstant.Name = "lblInstant";
-            this.lblInstant.Size = new System.Drawing.Size(249, 31);
+            this.lblInstant.Size = new System.Drawing.Size(332, 31);
             this.lblInstant.TabIndex = 39;
             this.lblInstant.Text = "Instant Profile";
             this.lblInstant.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -653,10 +713,10 @@
             this.txt_Instant_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Instant_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Instant_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Instant_DestIP.Location = new System.Drawing.Point(258, 33);
+            this.txt_Instant_DestIP.Location = new System.Drawing.Point(341, 33);
             this.txt_Instant_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Instant_DestIP.Name = "txt_Instant_DestIP";
-            this.txt_Instant_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_Instant_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_Instant_DestIP.TabIndex = 40;
             this.txt_Instant_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -674,10 +734,10 @@
             "8 Hour",
             "12 Hour",
             "24 Hour"});
-            this.cbInstant_Frequency.Location = new System.Drawing.Point(558, 33);
+            this.cbInstant_Frequency.Location = new System.Drawing.Point(679, 33);
             this.cbInstant_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbInstant_Frequency.Name = "cbInstant_Frequency";
-            this.cbInstant_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cbInstant_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cbInstant_Frequency.TabIndex = 41;
             // 
             // lblAlert
@@ -687,7 +747,7 @@
             this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAlert.Location = new System.Drawing.Point(3, 62);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(249, 31);
+            this.lblAlert.Size = new System.Drawing.Size(332, 31);
             this.lblAlert.TabIndex = 36;
             this.lblAlert.Text = "Alert Profile";
             this.lblAlert.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -697,10 +757,10 @@
             this.txt_Alert_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Alert_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Alert_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Alert_DestIP.Location = new System.Drawing.Point(258, 64);
+            this.txt_Alert_DestIP.Location = new System.Drawing.Point(341, 64);
             this.txt_Alert_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Alert_DestIP.Name = "txt_Alert_DestIP";
-            this.txt_Alert_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_Alert_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_Alert_DestIP.TabIndex = 37;
             this.txt_Alert_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -709,10 +769,10 @@
             this.cb_Alert_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cb_Alert_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Alert_Frequency.FormattingEnabled = true;
-            this.cb_Alert_Frequency.Location = new System.Drawing.Point(558, 64);
+            this.cb_Alert_Frequency.Location = new System.Drawing.Point(679, 64);
             this.cb_Alert_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_Alert_Frequency.Name = "cb_Alert_Frequency";
-            this.cb_Alert_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_Alert_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_Alert_Frequency.TabIndex = 38;
             // 
             // lblBillingProfile
@@ -722,7 +782,7 @@
             this.lblBillingProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBillingProfile.Location = new System.Drawing.Point(3, 93);
             this.lblBillingProfile.Name = "lblBillingProfile";
-            this.lblBillingProfile.Size = new System.Drawing.Size(249, 31);
+            this.lblBillingProfile.Size = new System.Drawing.Size(332, 31);
             this.lblBillingProfile.TabIndex = 33;
             this.lblBillingProfile.Text = "Billing Profile";
             this.lblBillingProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -732,10 +792,10 @@
             this.txt_Bill_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Bill_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Bill_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Bill_DestIP.Location = new System.Drawing.Point(258, 95);
+            this.txt_Bill_DestIP.Location = new System.Drawing.Point(341, 95);
             this.txt_Bill_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Bill_DestIP.Name = "txt_Bill_DestIP";
-            this.txt_Bill_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_Bill_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_Bill_DestIP.TabIndex = 34;
             this.txt_Bill_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -744,10 +804,10 @@
             this.cb_Bill_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cb_Bill_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Bill_Frequency.FormattingEnabled = true;
-            this.cb_Bill_Frequency.Location = new System.Drawing.Point(558, 95);
+            this.cb_Bill_Frequency.Location = new System.Drawing.Point(679, 95);
             this.cb_Bill_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_Bill_Frequency.Name = "cb_Bill_Frequency";
-            this.cb_Bill_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_Bill_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_Bill_Frequency.TabIndex = 35;
             // 
             // lblSRProfile
@@ -757,7 +817,7 @@
             this.lblSRProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSRProfile.Location = new System.Drawing.Point(3, 124);
             this.lblSRProfile.Name = "lblSRProfile";
-            this.lblSRProfile.Size = new System.Drawing.Size(249, 31);
+            this.lblSRProfile.Size = new System.Drawing.Size(332, 31);
             this.lblSRProfile.TabIndex = 30;
             this.lblSRProfile.Text = "Self Registration Profile";
             this.lblSRProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -767,10 +827,10 @@
             this.txt_SR_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_SR_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_SR_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_SR_DestIP.Location = new System.Drawing.Point(258, 126);
+            this.txt_SR_DestIP.Location = new System.Drawing.Point(341, 126);
             this.txt_SR_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_SR_DestIP.Name = "txt_SR_DestIP";
-            this.txt_SR_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_SR_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_SR_DestIP.TabIndex = 31;
             this.txt_SR_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -788,10 +848,10 @@
             "8 Hour",
             "12 Hour",
             "24 Hour"});
-            this.cb_SR_Frequency.Location = new System.Drawing.Point(558, 126);
+            this.cb_SR_Frequency.Location = new System.Drawing.Point(679, 126);
             this.cb_SR_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_SR_Frequency.Name = "cb_SR_Frequency";
-            this.cb_SR_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_SR_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_SR_Frequency.TabIndex = 32;
             // 
             // lblDEProfile
@@ -801,7 +861,7 @@
             this.lblDEProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDEProfile.Location = new System.Drawing.Point(3, 155);
             this.lblDEProfile.Name = "lblDEProfile";
-            this.lblDEProfile.Size = new System.Drawing.Size(249, 31);
+            this.lblDEProfile.Size = new System.Drawing.Size(332, 31);
             this.lblDEProfile.TabIndex = 27;
             this.lblDEProfile.Text = "Daily Energy Profile";
             this.lblDEProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -811,10 +871,10 @@
             this.txt_DE_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_DE_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_DE_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_DE_DestIP.Location = new System.Drawing.Point(258, 157);
+            this.txt_DE_DestIP.Location = new System.Drawing.Point(341, 157);
             this.txt_DE_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_DE_DestIP.Name = "txt_DE_DestIP";
-            this.txt_DE_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_DE_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_DE_DestIP.TabIndex = 28;
             this.txt_DE_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -825,10 +885,10 @@
             this.cb_DE_Frequency.FormattingEnabled = true;
             this.cb_DE_Frequency.Items.AddRange(new object[] {
             "*/*/* 00:00:00 (Midnight)"});
-            this.cb_DE_Frequency.Location = new System.Drawing.Point(558, 157);
+            this.cb_DE_Frequency.Location = new System.Drawing.Point(679, 157);
             this.cb_DE_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_DE_Frequency.Name = "cb_DE_Frequency";
-            this.cb_DE_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_DE_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_DE_Frequency.TabIndex = 29;
             // 
             // lblLSProfile
@@ -838,7 +898,7 @@
             this.lblLSProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLSProfile.Location = new System.Drawing.Point(3, 186);
             this.lblLSProfile.Name = "lblLSProfile";
-            this.lblLSProfile.Size = new System.Drawing.Size(249, 31);
+            this.lblLSProfile.Size = new System.Drawing.Size(332, 31);
             this.lblLSProfile.TabIndex = 24;
             this.lblLSProfile.Text = "Load Survey Profile";
             this.lblLSProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -848,10 +908,10 @@
             this.txt_LS_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_LS_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_LS_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_LS_DestIP.Location = new System.Drawing.Point(258, 188);
+            this.txt_LS_DestIP.Location = new System.Drawing.Point(341, 188);
             this.txt_LS_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_LS_DestIP.Name = "txt_LS_DestIP";
-            this.txt_LS_DestIP.Size = new System.Drawing.Size(294, 27);
+            this.txt_LS_DestIP.Size = new System.Drawing.Size(332, 27);
             this.txt_LS_DestIP.TabIndex = 25;
             this.txt_LS_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
@@ -869,10 +929,10 @@
             "8 Hour",
             "12 Hour",
             "24 Hour"});
-            this.cb_LS_Frequency.Location = new System.Drawing.Point(558, 188);
+            this.cb_LS_Frequency.Location = new System.Drawing.Point(679, 188);
             this.cb_LS_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_LS_Frequency.Name = "cb_LS_Frequency";
-            this.cb_LS_Frequency.Size = new System.Drawing.Size(294, 28);
+            this.cb_LS_Frequency.Size = new System.Drawing.Size(332, 28);
             this.cb_LS_Frequency.TabIndex = 26;
             // 
             // lblProfileHeader
@@ -881,7 +941,7 @@
             this.lblProfileHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfileHeader.Location = new System.Drawing.Point(3, 0);
             this.lblProfileHeader.Name = "lblProfileHeader";
-            this.lblProfileHeader.Size = new System.Drawing.Size(249, 31);
+            this.lblProfileHeader.Size = new System.Drawing.Size(332, 31);
             this.lblProfileHeader.TabIndex = 0;
             this.lblProfileHeader.Text = "Profiles";
             this.lblProfileHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -890,9 +950,9 @@
             // 
             this.lblDestIPHeader.AutoSize = true;
             this.lblDestIPHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDestIPHeader.Location = new System.Drawing.Point(258, 0);
+            this.lblDestIPHeader.Location = new System.Drawing.Point(341, 0);
             this.lblDestIPHeader.Name = "lblDestIPHeader";
-            this.lblDestIPHeader.Size = new System.Drawing.Size(294, 31);
+            this.lblDestIPHeader.Size = new System.Drawing.Size(332, 31);
             this.lblDestIPHeader.TabIndex = 1;
             this.lblDestIPHeader.Text = "Destination IP Address";
             this.lblDestIPHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -901,9 +961,9 @@
             // 
             this.lblPushFreqHeader.AutoSize = true;
             this.lblPushFreqHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPushFreqHeader.Location = new System.Drawing.Point(558, 0);
+            this.lblPushFreqHeader.Location = new System.Drawing.Point(679, 0);
             this.lblPushFreqHeader.Name = "lblPushFreqHeader";
-            this.lblPushFreqHeader.Size = new System.Drawing.Size(294, 31);
+            this.lblPushFreqHeader.Size = new System.Drawing.Size(332, 31);
             this.lblPushFreqHeader.TabIndex = 2;
             this.lblPushFreqHeader.Text = "Push Frequency Schedule";
             this.lblPushFreqHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -999,5 +1059,9 @@
         private System.Windows.Forms.Button btnRawData;
         private System.Windows.Forms.Panel PanelProfileandRawData;
         private System.Windows.Forms.DataGridView dgRawData;
+        private System.Windows.Forms.Button btnSet_PS_AS;
+        private System.Windows.Forms.Button btnGet_PS_AS;
+        private System.Windows.Forms.ComboBox cbTestProfileType;
+        private System.Windows.Forms.Label lblProfile;
     }
 }

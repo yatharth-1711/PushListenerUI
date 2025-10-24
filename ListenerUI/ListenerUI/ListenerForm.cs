@@ -1,4 +1,4 @@
-﻿using DevExpress.Internal.WinApi.Windows.UI.Notifications;
+﻿using AutoTest.FrameWork.Converts;
 using Gurux.DLMS.AMI.Messages.DB;
 using ListenerUI.HelperClasses;
 using log4net;
@@ -11,6 +11,7 @@ using MeterReader.TestHelperClasses;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +20,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Timers;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace ListenerUI
@@ -56,11 +56,13 @@ namespace ListenerUI
         private TestStopWatch stopWatch;
         private TCPTestNotifier tcpTestNotifier;
         PushPacketManager pushPacketManager = new PushPacketManager();
+        DLMSParser parse = new DLMSParser();
         private System.Timers.Timer pushMonitorTimer;
         RichTextBox logBox = new RichTextBox();
         private DataTable receivedPushData = new DataTable();
         public DataTable finalDataTable = new DataTable();
         private int lastPushRowCount = 0;
+
         public ListenerForm()
         {
             InitializeComponent();
@@ -69,13 +71,34 @@ namespace ListenerUI
             finalDataTable.RowChanged += FinalDataTable_RowChanged;
             // Bind log event
             TestLogService.AppendColoredTextControlEventHandler += TestLogService_AppendColoredTextControlEventHandler;
-
+            PushPacketManager._logService = logService;
+            PushPacketManager.logBox = rtbPushLogs;
             // Start background flush timer
             _flushTimer2 = new System.Timers.Timer(500); // flush every 500ms
             _flushTimer2.Elapsed += FlushLogBuffer2;
             _flushTimer2.Start();
+
+            ComboBox[] comboBoxes = {
+                cbTestProfileType, cbInstant_Frequency,cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency };
+            foreach (var cb in comboBoxes)
+                cb.SelectedIndex = 0;
         }
 
+        private Dictionary<string, (TextBox txtDestIP, ComboBox cbFrequency)> profileControls;
+        private void InitializeProfileControls()
+        {
+            profileControls = new Dictionary<string, (TextBox, ComboBox)>
+            {
+                { "Instant", (txt_Instant_DestIP, cbInstant_Frequency) },
+                { "Alert", (txt_Alert_DestIP, cb_Alert_Frequency) },
+                { "Billing", (txt_Bill_DestIP, cb_Bill_Frequency) },
+                { "Self Registration", (txt_SR_DestIP, cb_SR_Frequency) },
+                { "Daily Energy", (txt_DE_DestIP, cb_DE_Frequency) },
+                { "Load Survey", (txt_LS_DestIP, cb_LS_Frequency) },
+                { "Current Bill", (txt_CB_DestIP, cb_CB_Frequency) },
+                { "Tamper", (txt_Alert_DestIP, cb_Alert_Frequency) } // Tamper shares Alert controls
+            };
+        }
         private void InitializeLoggerAndConfigurations()
         {
             logService = new TestLogService(rtbPushLogs);
@@ -97,6 +120,14 @@ namespace ListenerUI
         {
 
         }
+        private void btnGet_PS_AS_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btnSet_PS_AS_Click(object sender, EventArgs e)
+        {
+
+        }
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
             rtbPushLogs.Clear();
@@ -104,6 +135,125 @@ namespace ListenerUI
         private void btnSaveData_Click(object sender, EventArgs e)
         {
         }
+        private void btnPushprofileSettings_Click(object sender, EventArgs e)
+        {
+            pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
+
+            if (pnlProfileSettings.Visible)
+            {
+                btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
+                btnPushprofileSettings.ForeColor = Color.Blue;
+            }
+            else
+            {
+                btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
+                btnPushprofileSettings.ForeColor = Color.Black;
+            }
+        }
+
+        #region Helper Methods
+        private void cbTestProfileType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedProfile = cbTestProfileType.SelectedItem.ToString();
+            DisableAllProfiles();
+
+            switch (selectedProfile)
+            {
+                case "All":
+                    EnableAllProfiles();
+                    break;
+
+                case "Instant":
+                    EnableProfile(txt_Instant_DestIP, cbInstant_Frequency, txt_Random_Instant);
+                    break;
+
+                case "Load Survey":
+                    EnableProfile(txt_LS_DestIP, cb_LS_Frequency, txt_Random_LS);
+                    break;
+
+                case "Daily Energy":
+                    EnableProfile(txt_DE_DestIP, cb_DE_Frequency, txt_Random_DE);
+                    break;
+
+                case "Self Registration":
+                    EnableProfile(txt_SR_DestIP, cb_SR_Frequency, txt_Random_SR);
+                    break;
+
+                case "Billing":
+                    EnableProfile(txt_Bill_DestIP, cb_Bill_Frequency, txt_Random_Bill);
+                    break;
+
+                case "Current Bill":
+                    EnableProfile(txt_CB_DestIP, cb_CB_Frequency, txt_Random_CB);
+                    break;
+
+                case "Alert":
+                    EnableProfile(txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        private void DisableAllProfiles()
+        {
+            TextBox[] textBoxes = {
+        txt_Instant_DestIP, txt_Alert_DestIP, txt_Bill_DestIP,
+        txt_SR_DestIP, txt_DE_DestIP, txt_LS_DestIP, txt_CB_DestIP
+    };
+
+            ComboBox[] comboBoxes = {
+        cbInstant_Frequency, cb_Alert_Frequency, cb_Bill_Frequency,
+        cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
+    };
+
+            TextBox[] textBoxes_Randmsn = {
+            txt_Random_Instant, txt_Random_Alert, txt_Random_Bill,
+            txt_Random_CB, txt_Random_DE, txt_Random_LS, txt_Random_SR
+        };
+
+            foreach (var tb in textBoxes)
+                tb.Enabled = false;
+
+            foreach (var cb in comboBoxes)
+                cb.Enabled = false;
+
+            foreach (var tb in textBoxes_Randmsn)
+                tb.Enabled = false;
+        }
+        private void EnableAllProfiles()
+        {
+            TextBox[] textBoxes = {
+            txt_Instant_DestIP, txt_Alert_DestIP, txt_Bill_DestIP,
+            txt_SR_DestIP, txt_DE_DestIP, txt_LS_DestIP, txt_CB_DestIP
+        };
+
+            ComboBox[] comboBoxes = {
+            cbInstant_Frequency, cb_Alert_Frequency, cb_Bill_Frequency,
+            cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
+        };
+            TextBox[] textBoxes_Randmsn = {
+            txt_Random_Instant, txt_Random_Alert, txt_Random_Bill,
+            txt_Random_CB, txt_Random_DE, txt_Random_LS, txt_Random_SR
+        };
+
+            foreach (var tb in textBoxes)
+                tb.Enabled = true;
+
+            foreach (var cb in comboBoxes)
+                cb.Enabled = true;
+            foreach (var tb in textBoxes_Randmsn)
+                tb.Enabled = true;
+        }
+        private void EnableProfile(TextBox txtBox, ComboBox comboBox, TextBox txtBox_Randmsn)
+        {
+            txtBox.Enabled = true;
+            comboBox.Enabled = true;
+            txtBox_Randmsn.Enabled = true;
+        }
+        #endregion
+
+        #region Logging Methods
         public void PushMonitorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
@@ -194,21 +344,6 @@ namespace ListenerUI
                 rtbPushLogs.ScrollToCaret();
             }
         }
-        private void btnPushprofileSettings_Click(object sender, EventArgs e)
-        {
-            pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
-
-            if (pnlProfileSettings.Visible)
-            {
-                btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
-                btnPushprofileSettings.ForeColor = Color.Blue;
-            }
-            else
-            {
-                btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
-                btnPushprofileSettings.ForeColor = Color.Black;
-            }
-        }
 
         private bool isRawDataVisible = false;
         private void btnRawData_Click(object sender, EventArgs e)
@@ -295,5 +430,6 @@ namespace ListenerUI
         {
             _logBuffer2.Enqueue((message + Environment.NewLine, color, isBold));
         }
+        #endregion
     }
 }
