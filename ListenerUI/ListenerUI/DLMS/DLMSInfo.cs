@@ -32,7 +32,7 @@ namespace MeterComm.DLMS
         /// <summary>
         ///Write Password
         /// </summary>
-        public static string MeterAuthPasswordWrite = "dlmspassword1234";
+        public static string MeterAuthPasswordWrite = "RsEbHlSugjV97abc";
         /// <summary>
         /// Addressing Mode => One Byte / Four Byte
         /// </summary>
@@ -111,11 +111,11 @@ namespace MeterComm.DLMS
         /// <summary>
         /// Encryption Key
         /// </summary>
-        public static string TxtEK = "";
+        public static string TxtEK = "RsEbEkAkgjV97abc";
         /// <summary>
         /// Authentication Key
         /// </summary>
-        public static string TxtAK = "";
+        public static string TxtAK = "RsEbEkAkgjV97abc";
         /// <summary>
         /// System Title
         /// </summary>
@@ -129,7 +129,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// Master Key for Global Key Change
         /// </summary>
-        public static string MasterKey = "";
+        public static string MasterKey = "GeNuSmAsteRkEy25";
         #endregion
 
         #region Extra

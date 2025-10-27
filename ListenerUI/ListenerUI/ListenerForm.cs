@@ -6,8 +6,10 @@ using log4net.Util;
 using MeterComm;
 using MeterComm.DLMS;
 using MeterReader.CommonClasses;
+using MeterReader.DLMSInterfaceClasses;
 using MeterReader.DLMSNetSerialCommunication;
 using MeterReader.TestHelperClasses;
+using Newtonsoft.Json.Linq;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using System;
 using System.Collections.Concurrent;
@@ -19,6 +21,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -41,8 +44,8 @@ namespace ListenerUI
         public delegate void AppendColoredTextControl(string message, Color color, bool isBold = false);
         public static event AppendColoredTextControl AppendColoredTextControlEventHandler = delegate { }; // add empty delegate!;
         private readonly ConcurrentQueue<(string Message, Color Color, bool IsBold)> _logBuffer2 = new ConcurrentQueue<(string, Color, bool)>();
-        private readonly Font BoldFont11 = new Font("Courier New", 11f, FontStyle.Bold);
-        private readonly Font RegularFont11 = new Font("Courier New", 11f, FontStyle.Regular);
+        private readonly Font BoldFont11 = new Font("Courier New", 9f, FontStyle.Bold);
+        private readonly Font RegularFont11 = new Font("Courier New", 9f, FontStyle.Regular);
         private const int MaxLines = 1000;
         private const int TrimLines = 200;
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -62,15 +65,21 @@ namespace ListenerUI
         private DataTable receivedPushData = new DataTable();
         public DataTable finalDataTable = new DataTable();
         private int lastPushRowCount = 0;
+        public static CancellationTokenSource _cancellationToken;
 
         public ListenerForm()
         {
             InitializeComponent();
+            StyleDataGrid(dgRawData); StyleDataGrid(dgAlert); StyleDataGrid(dgInstant); StyleDataGrid(dgLS);
+            StyleDataGrid(dgTamper); StyleDataGrid(dgBill); StyleDataGrid(dgDE); StyleDataGrid(dgSR); StyleDataGrid(dgCB);
             InitializeLoggerAndConfigurations();
             PushPacketManager.DeviceID = "GOE12043714";
             finalDataTable.RowChanged += FinalDataTable_RowChanged;
             // Bind log event
             TestLogService.AppendColoredTextControlEventHandler += TestLogService_AppendColoredTextControlEventHandler;
+            rtbPushLogs.MouseDown += rtbPushLogs_MouseDown;
+            rtbPushLogs.MouseMove += rtbPushLogs_MouseMove;
+
             PushPacketManager._logService = logService;
             PushPacketManager.logBox = rtbPushLogs;
             // Start background flush timer
@@ -104,20 +113,86 @@ namespace ListenerUI
             logService = new TestLogService(rtbPushLogs);
             config = TestConfiguration.CreateDefault();
         }
-        private void btnStartListener_Click(object sender, EventArgs e)
+        private async void btnStartListener_Click(object sender, EventArgs e)
         {
+
             logService = new TestLogService(rtbPushLogs);
             logBox = rtbPushLogs;
-            DLMSComm dlmsReader = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
-            if (!dlmsReader.SignOnDLMS())
+            try
             {
-                log.Error("Sign ON Failure");
-                logService.LogMessage(rtbPushLogs, "Sign ON Failure", Color.Red, true);
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        logService.LogMessage(rtbPushLogs, "Getting Meter Details and Push profiles...", Color.Black, true);
+                        //IniTestRun(config);
+                        //ProfileGenericInfo.FillTables();
+                    }));
+                });
             }
-            logService.LogMessage(rtbPushLogs, "Meter Sign On Successful", Color.Green);
+            catch
+            {
+                return;
+            }
+            DLMSComm dlmsReader = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            try
+            {
+                if (!dlmsReader.SignOnDLMS())
+                {
+                    log.Error("Sign ON Failure");
+                    logService.LogMessage(rtbPushLogs, "Sign ON Failure", Color.Red, true);
+                    return;
+                }
+                string _recData = string.Empty; int obisCount = 0;
+                DataTable USdataTable = new DataTable();
+                if (DLMSAssociationLN.IsUSAssociationAvailable)
+                    USdataTable = DLMSAssociationLN.US_AssociationDataTable.Copy();
+                else
+                {
+                    if (dlmsReader.GetParameter("000F0000280003FF02", (byte)(config.InterFrameTimeout / 1000), (byte)5, (byte)(config.ResponseTimeout / 1000), (byte)0, DateTime.Now, DateTime.Now, string.Empty, 0UL, 0UL))
+                        _recData = dlmsReader.strbldDLMdata.ToString().Trim().Split(' ')[3];
+                    if (_recData.Length > 20)
+                        USdataTable = DLMSAssociationLN.GetObjectListTable(_recData, DLMSAssociationLN.AssociationType.Utility_Settings, out obisCount);
+                }
+                PushPacketManager.isCurrentBillAvailable = USdataTable.AsEnumerable().Any(row => row[4].ToString().Contains("0.0.25.9.129.255"));
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+            }
+            finally
+            {
+                dlmsReader.SetDISCMode();
+                dlmsReader.Dispose();
+            }
+            if (tcpTestNotifier == null)
+            {
+                tcpTestNotifier = new TCPTestNotifier();
+                pushPacketManager.InitializePushProfileTables();
+                TCPTestNotifier.LogControlEventHandler += OnPushDataReceived;
+                tcpTestNotifier.Connect(logBox);
+                logService.LogMessage(logBox, $"\n----------------------------*** Listener Port Connected ***----------------------------", Color.DeepPink, true);
+            }
+            if (pushMonitorTimer == null)
+            {
+                pushMonitorTimer = new System.Timers.Timer(1000);
+                pushMonitorTimer.Elapsed += PushMonitorTimer_Elapsed;
+                pushMonitorTimer.Start();
+            }
         }
         private void btnStopListener_Click(object sender, EventArgs e)
         {
+            if (tcpTestNotifier != null)
+            {
+                TCPTestNotifier.LogControlEventHandler -= OnPushDataReceived;
+                tcpTestNotifier?.StopServer();
+                tcpTestNotifier?.Dispose();
+                tcpTestNotifier = null;
+                pushMonitorTimer?.Stop();
+                pushMonitorTimer?.Dispose();
+                pushMonitorTimer = null;
+                logService.LogMessage(logBox, $"\n----------------------------*** Listener Port disconnected ***----------------------------", Color.DeepPink, true);
+            }
 
         }
         private void btnGet_PS_AS_Click(object sender, EventArgs e)
@@ -150,6 +225,253 @@ namespace ListenerUI
                 btnPushprofileSettings.ForeColor = Color.Black;
             }
         }
+
+
+        #region NEW IMPLEMENTATION
+        private void LogPush(string deviceId, string profile, string timestamp)
+        {
+            string logEntry = $"Device ID: {deviceId}\t\t{timestamp}: {profile} Push Received";
+
+            // Make this entry look clickable
+            rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
+            rtbPushLogs.SelectionColor = Color.Blue;
+            rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
+            rtbPushLogs.AppendText(logEntry + Environment.NewLine);
+            rtbPushLogs.SelectionColor = rtbPushLogs.ForeColor;
+        }
+        private void rtbPushLogs_MouseDown(object sender, MouseEventArgs e)
+        {
+            /*try
+            {
+                int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
+                int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
+                if (lineIndex < 0 || lineIndex >= rtbPushLogs.Lines.Length)
+                    return;
+
+                string clickedLine = rtbPushLogs.Lines[lineIndex].Trim();
+                if (string.IsNullOrWhiteSpace(clickedLine))
+                    return;
+                int receivedIndex = clickedLine.IndexOf("Received");
+                if (receivedIndex > 0)
+                {
+                    var match = System.Text.RegularExpressions.Regex.Match(clickedLine, @"\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}:\d{3} [AP]M");
+                    if (match.Success)
+                    {
+                        string timestamp = match.Value;
+                        if (clickedLine.Contains("Alert Push"))
+                            HighlightGridColumn(dgAlert, timestamp);
+                        else if (clickedLine.Contains("Instant Push"))
+                            HighlightGridColumn(dgInstant, timestamp);
+                        else if (clickedLine.Contains("Load Survey Push"))
+                            HighlightGridColumn(dgLS, timestamp);
+                        else if (clickedLine.Contains("Daily Energy Push"))
+                            HighlightGridColumn(dgDE, timestamp);
+                        else if (clickedLine.Contains("Self Registration Push"))
+                            HighlightGridColumn(dgSR, timestamp);
+                        else if (clickedLine.Contains("Billing Push"))
+                            HighlightGridColumn(dgBill, timestamp);
+                        else if (clickedLine.Contains("Tamper Push"))
+                            HighlightGridColumn(dgTamper, timestamp);
+                        else if (clickedLine.Contains("Current Bill Push"))
+                            HighlightGridColumn(dgCB, timestamp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.LogMessage(rtbPushLogs, $"Error in rtbPushLogs_MouseDown: {ex.Message}", Color.Red, true);
+            }*/
+            try
+            {
+                int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
+                int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
+
+                if (lineIndex < 0 || lineIndex >= rtbPushLogs.Lines.Length)
+                    return;
+
+                string clickedLine = rtbPushLogs.Lines[lineIndex];
+                if (!clickedLine.Contains("🔗"))
+                    return;
+
+                int linkIndex = clickedLine.IndexOf("🔗");
+                int charIndexFromLine = rtbPushLogs.GetFirstCharIndexFromLine(lineIndex) + linkIndex;
+
+                // check if click is near the link
+                if (index >= charIndexFromLine - 1 && index <= charIndexFromLine + 2)
+                {
+                    // Extract timestamp from that line
+                    var match = System.Text.RegularExpressions.Regex.Match(
+                        clickedLine, @"\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}:\d{3} [AP]M");
+
+                    if (match.Success)
+                    {
+                        string timestamp = match.Value;
+                        if (clickedLine.Contains("Alert Push"))
+                            HighlightGridColumn(dgAlert, timestamp);
+                        else if (clickedLine.Contains("Instant Push"))
+                            HighlightGridColumn(dgInstant, timestamp);
+                        else if (clickedLine.Contains("Load Survey Push"))
+                            HighlightGridColumn(dgLS, timestamp);
+                        else if (clickedLine.Contains("Daily Energy Push"))
+                            HighlightGridColumn(dgDE, timestamp);
+                        else if (clickedLine.Contains("Self Registration Push"))
+                            HighlightGridColumn(dgSR, timestamp);
+                        else if (clickedLine.Contains("Billing Push"))
+                            HighlightGridColumn(dgBill, timestamp);
+                        else if (clickedLine.Contains("Tamper Push"))
+                            HighlightGridColumn(dgTamper, timestamp);
+                        else if (clickedLine.Contains("Current Bill Push"))
+                            HighlightGridColumn(dgCB, timestamp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.LogMessage(rtbPushLogs, $"Error handling link click: {ex.Message}", Color.Red, true);
+            }
+
+        }
+        private void HighlightGridColumn(DataGridView grid, string columnHeader)
+        {
+            if (grid == null || grid.Columns.Count == 0)
+                return;
+
+            var col = grid.Columns
+                .Cast<DataGridViewColumn>()
+                .FirstOrDefault(c => c.HeaderText.Equals(columnHeader, StringComparison.OrdinalIgnoreCase));
+
+            if (col == null)
+                return;
+
+            // Scroll to column
+            grid.FirstDisplayedScrollingColumnIndex = col.Index;
+
+            // Temporarily highlight column
+            col.DefaultCellStyle.BackColor = Color.Yellow;
+
+            var timer = new System.Windows.Forms.Timer();
+            timer.Interval = 1500; // 1.5 seconds
+            timer.Tick += (s, e) =>
+            {
+                col.DefaultCellStyle.BackColor = Color.White;
+                timer.Stop();
+            };
+            timer.Start();
+        }
+        /*private void HighlightClickableLog(string updatedText)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(updatedText) || !updatedText.Contains("Push Received")) //🔗
+                    return;
+
+                string targetTrim = updatedText.Trim();
+
+                // find last non-empty line
+                string[] lines = rtbPushLogs.Lines;
+                int lastNonEmptyIndex = -1;
+                for (int i = lines.Length - 1; i >= 0; i--)
+                {
+                    if (!string.IsNullOrWhiteSpace(lines[i]))
+                    {
+                        lastNonEmptyIndex = i;
+                        break;
+                    }
+                }
+
+                if (lastNonEmptyIndex >= 0)
+                {
+                    string lastLineTrim = lines[lastNonEmptyIndex].Trim();
+                    if (lastLineTrim.Equals(targetTrim, StringComparison.Ordinal))
+                    {
+                        int startIndex = rtbPushLogs.GetFirstCharIndexFromLine(lastNonEmptyIndex);
+                        int length = lines[lastNonEmptyIndex].Length;
+                        rtbPushLogs.Select(startIndex, length);
+                        rtbPushLogs.SelectionColor = Color.Blue;
+                        rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
+                        rtbPushLogs.DeselectAll();
+                        return;
+                    }
+                }
+
+                int lastOcc = rtbPushLogs.Text.LastIndexOf(targetTrim, StringComparison.OrdinalIgnoreCase);
+                if (lastOcc >= 0)
+                {
+                    rtbPushLogs.Select(lastOcc, targetTrim.Length);
+                    rtbPushLogs.SelectionColor = Color.Blue;
+                    rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
+                    rtbPushLogs.DeselectAll();
+                }
+            }
+            catch (Exception ex)
+            {
+                logService.LogMessage(rtbPushLogs, $"Error styling log: {ex.Message}", Color.Red, true);
+            }
+        }
+        */
+        private void AppendClickableLinkIcon(string updatedText)
+        {
+            try
+            {
+                string[] lines = rtbPushLogs.Lines;
+                if (lines == null || lines.Length == 0)
+                    return;
+
+                int lastLineIndex = lines.Length - 1;
+                string lastLine = lines[lastLineIndex];
+
+                // Go to end of the last line
+                int startIndex = rtbPushLogs.GetFirstCharIndexFromLine(lastLineIndex) + lastLine.Length;
+
+                rtbPushLogs.Select(startIndex, 0);
+                rtbPushLogs.SelectionColor = Color.Blue;
+                rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Bold);
+                rtbPushLogs.SelectedText = " 🔗";
+                rtbPushLogs.DeselectAll();
+            }
+            catch (Exception ex)
+            {
+                logService.LogMessage(rtbPushLogs, $"Error appending link icon: {ex.Message}", Color.Red, true);
+            }
+        }
+
+        private void rtbPushLogs_MouseMove(object sender, MouseEventArgs e)
+        {
+            /*
+            int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
+            int line = rtbPushLogs.GetLineFromCharIndex(index);
+
+            if (line >= 0 && line < rtbPushLogs.Lines.Length)
+            {
+                string text = rtbPushLogs.Lines[line];
+                if (text.Contains("Push Received"))
+                    rtbPushLogs.Cursor = Cursors.Hand;
+                else
+                    rtbPushLogs.Cursor = Cursors.IBeam;
+            }
+            */
+            int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
+            int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
+
+            if (lineIndex >= 0 && lineIndex < rtbPushLogs.Lines.Length)
+            {
+                string line = rtbPushLogs.Lines[lineIndex];
+                if (line.Contains("🔗"))
+                {
+                    int linkIndex = line.IndexOf("🔗");
+                    int charIndexFromLine = rtbPushLogs.GetFirstCharIndexFromLine(lineIndex) + linkIndex;
+
+                    if (index >= charIndexFromLine - 1 && index <= charIndexFromLine + 2)
+                    {
+                        rtbPushLogs.Cursor = Cursors.Hand;
+                        return;
+                    }
+                }
+            }
+            rtbPushLogs.Cursor = Cursors.IBeam;
+        }
+
+        #endregion
 
         #region Helper Methods
         private void cbTestProfileType_SelectedIndexChanged(object sender, EventArgs e)
@@ -254,6 +576,27 @@ namespace ListenerUI
         #endregion
 
         #region Logging Methods
+        private bool IniTestRun(TestConfiguration _config)
+        {
+            _cancellationToken = new CancellationTokenSource();
+            var token = _cancellationToken.Token;
+            WrapperInfo.IsCommDelayRequired = false;
+            bool iniStatus = true;
+            if (!MeterIdentity.AssignMeterDetails(_config, token))
+            {
+                iniStatus = false;
+                return iniStatus;
+            }
+            if (MeterIdentity.GetCipherStatus())
+            {
+                if (!PushSetupInfo.ReadPushSetup(_config))
+                {
+                    iniStatus = false;
+                    return iniStatus;
+                }
+            }
+            return iniStatus;
+        }
         public void PushMonitorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
@@ -274,27 +617,28 @@ namespace ListenerUI
                                 finalDataTable.Columns.Add(col.ColumnName, col.DataType);
                             }
                         }
+
                         foreach (DataRow row in newRows.Rows)
                         {
                             receivedPushData.ImportRow(row);
                             finalDataTable.ImportRow(row);
-                            dgRawData.DataSource = receivedPushData;
-                            //New
-                            if (dgRawData.InvokeRequired)
-                            {
-                                dgRawData.Invoke(new Action(() =>
-                                {
-                                    dgRawData.DataSource = dgRawData;
-                                    dgRawData.Refresh();
-                                }));
-                            }
-                            else
-                            {
-                                dgRawData.DataSource = dgRawData;
-                                dgRawData.Refresh();
-                            }
                         }
 
+                        if (dgRawData.InvokeRequired)
+                        {
+                            dgRawData.Invoke(new Action(() =>
+                            {
+                                dgRawData.DataSource = null;
+                                dgRawData.DataSource = receivedPushData;
+                                dgRawData.Refresh();
+                            }));
+                        }
+                        else
+                        {
+                            dgRawData.DataSource = null;
+                            dgRawData.DataSource = receivedPushData;
+                            dgRawData.Refresh();
+                        }
                     }
                 }
             }
@@ -305,28 +649,59 @@ namespace ListenerUI
         }
         private void FinalDataTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            if (e.Action == DataRowAction.Add)
+            if (e.Action != DataRowAction.Add)
+                return;
+            try
             {
-                try
+                string decryptedData = e.Row[4]?.ToString();
+                string dataPacket = e.Row[0]?.ToString();
+                if (string.IsNullOrEmpty(decryptedData))
+                    return;
+                DataTable targetTable = new DataTable();
+                string profile = string.Empty;
+                string DeviceID = dataPacket.Split('-')[2];
+
+                DataTable onlyColumn = pushPacketManager.GeneratePushDataTableFromHex(decryptedData, dataPacket);
+                targetTable = pushPacketManager.BuildTargetTableFromPushData(dataPacket, onlyColumn);
+                profile = PushPacketManager.pushProfile;
+                string saveName = profile.Replace("/", "").Replace(":", "").Replace("-", "_").Trim();
+
+                DataGridView targetGrid = null;
+                switch (profile)
                 {
-                    string decryptedData = e.Row[4]?.ToString();
-                    string dataPacket = e.Row[0]?.ToString();
-                    DataTable targetTable = new DataTable();
-                    string profile = string.Empty;
-                    string DeviceID = dataPacket.Split('-')[2];
-                    if (!string.IsNullOrEmpty(decryptedData))
-                    {
-                        DataTable onlyColumn = pushPacketManager.GeneratePushDataTableFromHex(decryptedData, dataPacket);
-                        targetTable = pushPacketManager.BuildTargetTableFromPushData(dataPacket, onlyColumn);
-                        profile = PushPacketManager.pushProfile;
-                        string saveName = profile.Replace("/", "").Replace(":", "").Replace("-", "_").Trim();
-                    }
+                    case "Instant": targetGrid = dgInstant; break;
+                    case "Alert": targetGrid = dgAlert; break;
+                    case "LS": targetGrid = dgLS; break;
+                    case "DE": targetGrid = dgDE; break;
+                    case "SR": targetGrid = dgSR; break;
+                    case "Billing": targetGrid = dgBill; break;
+                    case "Tamper": targetGrid = dgTamper; break;
+                    case "Current Bill": targetGrid = dgCB; break;
                 }
-                catch (Exception ex)
+
+                if (targetGrid == null)
+                    return;
+                if (targetGrid.InvokeRequired)
                 {
-                    logService.LogMessage(logBox, $"Error in {PushPacketManager.pushProfile} => {ex.Message}\n{ex.StackTrace}", Color.Red);
+                    targetGrid.Invoke(new Action(() =>
+                    {
+                        targetGrid.DataSource = null;
+                        targetGrid.DataSource = targetTable;
+                        targetGrid.Refresh();
+                    }));
+                }
+                else
+                {
+                    targetGrid.DataSource = null;
+                    targetGrid.DataSource = targetTable;
+                    targetGrid.Refresh();
                 }
             }
+            catch (Exception ex)
+            {
+                logService.LogMessage(logBox, $"Error in {PushPacketManager.pushProfile} => {ex.Message}\n{ex.StackTrace}", Color.Red);
+            }
+
         }
         public void OnPushDataReceived(string updatedText, Color color)
         {
@@ -336,14 +711,22 @@ namespace ListenerUI
                 {
                     logService.LogMessage(rtbPushLogs, updatedText, color, true);
                     rtbPushLogs.ScrollToCaret();
+                    if (updatedText.Contains("Push Received"))
+                        AppendClickableLinkIcon(updatedText);
+                    //rtbPushLogs.BeginInvoke(new Action(() => HighlightClickableLog(updatedText)));
                 }));
             }
             else
             {
                 logService.LogMessage(rtbPushLogs, updatedText, color, true);
                 rtbPushLogs.ScrollToCaret();
+                // Only append link if it's a push received line
+                if (updatedText.Contains("Push Received"))
+                    AppendClickableLinkIcon(updatedText);
+                //rtbPushLogs.BeginInvoke(new Action(() => HighlightClickableLog(updatedText)));
             }
         }
+
 
         private bool isRawDataVisible = false;
         private void btnRawData_Click(object sender, EventArgs e)
@@ -353,7 +736,7 @@ namespace ListenerUI
             {
                 // Show DataGridView in fill mode
                 dgRawData.Visible = true;
-                tabConProfileTabs.Visible = false;
+                tabControlProfiles.Visible = false;
                 dgRawData.Dock = DockStyle.Fill;
 
                 btnRawData.Text = "Profile Tab View";
@@ -361,9 +744,9 @@ namespace ListenerUI
             else
             {
                 // Show TabControl in fill mode
-                tabConProfileTabs.Visible = true;
+                tabControlProfiles.Visible = true;
                 dgRawData.Visible = false;
-                tabConProfileTabs.Dock = DockStyle.Fill;
+                tabControlProfiles.Dock = DockStyle.Fill;
 
                 btnRawData.Text = "Raw Data View";
             }
@@ -429,6 +812,27 @@ namespace ListenerUI
         private void TestLogService_AppendColoredTextControlEventHandler(string message, Color color, bool isBold = false)
         {
             _logBuffer2.Enqueue((message + Environment.NewLine, color, isBold));
+        }
+        private void StyleDataGrid(DataGridView grid)
+        {
+            grid.AutoGenerateColumns = true;
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            grid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            grid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            grid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            grid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.LightSteelBlue;
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            grid.EnableHeadersVisualStyles = false;
+            grid.BackgroundColor = Color.White;
+            grid.BorderStyle = BorderStyle.FixedSingle;
+            grid.GridColor = Color.LightGray;
+            grid.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            grid.RowHeadersVisible = false;
+            //grid.AllowUserToResizeRows = false;
+            grid.AllowUserToOrderColumns = false;
+            grid.Font = new Font("Times New Roman", 9);
+            grid.ColumnHeadersHeight = 35;
         }
         #endregion
     }
