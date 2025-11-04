@@ -1,4 +1,6 @@
-﻿using AutoTest.FrameWork.Converts;
+﻿using AutoTest.FrameWork;
+using AutoTest.FrameWork.Converts;
+using AutoTestDesktopWFA;
 using Gurux.DLMS.AMI.Messages.DB;
 using ListenerUI.HelperClasses;
 using log4net;
@@ -11,6 +13,7 @@ using MeterReader.DLMSNetSerialCommunication;
 using MeterReader.TestHelperClasses;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -22,6 +25,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -67,6 +71,39 @@ namespace ListenerUI
         private int lastPushRowCount = 0;
         public static CancellationTokenSource _cancellationToken;
 
+        Dictionary<string, string> actionScheduleClassObis = new Dictionary<string, string>
+            {
+              { "Instant", "001600000F0004FF04" },
+              { "LS", "001600040F0004FF04" },
+              { "DE", "001600050F0004FF04" },
+              { "SR", "001600000F008EFF04" },
+              { "Bill", "001600000F0000FF04" },
+              { "Tamper", "001600000F008FFF04" },
+              { "Current Bill", "001600000F0093FF04" }
+            };
+        Dictionary<string, string> pushSetupClassObis = new Dictionary<string, string>
+            {
+              { "Alert", "00280004190900FF"},
+              { "Instant", "00280000190900FF" },
+              { "LS", "00280005190900FF" },
+              { "DE", "00280006190900FF" },
+              { "SR", "00280082190900FF" },
+              { "Bill", "00280084190900FF" },
+              { "Tamper", "00280086190900FF" },
+              { "Current Bill", "00280000190981FF"}
+            };
+        Dictionary<string, string> freqHexString = new Dictionary<string, string>
+            {
+                { "15 Min", "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
+                { "30 Min", "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF" },
+                { "1 Hour", "010102020904FF0000000905FFFFFFFFFF" },
+                { "4 Hour", "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF" },
+                { "6 Hour", "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF" },
+                { "8 Hour", "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
+                { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
+                { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
+                {"Disabled", "0100" }
+            };
         public ListenerForm()
         {
             InitializeComponent();
@@ -93,19 +130,19 @@ namespace ListenerUI
                 cb.SelectedIndex = 0;
         }
 
-        private Dictionary<string, (TextBox txtDestIP, ComboBox cbFrequency)> profileControls;
+        private Dictionary<string, (TextBox txtDestIP, ComboBox cbFrequency, TextBox txtRandom)> profileControls;
         private void InitializeProfileControls()
         {
-            profileControls = new Dictionary<string, (TextBox, ComboBox)>
+            profileControls = new Dictionary<string, (TextBox, ComboBox, TextBox)>
             {
-                { "Instant", (txt_Instant_DestIP, cbInstant_Frequency) },
-                { "Alert", (txt_Alert_DestIP, cb_Alert_Frequency) },
-                { "Billing", (txt_Bill_DestIP, cb_Bill_Frequency) },
-                { "Self Registration", (txt_SR_DestIP, cb_SR_Frequency) },
-                { "Daily Energy", (txt_DE_DestIP, cb_DE_Frequency) },
-                { "Load Survey", (txt_LS_DestIP, cb_LS_Frequency) },
-                { "Current Bill", (txt_CB_DestIP, cb_CB_Frequency) },
-                { "Tamper", (txt_Alert_DestIP, cb_Alert_Frequency) } // Tamper shares Alert controls
+                { "Instant", (txt_Instant_DestIP, cbInstant_Frequency, txt_Random_Instant) },
+                { "Alert", (txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert) },
+                { "Bill", (txt_Bill_DestIP, cb_Bill_Frequency, txt_Random_Bill) },
+                { "SR", (txt_SR_DestIP, cb_SR_Frequency, txt_Random_SR) },
+                { "DE", (txt_DE_DestIP, cb_DE_Frequency, txt_Random_DE) },
+                { "LS", (txt_LS_DestIP, cb_LS_Frequency, txt_Random_LS) },
+                { "Current Bill", (txt_CB_DestIP, cb_CB_Frequency, txt_Random_CB) },
+                { "Tamper", (txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert) } // Tamper shares Alert controls
             };
         }
         private void InitializeLoggerAndConfigurations()
@@ -197,11 +234,63 @@ namespace ListenerUI
         }
         private void btnGet_PS_AS_Click(object sender, EventArgs e)
         {
-
+            if (cbTestProfileType.Text != "All")
+            {
+                GetPushFreqAndDestination(cbTestProfileType.Text);
+            }
+            else
+            {
+                GetPushFreqAndDestination("Instant"); GetPushFreqAndDestination("LS"); GetPushFreqAndDestination("DE"); GetPushFreqAndDestination("SR");
+                GetPushFreqAndDestination("Bill"); GetPushFreqAndDestination("Current Bill"); //GetPushFreqAndDestination("Tamper"); 
+            }
         }
         private void btnSet_PS_AS_Click(object sender, EventArgs e)
         {
-
+            switch (cbTestProfileType.Text)
+            {
+                case "All":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Instant_DestIP.Text.Trim()}-{txt_Random_Instant.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_LS_DestIP.Text.Trim()}-{txt_Random_LS.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_DE_DestIP.Text.Trim()}-{txt_Random_DE.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_SR_DestIP.Text.Trim()}-{txt_Random_SR.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Bill_DestIP.Text.Trim()}-{txt_Random_Bill.Text.Trim()}");
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_CB_DestIP.Text.Trim()}-{txt_Random_CB.Text.Trim()}");
+                    break;
+                case "Alert":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
+                    break;
+                case "Instant":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Instant_DestIP.Text.Trim()}-{txt_Random_Instant.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
+                    break;
+                case "Load Survey":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_LS_DestIP.Text.Trim()}-{txt_Random_LS.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_LS_Frequency.Text.Trim());
+                    break;
+                case "Daily Energy":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_DE_DestIP.Text.Trim()}-{txt_Random_DE.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_DE_Frequency.Text.Trim());
+                    break;
+                case "Self Registration":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_SR_DestIP.Text.Trim()}-{txt_Random_SR.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_SR_Frequency.Text.Trim());
+                    break;
+                case "Billing":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Bill_DestIP.Text.Trim()}-{txt_Random_Bill.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), "0", cb_Bill_Frequency.Text.Trim());
+                    break;
+                case "Current Bill":
+                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_CB_DestIP.Text.Trim()}-{txt_Random_CB.Text.Trim()}");
+                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_CB_Frequency.Text.Trim());
+                    break;
+                //case "Tamper":
+                //    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
+                //SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
+                //    break;
+                default:
+                    break;
+            }
         }
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
@@ -548,16 +637,16 @@ namespace ListenerUI
             TextBox[] textBoxes = {
             txt_Instant_DestIP, txt_Alert_DestIP, txt_Bill_DestIP,
             txt_SR_DestIP, txt_DE_DestIP, txt_LS_DestIP, txt_CB_DestIP
-        };
+            };
 
             ComboBox[] comboBoxes = {
             cbInstant_Frequency, cb_Alert_Frequency, cb_Bill_Frequency,
             cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
-        };
+            };
             TextBox[] textBoxes_Randmsn = {
             txt_Random_Instant, txt_Random_Alert, txt_Random_Bill,
             txt_Random_CB, txt_Random_DE, txt_Random_LS, txt_Random_SR
-        };
+            };
 
             foreach (var tb in textBoxes)
                 tb.Enabled = true;
@@ -572,6 +661,226 @@ namespace ListenerUI
             txtBox.Enabled = true;
             comboBox.Enabled = true;
             txtBox_Randmsn.Enabled = true;
+        }
+
+        public void GetPushFreqAndDestination(string profile)
+        {
+            string message = string.Empty;
+            DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            try
+            {
+                InitializeProfileControls();
+                string pushFreqString = string.Empty;
+                string pushFreqValue = string.Empty;
+                string destinationAddString = string.Empty;
+                string destinationAddValue = string.Empty;
+                string randomizationString = string.Empty;
+                if (!DLMSWriter.SignOnDLMS())
+                {
+                    CommonHelper.DisplayDLMSSignONError();
+                    return;
+                }
+                // push frequency
+                pushFreqString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(actionScheduleClassObis[profile].Substring(0, 4), 16), parse.HexObisToDecObis(actionScheduleClassObis[profile].Substring(4, 12)), 4).Trim();
+                if (pushFreqString.Substring(0, 2) != "0B" && pushFreqString.Substring(0, 2) == "01") //&& pushFreqString.Substring(2, 2) != "00")  "0100" if  frequency disabled
+                {
+
+                    pushFreqValue = freqHexString.FirstOrDefault(x => x.Value == pushFreqString).Key;
+                    profileControls[profile].cbFrequency.Text = pushFreqValue;
+                }
+                else if (pushFreqString == "0B")
+                {
+
+                }
+                // destination address and IP
+                destinationAddString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushSetupClassObis[profile].Substring(0, 4), 16), parse.HexObisToDecObis(pushSetupClassObis[profile].Substring(4, 12)), 3).Trim();
+                if (destinationAddString.Substring(0, 2) == "02")
+                {
+                    string[] structureDataArray = parse.GetStructureValueList(destinationAddString.Substring(4)).ToArray();
+                    string[] structureValueArray = new string[structureDataArray.Length];
+                    for (int i = 0; i < structureDataArray.Length; i++)
+                    {
+                        structureValueArray[i] = parse.GetProfileValueString(structureDataArray[i]);
+                    }
+                    profileControls[profile].txtDestIP.Text = structureValueArray[1];
+                }
+                else if (destinationAddString == "0B")
+                {
+                }
+                // Randomization delay
+                randomizationString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushSetupClassObis[profile].Substring(0, 4)), parse.HexObisToDecObis(pushSetupClassObis[profile].Substring(4, 12)), 5).Trim();
+                if (randomizationString == "0B")
+                {
+
+                }
+                else
+                {
+                    profileControls[profile].txtRandom.Text = parse.GetProfileValueString(randomizationString);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in fetching Entries from Utilities.ReadDataFromObjectLNCipher " + ex.Message.ToString());
+            }
+            finally
+            {
+                DLMSWriter.Dispose();
+            }
+            return;
+        }
+
+        public void GetDestionationAddAndRandomization()
+        {
+
+        }
+        public void SetProfilePushFrequency(string profile, string pushFreqToSet, string billDateTime = null)
+        {
+            try
+            {
+                //  txtBox_PushSetupSet.Text = "";     t0 update status  
+                //    Dictionary<string, string> pushProfileClassObis = new Dictionary<string, string>
+                //{
+                //  { "Instant", "001600000F0004FF04" },
+                //  { "LS", "001600040F0004FF04" },
+                //  { "DE", "001600050F0004FF04" },
+                //  { "SR", "001600000F008EFF04" },
+                //  { "Bill", "001600000F0000FF04" },
+                //  { "Tamper", "001600000F008FFF04" },
+                //  { "Current Bill", "001600000F0093FF04" }
+                //};
+                if (string.IsNullOrEmpty(pushFreqToSet))
+                {
+                    MessageBox.Show($"Kindly Input the Frequency Value for {profile}", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    return;
+                }
+                //if (cbAccessLevel.SelectedIndex != 2)
+                //{
+                //    MessageBox.Show("Kindly Connect with Access Level of Utility Settings for Write Operation", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                //    return;
+                //}
+                Dictionary<string, string> freqHexString = new Dictionary<string, string>
+            {
+                { "15 Min", "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
+                { "30 Min", "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF" },
+                { "1 Hour", "010102020904FF0000000905FFFFFFFFFF" },
+                { "4 Hour", "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF" },
+                { "6 Hour", "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF" },
+                { "8 Hour", "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
+                { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
+                { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
+                {"Disabled", "0100" },
+                { "0", billDateTime}
+            };
+                int nRetVal = 0;
+                string sMessage = string.Empty;
+                DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+                try
+                {
+                    if (!DLMSWriter.SignOnDLMS())
+                    {
+                        CommonHelper.DisplayDLMSSignONError();
+                        DLMSWriter.Dispose();
+                        return;
+                    }
+                    DLMSWriter.strbldDLMdata.Clear();
+                    nRetVal = DLMSWriter.SetParameter($"{actionScheduleClassObis[profile]}", (byte)0, (byte)3, (byte)3, freqHexString[pushFreqToSet]);
+                    if (nRetVal == 0)
+                        sMessage = sMessage + $"{profile} Push Frequency Set Successfully to {pushFreqToSet}.";
+                    else if (nRetVal == 2)
+                        sMessage = sMessage + $"{profile} Push Frequency Action Denied.";
+                    else if (nRetVal == 1 || nRetVal == 3)
+                        sMessage = sMessage + $"{profile} Push Frequency Error in Setting.";
+                    // txtBox_PushSetupSet.Text = sMessage;
+                }
+
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message.ToString());
+                }
+                finally
+                {
+                    DLMSWriter.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in Setting Destination and Push Frequency" + ex.Message.ToString());
+            }
+        }
+        public void SetDestinationAddAndRandomization(string profile, string dataToSet)
+        {
+            try
+            {
+                //    Dictionary<string, string> pushSetupClassObis = new Dictionary<string, string>
+                //{
+                //  { "Alert", "00280004190900FF"},
+                //  { "Instant", "00280000190900FF" },
+                //  { "LS", "00280005190900FF" },
+                //  { "DE", "00280006190900FF" },
+                //  { "SR", "00280082190900FF" },
+                //  { "Bill", "00280084190900FF" },
+                //  { "Tamper", "00280086190900FF" },
+                //  { "Current Bill", "00280000190981FF"}
+                //};
+                //  txtBox_PushSetupSet.Text = "";     t0 update status   
+                string destinationAddData = $"{DLMSParser.ConvertAsciiToHex(dataToSet.Split('-')[0].Trim())}-{dataToSet.Split('-')[1].Trim()}";  // destination address and randomization
+                if (string.IsNullOrEmpty(destinationAddData.Split('-')[0]))
+                {
+                    MessageBox.Show($"Kindly Input the Destination Value for {profile}", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    return;
+                }
+                //if (cbAccessLevel.SelectedIndex != 2)
+                //{
+                //    MessageBox.Show("Kindly Connect with Access Level of Utility Settings for Write Operation", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                //    return;
+                //}
+
+                int nRetVal = 0;
+                string sMessage = string.Empty;
+                DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+                try
+                {
+                    if (!DLMSWriter.SignOnDLMS())
+                    {
+                        CommonHelper.DisplayDLMSSignONError();
+                        DLMSWriter.Dispose();
+                        return;
+                    }
+                    DLMSWriter.strbldDLMdata.Clear();
+                    string length = ((destinationAddData.Split('-')[0].Trim().Length) / 2).ToString("X2");
+                    nRetVal = DLMSWriter.SetParameter($"{pushSetupClassObis[profile].Trim()}03", (byte)0, (byte)3, (byte)5, $"0203160009{length}{destinationAddData.Split('-')[0].Trim()}1600");
+                    if (nRetVal == 0)
+                        sMessage = sMessage + "Push Setup: Destination Address Set Successfully.";
+                    else if (nRetVal == 2)
+                        sMessage = sMessage + "Push Setup: Destination Address Action Denied.";
+                    else if (nRetVal == 1 || nRetVal == 3)
+                        sMessage = sMessage + "Push Setup: Destination Address Error in Setting.";
+                    int number;
+                    if (!string.IsNullOrEmpty(destinationAddData.Split('-')[1].Trim()) && int.TryParse(destinationAddData.Split('-')[1].Trim(), out number))
+                    {
+                        nRetVal = DLMSWriter.SetParameter($"{pushSetupClassObis[profile].Trim()}05", (byte)0, (byte)3, (byte)5, $"12{number.ToString("X4")}");
+                        if (nRetVal == 0)
+                            sMessage = sMessage + "Push Setup: Randamisation Set Successfully.";
+                        else if (nRetVal == 2)
+                            sMessage = sMessage + "Push Setup: Randamisation Action Denied.";
+                        else if (nRetVal == 1 || nRetVal == 3)
+                            sMessage = sMessage + "Push Setup: Randamisation Error in Setting.";
+                    }
+                    // txtBox_PushSetupSet.Text = sMessage;
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message.ToString());
+                }
+                finally
+                {
+                    DLMSWriter.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+            }
         }
         #endregion
 
