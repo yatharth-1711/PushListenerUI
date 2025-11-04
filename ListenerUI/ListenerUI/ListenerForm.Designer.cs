@@ -17,9 +17,9 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rtbPushLogs = new System.Windows.Forms.RichTextBox();
@@ -197,7 +197,7 @@
             this.tbpLS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpLS.Name = "tbpLS";
             this.tbpLS.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbpLS.Size = new System.Drawing.Size(852, 492);
+            this.tbpLS.Size = new System.Drawing.Size(852, 452);
             this.tbpLS.TabIndex = 1;
             this.tbpLS.Text = "Load Survey";
             this.tbpLS.UseVisualStyleBackColor = true;
@@ -208,7 +208,7 @@
             this.tbpDE.Location = new System.Drawing.Point(4, 25);
             this.tbpDE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpDE.Name = "tbpDE";
-            this.tbpDE.Size = new System.Drawing.Size(852, 492);
+            this.tbpDE.Size = new System.Drawing.Size(852, 452);
             this.tbpDE.TabIndex = 2;
             this.tbpDE.Text = "Daily Energy";
             this.tbpDE.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             this.tbpSR.Location = new System.Drawing.Point(4, 25);
             this.tbpSR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpSR.Name = "tbpSR";
-            this.tbpSR.Size = new System.Drawing.Size(852, 492);
+            this.tbpSR.Size = new System.Drawing.Size(852, 452);
             this.tbpSR.TabIndex = 3;
             this.tbpSR.Text = "Self Registration";
             this.tbpSR.UseVisualStyleBackColor = true;
@@ -230,7 +230,7 @@
             this.tbpBill.Location = new System.Drawing.Point(4, 25);
             this.tbpBill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpBill.Name = "tbpBill";
-            this.tbpBill.Size = new System.Drawing.Size(852, 492);
+            this.tbpBill.Size = new System.Drawing.Size(852, 452);
             this.tbpBill.TabIndex = 4;
             this.tbpBill.Text = "Billing";
             this.tbpBill.UseVisualStyleBackColor = true;
@@ -241,7 +241,7 @@
             this.tbpCB.Location = new System.Drawing.Point(4, 25);
             this.tbpCB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpCB.Name = "tbpCB";
-            this.tbpCB.Size = new System.Drawing.Size(852, 492);
+            this.tbpCB.Size = new System.Drawing.Size(852, 452);
             this.tbpCB.TabIndex = 5;
             this.tbpCB.Text = "Current Bill";
             this.tbpCB.UseVisualStyleBackColor = true;
@@ -252,7 +252,7 @@
             this.tbpAlert.Location = new System.Drawing.Point(4, 25);
             this.tbpAlert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpAlert.Name = "tbpAlert";
-            this.tbpAlert.Size = new System.Drawing.Size(852, 492);
+            this.tbpAlert.Size = new System.Drawing.Size(852, 452);
             this.tbpAlert.TabIndex = 6;
             this.tbpAlert.Text = "Alert";
             this.tbpAlert.UseVisualStyleBackColor = true;
@@ -263,7 +263,7 @@
             this.tbpTamper.Location = new System.Drawing.Point(4, 25);
             this.tbpTamper.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpTamper.Name = "tbpTamper";
-            this.tbpTamper.Size = new System.Drawing.Size(852, 492);
+            this.tbpTamper.Size = new System.Drawing.Size(852, 452);
             this.tbpTamper.TabIndex = 7;
             this.tbpTamper.Text = "Tamper";
             this.tbpTamper.UseVisualStyleBackColor = true;
@@ -272,18 +272,18 @@
             // 
             this.dgRawData.AllowUserToAddRows = false;
             this.dgRawData.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.LightSkyBlue;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgRawData.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightSkyBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgRawData.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgRawData.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgRawData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgRawData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgRawData.GridColor = System.Drawing.SystemColors.AppWorkspace;
@@ -291,14 +291,14 @@
             this.dgRawData.Margin = new System.Windows.Forms.Padding(0);
             this.dgRawData.Name = "dgRawData";
             this.dgRawData.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgRawData.RowHeadersVisible = false;
             this.dgRawData.RowHeadersWidth = 50;
             this.dgRawData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White;
