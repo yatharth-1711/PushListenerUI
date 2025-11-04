@@ -12,7 +12,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// Hold the Com - Port for the Meter communication 
         /// </summary>
-        public static string comPort = "COM4";
+        public static string comPort = "COM3";
         /// <summary>
         /// Hold the Baud Rate for the Meter communication 
         /// </summary>
@@ -24,7 +24,7 @@ namespace MeterComm.DLMS
         /// 2=US
         /// 3=PUSH
         /// </summary>
-        public static int AccessMode = 1;
+        public static int AccessMode = 2;
         /// <summary>
         ///Read Password
         /// </summary>
@@ -32,7 +32,7 @@ namespace MeterComm.DLMS
         /// <summary>
         ///Write Password
         /// </summary>
-        public static string MeterAuthPasswordWrite = "dlmspassword1234";
+        public static string MeterAuthPasswordWrite = "CsPdClHlsuG1946a";
         /// <summary>
         /// Addressing Mode => One Byte / Four Byte
         /// </summary>
@@ -95,7 +95,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// LN with Cipher
         /// </summary>
-        public static bool IsLNWithCipher = false;
+        public static bool IsLNWithCipher = true;
         /// <summary>
         /// with GMAC
         /// </summary>
@@ -111,11 +111,11 @@ namespace MeterComm.DLMS
         /// <summary>
         /// Encryption Key
         /// </summary>
-        public static string TxtEK = "";
+        public static string TxtEK = "CsPdClEkaKG1946a";
         /// <summary>
         /// Authentication Key
         /// </summary>
-        public static string TxtAK = "";
+        public static string TxtAK = "CsPdClEkaKG1946a";
         /// <summary>
         /// System Title
         /// </summary>
