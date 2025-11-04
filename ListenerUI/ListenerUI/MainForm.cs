@@ -27,6 +27,7 @@ namespace ListenerUI
             InitializeComponent();
             AddListenerFormToTabPage();
             cbAccessLevel.SelectedIndex = 2;
+            cbMeterBaudRate.SelectedIndex = 0;
         }
         private void AddListenerFormToTabPage()
         {
@@ -46,7 +47,7 @@ namespace ListenerUI
                 MessageBox.Show("tabPageLCDConfig not found in tabControl2.");
             }
         }
-        private async void btnSaveData_Click(object sender, EventArgs e)
+        private void btnSaveData_Click(object sender, EventArgs e)
         {
             TestConfiguration config = new TestConfiguration();
             config = TestConfiguration.CreateDefault();
@@ -59,22 +60,6 @@ namespace ListenerUI
             DLMSInfo.AccessMode = cbAccessLevel.SelectedIndex;
             DLMSInfo.MeterAuthPasswordWrite = txtAuthPasswordWrite.Text.Trim();
             DLMSInfo.MeterAuthPassword = txtAuthPassword.Text.Trim();
-            //TestConfigLoad(config);
-            //try
-            //{
-            //    await System.Threading.Tasks.Task.Run(() =>
-            //    {
-            //        this.Invoke(new Action(() =>
-            //        {
-            //            IniTestRun(config);
-            //        }));
-            //    });
-            //}
-            //catch
-            //{
-            //    return;
-            //}
-            MessageBox.Show("Meter Settings Saved Succesfully");
 
         }
         private void TestConfigLoad(TestConfiguration config)
@@ -114,28 +99,7 @@ namespace ListenerUI
             config.serverAddress = 1;
             //config.ModuleType = cbModuleType.SelectedItem.ToString();
         }
-        private bool IniTestRun(TestConfiguration _config)
-        {
-            _cancellationToken = new CancellationTokenSource();
-            var token = _cancellationToken.Token;
-            WrapperInfo.IsCommDelayRequired = false;
-            bool iniStatus = true;
-            if (!MeterIdentity.AssignMeterDetails(_config, token))
-            {
-                iniStatus = false;
-                return iniStatus;
-            }
-            if (MeterIdentity.GetCipherStatus())
-            {
-                if (!PushSetupInfo.ReadPushSetup(_config))
-                {
-                    iniStatus = false;
-                    return iniStatus;
-                }
-            }
-            //ProfileGenericInfo.FillTables(); //By YS
-            return iniStatus;
-        }
+
         private void cbMeterComPort_MouseClick(object sender, MouseEventArgs e)
         {
             RefreshComPorts();

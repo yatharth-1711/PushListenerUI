@@ -327,6 +327,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AllObisList.txt" />
     <Content Include="profilegeneric\ProfileGeneric.xml" />
   </ItemGroup>
   <ItemGroup>

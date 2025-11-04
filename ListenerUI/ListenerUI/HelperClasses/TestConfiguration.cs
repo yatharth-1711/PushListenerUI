@@ -39,11 +39,11 @@ namespace MeterReader.TestHelperClasses
         /// <summary>
         ///Write Password
         /// </summary>
-        public string MeterAuthPasswordWrite { get; set; } = "dlmspassword1234";
+        public string MeterAuthPasswordWrite { get; set; } = "RsEbHlSugjV97abc";
         /// <summary>
         ///Write Password FW
         /// </summary>
-        public string FWMeterAuthPasswordWrite { get; set; } = "dlmspassword1234";
+        public string FWMeterAuthPasswordWrite { get; set; } = "RsEbHlSfgjV97abc";
         /// <summary>
         /// Addressing Mode => One Byte / Four Byte
         /// </summary>
@@ -113,11 +113,11 @@ namespace MeterReader.TestHelperClasses
         /// <summary>
         /// Encryption Key
         /// </summary>
-        public string TxtEK { get; set; } = "NbPdClHlsuNb04ab";
+        public string TxtEK { get; set; } = "RsEbEkAkgjV97abc";
         /// <summary>
         /// Authentication Key
         /// </summary>
-        public string TxtAK { get; set; } = "NbPdClHlsuNb04ab";
+        public string TxtAK { get; set; } = "RsEbEkAkgjV97abc";
         /// <summary>
         /// System Title
         /// </summary>
@@ -125,7 +125,7 @@ namespace MeterReader.TestHelperClasses
         /// <summary>
         /// Master Key
         /// </summary>
-        public string MasterKey { get; set; } = "NbPdClHlsuNb04ab";
+        public string MasterKey { get; set; } = "GeNuSmAsteRkEy25";
         /// <summary>
         /// Conformance Block
         /// </summary>

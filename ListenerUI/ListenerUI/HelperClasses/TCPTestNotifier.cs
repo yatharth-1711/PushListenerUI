@@ -381,5 +381,6 @@ namespace MeterReader.DLMSNetSerialCommunication
             listenerThread?.Abort();
         }
         #endregion
+
     }
 }

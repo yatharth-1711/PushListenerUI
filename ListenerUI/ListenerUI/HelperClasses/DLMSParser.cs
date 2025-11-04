@@ -5362,7 +5362,7 @@ namespace AutoTest.FrameWork.Converts
             try
             {
                 // Read all lines from the text file
-                string[] lines = File.ReadAllLines(filePath);
+                string[] lines = File.ReadAllLines("F:/Projects/PushListenerUI/ListenerUI/ListenerUI/AllObisList.txt");
                 foreach (string line in lines)
                 {
                     if (!string.IsNullOrEmpty(line))
