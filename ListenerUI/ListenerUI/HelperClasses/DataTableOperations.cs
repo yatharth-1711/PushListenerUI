@@ -5,16 +5,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Globalization;
-using System.ComponentModel;
 using LicenseContext = OfficeOpenXml.LicenseContext;
-using System.Data.Linq.Mapping;
-
-
 
 namespace MeterReader.CommonClasses
 {
@@ -102,7 +95,7 @@ namespace MeterReader.CommonClasses
         //By YS
         public static void ExportDataTableToExcelWithDifferentSheet(DataTable table, string filePath, string sheetName)
         {
-            //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             FileInfo excelFile = new FileInfo(filePath);
             using (ExcelPackage package = excelFile.Exists ? new ExcelPackage(excelFile) : new ExcelPackage())
             {

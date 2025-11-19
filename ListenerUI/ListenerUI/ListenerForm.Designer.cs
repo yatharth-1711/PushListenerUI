@@ -19,46 +19,85 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitConMain = new System.Windows.Forms.SplitContainer();
             this.rtbPushLogs = new System.Windows.Forms.RichTextBox();
             this.PanelProfileandRawData = new System.Windows.Forms.Panel();
             this.tabControlProfiles = new System.Windows.Forms.TabControl();
             this.tbpInstant = new System.Windows.Forms.TabPage();
+            this.splitcon_InstantTab = new System.Windows.Forms.SplitContainer();
             this.dgInstant = new System.Windows.Forms.DataGridView();
+            this.chart_Instant = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpLS = new System.Windows.Forms.TabPage();
+            this.splitCon_LS = new System.Windows.Forms.SplitContainer();
             this.dgLS = new System.Windows.Forms.DataGridView();
+            this.chart_LS = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpDE = new System.Windows.Forms.TabPage();
+            this.splitCon_DE = new System.Windows.Forms.SplitContainer();
             this.dgDE = new System.Windows.Forms.DataGridView();
+            this.chart_DE = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpSR = new System.Windows.Forms.TabPage();
+            this.splitCon_SR = new System.Windows.Forms.SplitContainer();
             this.dgSR = new System.Windows.Forms.DataGridView();
+            this.chart_SR = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpBill = new System.Windows.Forms.TabPage();
+            this.splitCon_Bill = new System.Windows.Forms.SplitContainer();
             this.dgBill = new System.Windows.Forms.DataGridView();
+            this.chart_Bill = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpCB = new System.Windows.Forms.TabPage();
+            this.splitCon_CB = new System.Windows.Forms.SplitContainer();
             this.dgCB = new System.Windows.Forms.DataGridView();
+            this.chart_CB = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpAlert = new System.Windows.Forms.TabPage();
+            this.splitCon_Alert = new System.Windows.Forms.SplitContainer();
             this.dgAlert = new System.Windows.Forms.DataGridView();
+            this.chart_Alert = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tbpTamper = new System.Windows.Forms.TabPage();
+            this.splitCon_Tamper = new System.Windows.Forms.SplitContainer();
             this.dgTamper = new System.Windows.Forms.DataGridView();
+            this.chart_tamper = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dgRawData = new System.Windows.Forms.DataGridView();
-            this.btnStartListener = new System.Windows.Forms.Button();
-            this.btnStopListener = new System.Windows.Forms.Button();
-            this.btnClearLogs = new System.Windows.Forms.Button();
-            this.btnSaveData = new System.Windows.Forms.Button();
             this.lblHeader = new System.Windows.Forms.Label();
             this.tblHeader = new System.Windows.Forms.TableLayoutPanel();
             this.flowPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.btnPushprofileSettings = new System.Windows.Forms.Button();
+            this.btnStartListener = new System.Windows.Forms.Button();
+            this.btnStopListener = new System.Windows.Forms.Button();
+            this.btnClearLogs = new System.Windows.Forms.Button();
+            this.btnSaveData = new System.Windows.Forms.Button();
             this.btnRawData = new System.Windows.Forms.Button();
             this.pnlProfileSettings = new System.Windows.Forms.Panel();
             this.grpProfileConfig = new System.Windows.Forms.GroupBox();
@@ -77,13 +116,11 @@
             this.lblRandomHeader = new System.Windows.Forms.Label();
             this.lblCBProfile = new System.Windows.Forms.Label();
             this.txt_CB_DestIP = new System.Windows.Forms.TextBox();
-            this.cb_CB_Frequency = new System.Windows.Forms.ComboBox();
             this.lblInstant = new System.Windows.Forms.Label();
             this.txt_Instant_DestIP = new System.Windows.Forms.TextBox();
             this.cbInstant_Frequency = new System.Windows.Forms.ComboBox();
             this.lblAlert = new System.Windows.Forms.Label();
             this.txt_Alert_DestIP = new System.Windows.Forms.TextBox();
-            this.cb_Alert_Frequency = new System.Windows.Forms.ComboBox();
             this.lblBillingProfile = new System.Windows.Forms.Label();
             this.txt_Bill_DestIP = new System.Windows.Forms.TextBox();
             this.cb_Bill_Frequency = new System.Windows.Forms.ComboBox();
@@ -99,29 +136,70 @@
             this.lblProfileHeader = new System.Windows.Forms.Label();
             this.lblDestIPHeader = new System.Windows.Forms.Label();
             this.lblPushFreqHeader = new System.Windows.Forms.Label();
+            this.cb_CB_Frequency = new System.Windows.Forms.ComboBox();
             this.tblMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitConMain)).BeginInit();
+            this.splitConMain.Panel1.SuspendLayout();
+            this.splitConMain.Panel2.SuspendLayout();
+            this.splitConMain.SuspendLayout();
             this.PanelProfileandRawData.SuspendLayout();
             this.tabControlProfiles.SuspendLayout();
             this.tbpInstant.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitcon_InstantTab)).BeginInit();
+            this.splitcon_InstantTab.Panel1.SuspendLayout();
+            this.splitcon_InstantTab.Panel2.SuspendLayout();
+            this.splitcon_InstantTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInstant)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Instant)).BeginInit();
             this.tbpLS.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_LS)).BeginInit();
+            this.splitCon_LS.Panel1.SuspendLayout();
+            this.splitCon_LS.Panel2.SuspendLayout();
+            this.splitCon_LS.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgLS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_LS)).BeginInit();
             this.tbpDE.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_DE)).BeginInit();
+            this.splitCon_DE.Panel1.SuspendLayout();
+            this.splitCon_DE.Panel2.SuspendLayout();
+            this.splitCon_DE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgDE)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_DE)).BeginInit();
             this.tbpSR.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_SR)).BeginInit();
+            this.splitCon_SR.Panel1.SuspendLayout();
+            this.splitCon_SR.Panel2.SuspendLayout();
+            this.splitCon_SR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgSR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_SR)).BeginInit();
             this.tbpBill.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Bill)).BeginInit();
+            this.splitCon_Bill.Panel1.SuspendLayout();
+            this.splitCon_Bill.Panel2.SuspendLayout();
+            this.splitCon_Bill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgBill)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Bill)).BeginInit();
             this.tbpCB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_CB)).BeginInit();
+            this.splitCon_CB.Panel1.SuspendLayout();
+            this.splitCon_CB.Panel2.SuspendLayout();
+            this.splitCon_CB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_CB)).BeginInit();
             this.tbpAlert.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Alert)).BeginInit();
+            this.splitCon_Alert.Panel1.SuspendLayout();
+            this.splitCon_Alert.Panel2.SuspendLayout();
+            this.splitCon_Alert.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAlert)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Alert)).BeginInit();
             this.tbpTamper.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Tamper)).BeginInit();
+            this.splitCon_Tamper.Panel1.SuspendLayout();
+            this.splitCon_Tamper.Panel2.SuspendLayout();
+            this.splitCon_Tamper.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTamper)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_tamper)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgRawData)).BeginInit();
             this.tblHeader.SuspendLayout();
             this.flowPanelButtons.SuspendLayout();
@@ -134,49 +212,50 @@
             // 
             this.tblMain.ColumnCount = 1;
             this.tblMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblMain.Controls.Add(this.splitContainer1, 0, 0);
+            this.tblMain.Controls.Add(this.splitConMain, 0, 0);
             this.tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblMain.Location = new System.Drawing.Point(0, 347);
+            this.tblMain.Location = new System.Drawing.Point(0, 333);
             this.tblMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tblMain.Name = "tblMain";
             this.tblMain.RowCount = 2;
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblMain.Size = new System.Drawing.Size(1354, 390);
+            this.tblMain.Size = new System.Drawing.Size(1760, 663);
             this.tblMain.TabIndex = 0;
             // 
-            // splitContainer1
+            // splitConMain
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 2);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitConMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitConMain.Location = new System.Drawing.Point(3, 2);
+            this.splitConMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.splitConMain.Name = "splitConMain";
             // 
-            // splitContainer1.Panel1
+            // splitConMain.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.rtbPushLogs);
-            this.splitContainer1.Panel1MinSize = 50;
+            this.splitConMain.Panel1.Controls.Add(this.rtbPushLogs);
+            this.splitConMain.Panel1MinSize = 50;
             // 
-            // splitContainer1.Panel2
+            // splitConMain.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.PanelProfileandRawData);
-            this.splitContainer1.Panel2MinSize = 80;
-            this.splitContainer1.Size = new System.Drawing.Size(1348, 340);
-            this.splitContainer1.SplitterDistance = 420;
-            this.splitContainer1.SplitterWidth = 2;
-            this.splitContainer1.TabIndex = 5;
+            this.splitConMain.Panel2.Controls.Add(this.PanelProfileandRawData);
+            this.splitConMain.Panel2MinSize = 80;
+            this.splitConMain.Size = new System.Drawing.Size(1754, 613);
+            this.splitConMain.SplitterDistance = 541;
+            this.splitConMain.SplitterWidth = 2;
+            this.splitConMain.TabIndex = 5;
             // 
             // rtbPushLogs
             // 
             this.rtbPushLogs.BackColor = System.Drawing.SystemColors.Window;
             this.rtbPushLogs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtbPushLogs.DetectUrls = false;
             this.rtbPushLogs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbPushLogs.Location = new System.Drawing.Point(0, 0);
             this.rtbPushLogs.Margin = new System.Windows.Forms.Padding(0);
             this.rtbPushLogs.Name = "rtbPushLogs";
             this.rtbPushLogs.ReadOnly = true;
-            this.rtbPushLogs.Size = new System.Drawing.Size(420, 340);
+            this.rtbPushLogs.Size = new System.Drawing.Size(541, 613);
             this.rtbPushLogs.TabIndex = 4;
             this.rtbPushLogs.Text = "";
             this.rtbPushLogs.WordWrap = false;
@@ -189,12 +268,12 @@
             this.PanelProfileandRawData.Location = new System.Drawing.Point(0, 0);
             this.PanelProfileandRawData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PanelProfileandRawData.Name = "PanelProfileandRawData";
-            this.PanelProfileandRawData.Size = new System.Drawing.Size(926, 340);
+            this.PanelProfileandRawData.Size = new System.Drawing.Size(1211, 613);
             this.PanelProfileandRawData.TabIndex = 0;
             // 
             // tabControlProfiles
             // 
-            this.tabControlProfiles.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabControlProfiles.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.tabControlProfiles.Controls.Add(this.tbpInstant);
             this.tabControlProfiles.Controls.Add(this.tbpLS);
             this.tabControlProfiles.Controls.Add(this.tbpDE);
@@ -208,23 +287,40 @@
             this.tabControlProfiles.Margin = new System.Windows.Forms.Padding(0);
             this.tabControlProfiles.Name = "tabControlProfiles";
             this.tabControlProfiles.SelectedIndex = 0;
-            this.tabControlProfiles.Size = new System.Drawing.Size(926, 340);
+            this.tabControlProfiles.Size = new System.Drawing.Size(1211, 613);
             this.tabControlProfiles.TabIndex = 0;
             // 
             // tbpInstant
             // 
-            this.tbpInstant.BackColor = System.Drawing.Color.Transparent;
-            this.tbpInstant.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.tbpInstant.Controls.Add(this.dgInstant);
+            this.tbpInstant.BackColor = System.Drawing.SystemColors.Control;
+            this.tbpInstant.Controls.Add(this.splitcon_InstantTab);
             this.tbpInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpInstant.Location = new System.Drawing.Point(4, 28);
-            this.tbpInstant.Margin = new System.Windows.Forms.Padding(0);
+            this.tbpInstant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpInstant.Name = "tbpInstant";
-            this.tbpInstant.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpInstant.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tbpInstant.Size = new System.Drawing.Size(918, 308);
+            this.tbpInstant.Size = new System.Drawing.Size(1203, 581);
             this.tbpInstant.TabIndex = 0;
             this.tbpInstant.Text = "Instant";
+            this.tbpInstant.UseVisualStyleBackColor = true;
+            // 
+            // splitcon_InstantTab
+            // 
+            this.splitcon_InstantTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitcon_InstantTab.Location = new System.Drawing.Point(0, 0);
+            this.splitcon_InstantTab.Name = "splitcon_InstantTab";
+            this.splitcon_InstantTab.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitcon_InstantTab.Panel1
+            // 
+            this.splitcon_InstantTab.Panel1.Controls.Add(this.dgInstant);
+            // 
+            // splitcon_InstantTab.Panel2
+            // 
+            this.splitcon_InstantTab.Panel2.Controls.Add(this.chart_Instant);
+            this.splitcon_InstantTab.Size = new System.Drawing.Size(1203, 581);
+            this.splitcon_InstantTab.SplitterDistance = 276;
+            this.splitcon_InstantTab.TabIndex = 1;
             // 
             // dgInstant
             // 
@@ -243,8 +339,8 @@
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgInstant.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgInstant.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
@@ -254,27 +350,61 @@
             this.dgInstant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgInstant.EnableHeadersVisualStyles = false;
             this.dgInstant.GridColor = System.Drawing.SystemColors.AppWorkspace;
-            this.dgInstant.Location = new System.Drawing.Point(3, 2);
+            this.dgInstant.Location = new System.Drawing.Point(0, 0);
             this.dgInstant.Name = "dgInstant";
             this.dgInstant.ReadOnly = true;
             this.dgInstant.RowHeadersVisible = false;
             this.dgInstant.RowHeadersWidth = 50;
             this.dgInstant.RowTemplate.Height = 24;
-            this.dgInstant.Size = new System.Drawing.Size(912, 304);
+            this.dgInstant.Size = new System.Drawing.Size(1203, 276);
             this.dgInstant.TabIndex = 0;
+            // 
+            // chart_Instant
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chart_Instant.ChartAreas.Add(chartArea1);
+            this.chart_Instant.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.chart_Instant.Legends.Add(legend1);
+            this.chart_Instant.Location = new System.Drawing.Point(0, 0);
+            this.chart_Instant.Name = "chart_Instant";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart_Instant.Series.Add(series1);
+            this.chart_Instant.Size = new System.Drawing.Size(1203, 301);
+            this.chart_Instant.TabIndex = 0;
+            this.chart_Instant.Text = "chart1";
             // 
             // tbpLS
             // 
-            this.tbpLS.Controls.Add(this.dgLS);
+            this.tbpLS.Controls.Add(this.splitCon_LS);
             this.tbpLS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpLS.Location = new System.Drawing.Point(4, 28);
             this.tbpLS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpLS.Name = "tbpLS";
-            this.tbpLS.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbpLS.Size = new System.Drawing.Size(918, 308);
+            this.tbpLS.Size = new System.Drawing.Size(1203, 581);
             this.tbpLS.TabIndex = 1;
             this.tbpLS.Text = "Load Survey";
             this.tbpLS.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_LS
+            // 
+            this.splitCon_LS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_LS.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_LS.Name = "splitCon_LS";
+            this.splitCon_LS.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_LS.Panel1
+            // 
+            this.splitCon_LS.Panel1.Controls.Add(this.dgLS);
+            // 
+            // splitCon_LS.Panel2
+            // 
+            this.splitCon_LS.Panel2.Controls.Add(this.chart_LS);
+            this.splitCon_LS.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_LS.SplitterDistance = 337;
+            this.splitCon_LS.TabIndex = 6;
             // 
             // dgLS
             // 
@@ -282,8 +412,8 @@
             this.dgLS.AllowUserToResizeRows = false;
             this.dgLS.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgLS.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
@@ -292,26 +422,61 @@
             this.dgLS.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgLS.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgLS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgLS.Location = new System.Drawing.Point(3, 2);
+            this.dgLS.Location = new System.Drawing.Point(0, 0);
             this.dgLS.Name = "dgLS";
             this.dgLS.RowHeadersVisible = false;
             this.dgLS.RowHeadersWidth = 51;
             this.dgLS.RowTemplate.Height = 24;
             this.dgLS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgLS.Size = new System.Drawing.Size(912, 304);
+            this.dgLS.Size = new System.Drawing.Size(1203, 337);
             this.dgLS.TabIndex = 2;
+            // 
+            // chart_LS
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chart_LS.ChartAreas.Add(chartArea2);
+            this.chart_LS.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend2.Name = "Legend1";
+            this.chart_LS.Legends.Add(legend2);
+            this.chart_LS.Location = new System.Drawing.Point(0, 0);
+            this.chart_LS.Name = "chart_LS";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart_LS.Series.Add(series2);
+            this.chart_LS.Size = new System.Drawing.Size(1203, 240);
+            this.chart_LS.TabIndex = 3;
+            this.chart_LS.Text = "chart1";
             // 
             // tbpDE
             // 
-            this.tbpDE.Controls.Add(this.dgDE);
+            this.tbpDE.Controls.Add(this.splitCon_DE);
             this.tbpDE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpDE.Location = new System.Drawing.Point(4, 28);
             this.tbpDE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpDE.Name = "tbpDE";
-            this.tbpDE.Size = new System.Drawing.Size(918, 308);
+            this.tbpDE.Size = new System.Drawing.Size(1203, 581);
             this.tbpDE.TabIndex = 2;
             this.tbpDE.Text = "Daily Energy";
             this.tbpDE.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_DE
+            // 
+            this.splitCon_DE.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_DE.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_DE.Name = "splitCon_DE";
+            this.splitCon_DE.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_DE.Panel1
+            // 
+            this.splitCon_DE.Panel1.Controls.Add(this.dgDE);
+            // 
+            // splitCon_DE.Panel2
+            // 
+            this.splitCon_DE.Panel2.Controls.Add(this.chart_DE);
+            this.splitCon_DE.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_DE.SplitterDistance = 267;
+            this.splitCon_DE.TabIndex = 7;
             // 
             // dgDE
             // 
@@ -335,20 +500,55 @@
             this.dgDE.RowHeadersWidth = 51;
             this.dgDE.RowTemplate.Height = 24;
             this.dgDE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgDE.Size = new System.Drawing.Size(918, 308);
+            this.dgDE.Size = new System.Drawing.Size(1203, 267);
             this.dgDE.TabIndex = 2;
+            // 
+            // chart_DE
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chart_DE.ChartAreas.Add(chartArea3);
+            this.chart_DE.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend3.Name = "Legend1";
+            this.chart_DE.Legends.Add(legend3);
+            this.chart_DE.Location = new System.Drawing.Point(0, 0);
+            this.chart_DE.Name = "chart_DE";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart_DE.Series.Add(series3);
+            this.chart_DE.Size = new System.Drawing.Size(1203, 310);
+            this.chart_DE.TabIndex = 3;
+            this.chart_DE.Text = "chart1";
             // 
             // tbpSR
             // 
-            this.tbpSR.Controls.Add(this.dgSR);
+            this.tbpSR.Controls.Add(this.splitCon_SR);
             this.tbpSR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpSR.Location = new System.Drawing.Point(4, 28);
             this.tbpSR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpSR.Name = "tbpSR";
-            this.tbpSR.Size = new System.Drawing.Size(918, 308);
+            this.tbpSR.Size = new System.Drawing.Size(1203, 581);
             this.tbpSR.TabIndex = 3;
             this.tbpSR.Text = "Self Registration";
             this.tbpSR.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_SR
+            // 
+            this.splitCon_SR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_SR.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_SR.Name = "splitCon_SR";
+            this.splitCon_SR.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_SR.Panel1
+            // 
+            this.splitCon_SR.Panel1.Controls.Add(this.dgSR);
+            // 
+            // splitCon_SR.Panel2
+            // 
+            this.splitCon_SR.Panel2.Controls.Add(this.chart_SR);
+            this.splitCon_SR.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_SR.SplitterDistance = 222;
+            this.splitCon_SR.TabIndex = 7;
             // 
             // dgSR
             // 
@@ -372,20 +572,55 @@
             this.dgSR.RowHeadersWidth = 51;
             this.dgSR.RowTemplate.Height = 24;
             this.dgSR.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgSR.Size = new System.Drawing.Size(918, 308);
+            this.dgSR.Size = new System.Drawing.Size(1203, 222);
             this.dgSR.TabIndex = 2;
+            // 
+            // chart_SR
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.chart_SR.ChartAreas.Add(chartArea4);
+            this.chart_SR.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend4.Name = "Legend1";
+            this.chart_SR.Legends.Add(legend4);
+            this.chart_SR.Location = new System.Drawing.Point(0, 0);
+            this.chart_SR.Name = "chart_SR";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart_SR.Series.Add(series4);
+            this.chart_SR.Size = new System.Drawing.Size(1203, 355);
+            this.chart_SR.TabIndex = 3;
+            this.chart_SR.Text = "chart1";
             // 
             // tbpBill
             // 
-            this.tbpBill.Controls.Add(this.dgBill);
+            this.tbpBill.Controls.Add(this.splitCon_Bill);
             this.tbpBill.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpBill.Location = new System.Drawing.Point(4, 28);
             this.tbpBill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpBill.Name = "tbpBill";
-            this.tbpBill.Size = new System.Drawing.Size(918, 308);
+            this.tbpBill.Size = new System.Drawing.Size(1203, 581);
             this.tbpBill.TabIndex = 4;
             this.tbpBill.Text = "Billing";
             this.tbpBill.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_Bill
+            // 
+            this.splitCon_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_Bill.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_Bill.Name = "splitCon_Bill";
+            this.splitCon_Bill.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_Bill.Panel1
+            // 
+            this.splitCon_Bill.Panel1.Controls.Add(this.dgBill);
+            // 
+            // splitCon_Bill.Panel2
+            // 
+            this.splitCon_Bill.Panel2.Controls.Add(this.chart_Bill);
+            this.splitCon_Bill.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_Bill.SplitterDistance = 267;
+            this.splitCon_Bill.TabIndex = 7;
             // 
             // dgBill
             // 
@@ -409,20 +644,55 @@
             this.dgBill.RowHeadersWidth = 51;
             this.dgBill.RowTemplate.Height = 24;
             this.dgBill.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgBill.Size = new System.Drawing.Size(918, 308);
+            this.dgBill.Size = new System.Drawing.Size(1203, 267);
             this.dgBill.TabIndex = 2;
+            // 
+            // chart_Bill
+            // 
+            chartArea5.Name = "ChartArea1";
+            this.chart_Bill.ChartAreas.Add(chartArea5);
+            this.chart_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend5.Name = "Legend1";
+            this.chart_Bill.Legends.Add(legend5);
+            this.chart_Bill.Location = new System.Drawing.Point(0, 0);
+            this.chart_Bill.Name = "chart_Bill";
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chart_Bill.Series.Add(series5);
+            this.chart_Bill.Size = new System.Drawing.Size(1203, 310);
+            this.chart_Bill.TabIndex = 3;
+            this.chart_Bill.Text = "chart1";
             // 
             // tbpCB
             // 
-            this.tbpCB.Controls.Add(this.dgCB);
+            this.tbpCB.Controls.Add(this.splitCon_CB);
             this.tbpCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpCB.Location = new System.Drawing.Point(4, 28);
             this.tbpCB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpCB.Name = "tbpCB";
-            this.tbpCB.Size = new System.Drawing.Size(918, 308);
+            this.tbpCB.Size = new System.Drawing.Size(1203, 581);
             this.tbpCB.TabIndex = 5;
             this.tbpCB.Text = "Current Bill";
             this.tbpCB.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_CB
+            // 
+            this.splitCon_CB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_CB.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_CB.Name = "splitCon_CB";
+            this.splitCon_CB.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_CB.Panel1
+            // 
+            this.splitCon_CB.Panel1.Controls.Add(this.dgCB);
+            // 
+            // splitCon_CB.Panel2
+            // 
+            this.splitCon_CB.Panel2.Controls.Add(this.chart_CB);
+            this.splitCon_CB.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_CB.SplitterDistance = 267;
+            this.splitCon_CB.TabIndex = 7;
             // 
             // dgCB
             // 
@@ -446,20 +716,55 @@
             this.dgCB.RowHeadersWidth = 51;
             this.dgCB.RowTemplate.Height = 24;
             this.dgCB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgCB.Size = new System.Drawing.Size(918, 308);
+            this.dgCB.Size = new System.Drawing.Size(1203, 267);
             this.dgCB.TabIndex = 2;
+            // 
+            // chart_CB
+            // 
+            chartArea6.Name = "ChartArea1";
+            this.chart_CB.ChartAreas.Add(chartArea6);
+            this.chart_CB.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend6.Name = "Legend1";
+            this.chart_CB.Legends.Add(legend6);
+            this.chart_CB.Location = new System.Drawing.Point(0, 0);
+            this.chart_CB.Name = "chart_CB";
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chart_CB.Series.Add(series6);
+            this.chart_CB.Size = new System.Drawing.Size(1203, 310);
+            this.chart_CB.TabIndex = 3;
+            this.chart_CB.Text = "chart1";
             // 
             // tbpAlert
             // 
-            this.tbpAlert.Controls.Add(this.dgAlert);
+            this.tbpAlert.Controls.Add(this.splitCon_Alert);
             this.tbpAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpAlert.Location = new System.Drawing.Point(4, 28);
             this.tbpAlert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpAlert.Name = "tbpAlert";
-            this.tbpAlert.Size = new System.Drawing.Size(918, 308);
+            this.tbpAlert.Size = new System.Drawing.Size(1203, 581);
             this.tbpAlert.TabIndex = 6;
             this.tbpAlert.Text = "Alert";
             this.tbpAlert.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_Alert
+            // 
+            this.splitCon_Alert.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_Alert.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_Alert.Name = "splitCon_Alert";
+            this.splitCon_Alert.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_Alert.Panel1
+            // 
+            this.splitCon_Alert.Panel1.Controls.Add(this.dgAlert);
+            // 
+            // splitCon_Alert.Panel2
+            // 
+            this.splitCon_Alert.Panel2.Controls.Add(this.chart_Alert);
+            this.splitCon_Alert.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_Alert.SplitterDistance = 267;
+            this.splitCon_Alert.TabIndex = 7;
             // 
             // dgAlert
             // 
@@ -483,20 +788,55 @@
             this.dgAlert.RowHeadersWidth = 51;
             this.dgAlert.RowTemplate.Height = 24;
             this.dgAlert.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgAlert.Size = new System.Drawing.Size(918, 308);
+            this.dgAlert.Size = new System.Drawing.Size(1203, 267);
             this.dgAlert.TabIndex = 2;
+            // 
+            // chart_Alert
+            // 
+            chartArea7.Name = "ChartArea1";
+            this.chart_Alert.ChartAreas.Add(chartArea7);
+            this.chart_Alert.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend7.Name = "Legend1";
+            this.chart_Alert.Legends.Add(legend7);
+            this.chart_Alert.Location = new System.Drawing.Point(0, 0);
+            this.chart_Alert.Name = "chart_Alert";
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series1";
+            this.chart_Alert.Series.Add(series7);
+            this.chart_Alert.Size = new System.Drawing.Size(1203, 310);
+            this.chart_Alert.TabIndex = 3;
+            this.chart_Alert.Text = "chart1";
             // 
             // tbpTamper
             // 
-            this.tbpTamper.Controls.Add(this.dgTamper);
+            this.tbpTamper.Controls.Add(this.splitCon_Tamper);
             this.tbpTamper.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbpTamper.Location = new System.Drawing.Point(4, 28);
             this.tbpTamper.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpTamper.Name = "tbpTamper";
-            this.tbpTamper.Size = new System.Drawing.Size(918, 308);
+            this.tbpTamper.Size = new System.Drawing.Size(1203, 581);
             this.tbpTamper.TabIndex = 7;
             this.tbpTamper.Text = "Tamper";
             this.tbpTamper.UseVisualStyleBackColor = true;
+            // 
+            // splitCon_Tamper
+            // 
+            this.splitCon_Tamper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitCon_Tamper.Location = new System.Drawing.Point(0, 0);
+            this.splitCon_Tamper.Name = "splitCon_Tamper";
+            this.splitCon_Tamper.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitCon_Tamper.Panel1
+            // 
+            this.splitCon_Tamper.Panel1.Controls.Add(this.dgTamper);
+            // 
+            // splitCon_Tamper.Panel2
+            // 
+            this.splitCon_Tamper.Panel2.Controls.Add(this.chart_tamper);
+            this.splitCon_Tamper.Size = new System.Drawing.Size(1203, 581);
+            this.splitCon_Tamper.SplitterDistance = 267;
+            this.splitCon_Tamper.TabIndex = 7;
             // 
             // dgTamper
             // 
@@ -520,8 +860,25 @@
             this.dgTamper.RowHeadersWidth = 51;
             this.dgTamper.RowTemplate.Height = 24;
             this.dgTamper.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgTamper.Size = new System.Drawing.Size(918, 308);
+            this.dgTamper.Size = new System.Drawing.Size(1203, 267);
             this.dgTamper.TabIndex = 2;
+            // 
+            // chart_tamper
+            // 
+            chartArea8.Name = "ChartArea1";
+            this.chart_tamper.ChartAreas.Add(chartArea8);
+            this.chart_tamper.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend8.Name = "Legend1";
+            this.chart_tamper.Legends.Add(legend8);
+            this.chart_tamper.Location = new System.Drawing.Point(0, 0);
+            this.chart_tamper.Name = "chart_tamper";
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            this.chart_tamper.Series.Add(series8);
+            this.chart_tamper.Size = new System.Drawing.Size(1203, 310);
+            this.chart_tamper.TabIndex = 3;
+            this.chart_tamper.Text = "chart1";
             // 
             // dgRawData
             // 
@@ -532,28 +889,22 @@
             this.dgRawData.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dgRawData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgRawData.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgRawData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgRawData.DefaultCellStyle = dataGridViewCellStyle11;
             this.dgRawData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgRawData.GridColor = System.Drawing.SystemColors.AppWorkspace;
             this.dgRawData.Location = new System.Drawing.Point(0, 0);
             this.dgRawData.Margin = new System.Windows.Forms.Padding(0);
             this.dgRawData.Name = "dgRawData";
             this.dgRawData.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgRawData.RowHeadersVisible = false;
             this.dgRawData.RowHeadersWidth = 50;
@@ -561,8 +912,68 @@
             this.dgRawData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgRawData.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.dgRawData.RowTemplate.Height = 24;
-            this.dgRawData.Size = new System.Drawing.Size(926, 340);
+            this.dgRawData.Size = new System.Drawing.Size(1211, 613);
             this.dgRawData.TabIndex = 1;
+            // 
+            // lblHeader
+            // 
+            this.lblHeader.AutoSize = true;
+            this.lblHeader.BackColor = System.Drawing.Color.Indigo;
+            this.lblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold);
+            this.lblHeader.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblHeader.Location = new System.Drawing.Point(3, 0);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(1754, 40);
+            this.lblHeader.TabIndex = 0;
+            this.lblHeader.Text = "Push Settings and Notifications";
+            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tblHeader
+            // 
+            this.tblHeader.ColumnCount = 1;
+            this.tblHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblHeader.Controls.Add(this.flowPanelButtons, 0, 1);
+            this.tblHeader.Controls.Add(this.lblHeader, 0, 0);
+            this.tblHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblHeader.Location = new System.Drawing.Point(0, 0);
+            this.tblHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tblHeader.Name = "tblHeader";
+            this.tblHeader.RowCount = 2;
+            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblHeader.Size = new System.Drawing.Size(1760, 73);
+            this.tblHeader.TabIndex = 9;
+            // 
+            // flowPanelButtons
+            // 
+            this.flowPanelButtons.BackColor = System.Drawing.Color.Transparent;
+            this.flowPanelButtons.Controls.Add(this.btnPushprofileSettings);
+            this.flowPanelButtons.Controls.Add(this.btnStartListener);
+            this.flowPanelButtons.Controls.Add(this.btnStopListener);
+            this.flowPanelButtons.Controls.Add(this.btnClearLogs);
+            this.flowPanelButtons.Controls.Add(this.btnSaveData);
+            this.flowPanelButtons.Controls.Add(this.btnRawData);
+            this.flowPanelButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowPanelButtons.Location = new System.Drawing.Point(0, 40);
+            this.flowPanelButtons.Margin = new System.Windows.Forms.Padding(0);
+            this.flowPanelButtons.MinimumSize = new System.Drawing.Size(0, 34);
+            this.flowPanelButtons.Name = "flowPanelButtons";
+            this.flowPanelButtons.Size = new System.Drawing.Size(1760, 34);
+            this.flowPanelButtons.TabIndex = 5;
+            // 
+            // btnPushprofileSettings
+            // 
+            this.btnPushprofileSettings.BackColor = System.Drawing.Color.Transparent;
+            this.btnPushprofileSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPushprofileSettings.Location = new System.Drawing.Point(3, 2);
+            this.btnPushprofileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnPushprofileSettings.Name = "btnPushprofileSettings";
+            this.btnPushprofileSettings.Size = new System.Drawing.Size(252, 30);
+            this.btnPushprofileSettings.TabIndex = 62;
+            this.btnPushprofileSettings.Text = "▼ Push Profile Settings";
+            this.btnPushprofileSettings.UseVisualStyleBackColor = false;
+            this.btnPushprofileSettings.Click += new System.EventHandler(this.btnPushprofileSettings_Click);
             // 
             // btnStartListener
             // 
@@ -616,65 +1027,6 @@
             this.btnSaveData.UseVisualStyleBackColor = false;
             this.btnSaveData.Click += new System.EventHandler(this.btnSaveData_Click);
             // 
-            // lblHeader
-            // 
-            this.lblHeader.AutoSize = true;
-            this.lblHeader.BackColor = System.Drawing.Color.Indigo;
-            this.lblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold);
-            this.lblHeader.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblHeader.Location = new System.Drawing.Point(3, 0);
-            this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(1348, 34);
-            this.lblHeader.TabIndex = 0;
-            this.lblHeader.Text = "Push Settings and Notifications";
-            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tblHeader
-            // 
-            this.tblHeader.ColumnCount = 1;
-            this.tblHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblHeader.Controls.Add(this.flowPanelButtons, 0, 1);
-            this.tblHeader.Controls.Add(this.lblHeader, 0, 0);
-            this.tblHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblHeader.Location = new System.Drawing.Point(0, 0);
-            this.tblHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tblHeader.Name = "tblHeader";
-            this.tblHeader.RowCount = 2;
-            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tblHeader.Size = new System.Drawing.Size(1354, 66);
-            this.tblHeader.TabIndex = 9;
-            // 
-            // flowPanelButtons
-            // 
-            this.flowPanelButtons.BackColor = System.Drawing.Color.Transparent;
-            this.flowPanelButtons.Controls.Add(this.btnPushprofileSettings);
-            this.flowPanelButtons.Controls.Add(this.btnStartListener);
-            this.flowPanelButtons.Controls.Add(this.btnStopListener);
-            this.flowPanelButtons.Controls.Add(this.btnClearLogs);
-            this.flowPanelButtons.Controls.Add(this.btnSaveData);
-            this.flowPanelButtons.Controls.Add(this.btnRawData);
-            this.flowPanelButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowPanelButtons.Location = new System.Drawing.Point(0, 34);
-            this.flowPanelButtons.Margin = new System.Windows.Forms.Padding(0);
-            this.flowPanelButtons.Name = "flowPanelButtons";
-            this.flowPanelButtons.Size = new System.Drawing.Size(1354, 34);
-            this.flowPanelButtons.TabIndex = 5;
-            // 
-            // btnPushprofileSettings
-            // 
-            this.btnPushprofileSettings.BackColor = System.Drawing.Color.Transparent;
-            this.btnPushprofileSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPushprofileSettings.Location = new System.Drawing.Point(3, 2);
-            this.btnPushprofileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnPushprofileSettings.Name = "btnPushprofileSettings";
-            this.btnPushprofileSettings.Size = new System.Drawing.Size(252, 30);
-            this.btnPushprofileSettings.TabIndex = 4;
-            this.btnPushprofileSettings.Text = "▼ Push Profile Settings";
-            this.btnPushprofileSettings.UseVisualStyleBackColor = false;
-            this.btnPushprofileSettings.Click += new System.EventHandler(this.btnPushprofileSettings_Click);
-            // 
             // btnRawData
             // 
             this.btnRawData.BackColor = System.Drawing.Color.Transparent;
@@ -692,12 +1044,10 @@
             // 
             this.pnlProfileSettings.Controls.Add(this.grpProfileConfig);
             this.pnlProfileSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 66);
+            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 73);
             this.pnlProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pnlProfileSettings.MaximumSize = new System.Drawing.Size(2000, 281);
-            this.pnlProfileSettings.MinimumSize = new System.Drawing.Size(1700, 281);
             this.pnlProfileSettings.Name = "pnlProfileSettings";
-            this.pnlProfileSettings.Size = new System.Drawing.Size(1700, 281);
+            this.pnlProfileSettings.Size = new System.Drawing.Size(1760, 260);
             this.pnlProfileSettings.TabIndex = 0;
             this.pnlProfileSettings.Visible = false;
             // 
@@ -711,7 +1061,7 @@
             this.grpProfileConfig.Margin = new System.Windows.Forms.Padding(11, 5, 11, 5);
             this.grpProfileConfig.Name = "grpProfileConfig";
             this.grpProfileConfig.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpProfileConfig.Size = new System.Drawing.Size(1700, 281);
+            this.grpProfileConfig.Size = new System.Drawing.Size(1760, 260);
             this.grpProfileConfig.TabIndex = 10;
             this.grpProfileConfig.TabStop = false;
             this.grpProfileConfig.Text = "Push Setup And Action Schedule settings";
@@ -738,13 +1088,11 @@
             this.tblProfileSettings.Controls.Add(this.lblRandomHeader, 3, 0);
             this.tblProfileSettings.Controls.Add(this.lblCBProfile, 0, 7);
             this.tblProfileSettings.Controls.Add(this.txt_CB_DestIP, 1, 7);
-            this.tblProfileSettings.Controls.Add(this.cb_CB_Frequency, 2, 7);
             this.tblProfileSettings.Controls.Add(this.lblInstant, 0, 1);
             this.tblProfileSettings.Controls.Add(this.txt_Instant_DestIP, 1, 1);
             this.tblProfileSettings.Controls.Add(this.cbInstant_Frequency, 2, 1);
             this.tblProfileSettings.Controls.Add(this.lblAlert, 0, 2);
             this.tblProfileSettings.Controls.Add(this.txt_Alert_DestIP, 1, 2);
-            this.tblProfileSettings.Controls.Add(this.cb_Alert_Frequency, 2, 2);
             this.tblProfileSettings.Controls.Add(this.lblBillingProfile, 0, 3);
             this.tblProfileSettings.Controls.Add(this.txt_Bill_DestIP, 1, 3);
             this.tblProfileSettings.Controls.Add(this.cb_Bill_Frequency, 2, 3);
@@ -760,6 +1108,7 @@
             this.tblProfileSettings.Controls.Add(this.lblProfileHeader, 0, 0);
             this.tblProfileSettings.Controls.Add(this.lblDestIPHeader, 1, 0);
             this.tblProfileSettings.Controls.Add(this.lblPushFreqHeader, 2, 0);
+            this.tblProfileSettings.Controls.Add(this.cb_CB_Frequency, 2, 7);
             this.tblProfileSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblProfileSettings.Location = new System.Drawing.Point(3, 22);
             this.tblProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -773,25 +1122,25 @@
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tblProfileSettings.Size = new System.Drawing.Size(1694, 257);
+            this.tblProfileSettings.Size = new System.Drawing.Size(1754, 236);
             this.tblProfileSettings.TabIndex = 0;
             // 
             // cbTestProfileType
             // 
             this.cbTestProfileType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbTestProfileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTestProfileType.FormattingEnabled = true;
             this.cbTestProfileType.Items.AddRange(new object[] {
             "All",
             "Instant",
-            "Load Survey",
-            "Daily Energy",
-            "Self Registration",
-            "Billing",
-            "Current Bill",
-            "Tamper"});
-            this.cbTestProfileType.Location = new System.Drawing.Point(1355, 35);
+            "LS",
+            "DE",
+            "SR",
+            "Bill",
+            "Current Bill"});
+            this.cbTestProfileType.Location = new System.Drawing.Point(1403, 32);
             this.cbTestProfileType.Name = "cbTestProfileType";
-            this.cbTestProfileType.Size = new System.Drawing.Size(336, 28);
+            this.cbTestProfileType.Size = new System.Drawing.Size(348, 28);
             this.cbTestProfileType.TabIndex = 67;
             this.cbTestProfileType.SelectedIndexChanged += new System.EventHandler(this.cbTestProfileType_SelectedIndexChanged);
             // 
@@ -799,9 +1148,9 @@
             // 
             this.lblProfile.AutoSize = true;
             this.lblProfile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblProfile.Location = new System.Drawing.Point(1355, 0);
+            this.lblProfile.Location = new System.Drawing.Point(1403, 0);
             this.lblProfile.Name = "lblProfile";
-            this.lblProfile.Size = new System.Drawing.Size(336, 32);
+            this.lblProfile.Size = new System.Drawing.Size(348, 29);
             this.lblProfile.TabIndex = 66;
             this.lblProfile.Text = "Test Profile";
             this.lblProfile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -809,10 +1158,10 @@
             // btnSet_PS_AS
             // 
             this.btnSet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSet_PS_AS.Location = new System.Drawing.Point(1355, 227);
+            this.btnSet_PS_AS.Location = new System.Drawing.Point(1403, 206);
             this.btnSet_PS_AS.Name = "btnSet_PS_AS";
-            this.btnSet_PS_AS.Size = new System.Drawing.Size(336, 27);
-            this.btnSet_PS_AS.TabIndex = 63;
+            this.btnSet_PS_AS.Size = new System.Drawing.Size(348, 27);
+            this.btnSet_PS_AS.TabIndex = 61;
             this.btnSet_PS_AS.Text = "Set";
             this.btnSet_PS_AS.UseVisualStyleBackColor = true;
             this.btnSet_PS_AS.Click += new System.EventHandler(this.btnSet_PS_AS_Click);
@@ -820,9 +1169,9 @@
             // btnGet_PS_AS
             // 
             this.btnGet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGet_PS_AS.Location = new System.Drawing.Point(1355, 195);
+            this.btnGet_PS_AS.Location = new System.Drawing.Point(1403, 177);
             this.btnGet_PS_AS.Name = "btnGet_PS_AS";
-            this.btnGet_PS_AS.Size = new System.Drawing.Size(336, 26);
+            this.btnGet_PS_AS.Size = new System.Drawing.Size(348, 23);
             this.btnGet_PS_AS.TabIndex = 62;
             this.btnGet_PS_AS.Text = "Get";
             this.btnGet_PS_AS.UseVisualStyleBackColor = true;
@@ -830,88 +1179,81 @@
             // 
             // txt_Random_CB
             // 
-            this.txt_Random_CB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_CB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_CB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_CB.Location = new System.Drawing.Point(1017, 226);
+            this.txt_Random_CB.Location = new System.Drawing.Point(1053, 205);
             this.txt_Random_CB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_CB.Name = "txt_Random_CB";
-            this.txt_Random_CB.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_CB.TabIndex = 55;
+            this.txt_Random_CB.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_CB.TabIndex = 60;
             // 
             // txt_Random_LS
             // 
-            this.txt_Random_LS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_LS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_LS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_LS.Location = new System.Drawing.Point(1017, 194);
+            this.txt_Random_LS.Location = new System.Drawing.Point(1053, 176);
             this.txt_Random_LS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_LS.Name = "txt_Random_LS";
-            this.txt_Random_LS.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_LS.TabIndex = 54;
+            this.txt_Random_LS.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_LS.TabIndex = 57;
             // 
             // txt_Random_DE
             // 
-            this.txt_Random_DE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_DE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_DE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_DE.Location = new System.Drawing.Point(1017, 162);
+            this.txt_Random_DE.Location = new System.Drawing.Point(1053, 147);
             this.txt_Random_DE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_DE.Name = "txt_Random_DE";
-            this.txt_Random_DE.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_DE.TabIndex = 53;
+            this.txt_Random_DE.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_DE.TabIndex = 54;
             // 
             // txt_Random_SR
             // 
-            this.txt_Random_SR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_SR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_SR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_SR.Location = new System.Drawing.Point(1017, 130);
+            this.txt_Random_SR.Location = new System.Drawing.Point(1053, 118);
             this.txt_Random_SR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_SR.Name = "txt_Random_SR";
-            this.txt_Random_SR.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_SR.TabIndex = 52;
+            this.txt_Random_SR.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_SR.TabIndex = 51;
             // 
             // txt_Random_Bill
             // 
-            this.txt_Random_Bill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Bill.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Bill.Location = new System.Drawing.Point(1017, 98);
+            this.txt_Random_Bill.Location = new System.Drawing.Point(1053, 89);
             this.txt_Random_Bill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Bill.Name = "txt_Random_Bill";
-            this.txt_Random_Bill.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_Bill.TabIndex = 51;
+            this.txt_Random_Bill.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_Bill.TabIndex = 48;
             // 
             // txt_Random_Alert
             // 
-            this.txt_Random_Alert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Alert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Alert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Alert.Location = new System.Drawing.Point(1017, 66);
+            this.txt_Random_Alert.Location = new System.Drawing.Point(1053, 60);
             this.txt_Random_Alert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Alert.Name = "txt_Random_Alert";
-            this.txt_Random_Alert.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_Alert.TabIndex = 50;
+            this.txt_Random_Alert.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_Alert.TabIndex = 45;
             // 
             // txt_Random_Instant
             // 
-            this.txt_Random_Instant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Random_Instant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Instant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Instant.Location = new System.Drawing.Point(1017, 34);
+            this.txt_Random_Instant.Location = new System.Drawing.Point(1053, 31);
             this.txt_Random_Instant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Instant.Name = "txt_Random_Instant";
-            this.txt_Random_Instant.Size = new System.Drawing.Size(332, 27);
-            this.txt_Random_Instant.TabIndex = 49;
+            this.txt_Random_Instant.Size = new System.Drawing.Size(344, 27);
+            this.txt_Random_Instant.TabIndex = 42;
             // 
             // lblRandomHeader
             // 
             this.lblRandomHeader.AutoSize = true;
             this.lblRandomHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRandomHeader.Location = new System.Drawing.Point(1017, 0);
+            this.lblRandomHeader.Location = new System.Drawing.Point(1053, 0);
             this.lblRandomHeader.Name = "lblRandomHeader";
-            this.lblRandomHeader.Size = new System.Drawing.Size(332, 32);
+            this.lblRandomHeader.Size = new System.Drawing.Size(344, 29);
             this.lblRandomHeader.TabIndex = 48;
             this.lblRandomHeader.Text = "Randomisation (In Min)";
             this.lblRandomHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -921,65 +1263,50 @@
             this.lblCBProfile.AutoSize = true;
             this.lblCBProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCBProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCBProfile.Location = new System.Drawing.Point(3, 224);
+            this.lblCBProfile.Location = new System.Drawing.Point(3, 203);
             this.lblCBProfile.Name = "lblCBProfile";
-            this.lblCBProfile.Size = new System.Drawing.Size(332, 33);
+            this.lblCBProfile.Size = new System.Drawing.Size(344, 33);
             this.lblCBProfile.TabIndex = 45;
             this.lblCBProfile.Text = "Current Bill Profile";
             this.lblCBProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_CB_DestIP
             // 
-            this.txt_CB_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_CB_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_CB_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_CB_DestIP.Location = new System.Drawing.Point(341, 226);
+            this.txt_CB_DestIP.Location = new System.Drawing.Point(353, 205);
             this.txt_CB_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_CB_DestIP.Name = "txt_CB_DestIP";
-            this.txt_CB_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_CB_DestIP.TabIndex = 46;
-            this.txt_CB_DestIP.Text = "2403:8600:2090:14::27[4059]";
-            // 
-            // cb_CB_Frequency
-            // 
-            this.cb_CB_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cb_CB_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_CB_Frequency.FormattingEnabled = true;
-            this.cb_CB_Frequency.Items.AddRange(new object[] {
-            "*/*/* 00:00:00 (Midnight)"});
-            this.cb_CB_Frequency.Location = new System.Drawing.Point(679, 226);
-            this.cb_CB_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cb_CB_Frequency.Name = "cb_CB_Frequency";
-            this.cb_CB_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_CB_Frequency.TabIndex = 47;
+            this.txt_CB_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_CB_DestIP.TabIndex = 58;
             // 
             // lblInstant
             // 
             this.lblInstant.AutoSize = true;
             this.lblInstant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInstant.Location = new System.Drawing.Point(3, 32);
+            this.lblInstant.Location = new System.Drawing.Point(3, 29);
             this.lblInstant.Name = "lblInstant";
-            this.lblInstant.Size = new System.Drawing.Size(332, 32);
+            this.lblInstant.Size = new System.Drawing.Size(344, 29);
             this.lblInstant.TabIndex = 39;
             this.lblInstant.Text = "Instant Profile";
             this.lblInstant.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_Instant_DestIP
             // 
-            this.txt_Instant_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Instant_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Instant_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Instant_DestIP.Location = new System.Drawing.Point(341, 34);
+            this.txt_Instant_DestIP.Location = new System.Drawing.Point(353, 31);
             this.txt_Instant_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Instant_DestIP.Name = "txt_Instant_DestIP";
-            this.txt_Instant_DestIP.Size = new System.Drawing.Size(332, 27);
+            this.txt_Instant_DestIP.Size = new System.Drawing.Size(344, 27);
             this.txt_Instant_DestIP.TabIndex = 40;
-            this.txt_Instant_DestIP.Text = "2403:8600:2090:14::27[4059]";
             // 
             // cbInstant_Frequency
             // 
             this.cbInstant_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbInstant_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbInstant_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbInstant_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbInstant_Frequency.FormattingEnabled = true;
             this.cbInstant_Frequency.Items.AddRange(new object[] {
@@ -990,110 +1317,101 @@
             "6 Hour",
             "8 Hour",
             "12 Hour",
-            "24 Hour"});
-            this.cbInstant_Frequency.Location = new System.Drawing.Point(679, 34);
+            "24 Hour",
+            "Disabled"});
+            this.cbInstant_Frequency.Location = new System.Drawing.Point(703, 31);
             this.cbInstant_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbInstant_Frequency.Name = "cbInstant_Frequency";
-            this.cbInstant_Frequency.Size = new System.Drawing.Size(332, 28);
+            this.cbInstant_Frequency.Size = new System.Drawing.Size(344, 28);
             this.cbInstant_Frequency.TabIndex = 41;
+            this.cbInstant_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblAlert
             // 
             this.lblAlert.AutoSize = true;
             this.lblAlert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAlert.Location = new System.Drawing.Point(3, 64);
+            this.lblAlert.Location = new System.Drawing.Point(3, 58);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(332, 32);
+            this.lblAlert.Size = new System.Drawing.Size(344, 29);
             this.lblAlert.TabIndex = 36;
             this.lblAlert.Text = "Alert Profile";
             this.lblAlert.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_Alert_DestIP
             // 
-            this.txt_Alert_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Alert_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Alert_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Alert_DestIP.Location = new System.Drawing.Point(341, 66);
+            this.txt_Alert_DestIP.Location = new System.Drawing.Point(353, 60);
             this.txt_Alert_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Alert_DestIP.Name = "txt_Alert_DestIP";
-            this.txt_Alert_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_Alert_DestIP.TabIndex = 37;
-            this.txt_Alert_DestIP.Text = "2403:8600:2090:14::27[4059]";
-            // 
-            // cb_Alert_Frequency
-            // 
-            this.cb_Alert_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cb_Alert_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_Alert_Frequency.FormattingEnabled = true;
-            this.cb_Alert_Frequency.Location = new System.Drawing.Point(679, 66);
-            this.cb_Alert_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cb_Alert_Frequency.Name = "cb_Alert_Frequency";
-            this.cb_Alert_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_Alert_Frequency.TabIndex = 38;
+            this.txt_Alert_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_Alert_DestIP.TabIndex = 43;
             // 
             // lblBillingProfile
             // 
             this.lblBillingProfile.AutoSize = true;
             this.lblBillingProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBillingProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBillingProfile.Location = new System.Drawing.Point(3, 96);
+            this.lblBillingProfile.Location = new System.Drawing.Point(3, 87);
             this.lblBillingProfile.Name = "lblBillingProfile";
-            this.lblBillingProfile.Size = new System.Drawing.Size(332, 32);
+            this.lblBillingProfile.Size = new System.Drawing.Size(344, 29);
             this.lblBillingProfile.TabIndex = 33;
             this.lblBillingProfile.Text = "Billing Profile";
             this.lblBillingProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_Bill_DestIP
             // 
-            this.txt_Bill_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_Bill_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Bill_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Bill_DestIP.Location = new System.Drawing.Point(341, 98);
+            this.txt_Bill_DestIP.Location = new System.Drawing.Point(353, 89);
             this.txt_Bill_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Bill_DestIP.Name = "txt_Bill_DestIP";
-            this.txt_Bill_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_Bill_DestIP.TabIndex = 34;
-            this.txt_Bill_DestIP.Text = "2403:8600:2090:14::27[4059]";
+            this.txt_Bill_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_Bill_DestIP.TabIndex = 46;
             // 
             // cb_Bill_Frequency
             // 
             this.cb_Bill_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_Bill_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cb_Bill_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_Bill_Frequency.FormattingEnabled = true;
-            this.cb_Bill_Frequency.Location = new System.Drawing.Point(679, 98);
+            this.cb_Bill_Frequency.Items.AddRange(new object[] {
+            "Disabled"});
+            this.cb_Bill_Frequency.Location = new System.Drawing.Point(703, 89);
             this.cb_Bill_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_Bill_Frequency.Name = "cb_Bill_Frequency";
-            this.cb_Bill_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_Bill_Frequency.TabIndex = 35;
+            this.cb_Bill_Frequency.Size = new System.Drawing.Size(344, 28);
+            this.cb_Bill_Frequency.TabIndex = 47;
+            this.cb_Bill_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblSRProfile
             // 
             this.lblSRProfile.AutoSize = true;
             this.lblSRProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSRProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSRProfile.Location = new System.Drawing.Point(3, 128);
+            this.lblSRProfile.Location = new System.Drawing.Point(3, 116);
             this.lblSRProfile.Name = "lblSRProfile";
-            this.lblSRProfile.Size = new System.Drawing.Size(332, 32);
+            this.lblSRProfile.Size = new System.Drawing.Size(344, 29);
             this.lblSRProfile.TabIndex = 30;
             this.lblSRProfile.Text = "Self Registration Profile";
             this.lblSRProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_SR_DestIP
             // 
-            this.txt_SR_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_SR_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_SR_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_SR_DestIP.Location = new System.Drawing.Point(341, 130);
+            this.txt_SR_DestIP.Location = new System.Drawing.Point(353, 118);
             this.txt_SR_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_SR_DestIP.Name = "txt_SR_DestIP";
-            this.txt_SR_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_SR_DestIP.TabIndex = 31;
-            this.txt_SR_DestIP.Text = "2403:8600:2090:14::27[4059]";
+            this.txt_SR_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_SR_DestIP.TabIndex = 49;
             // 
             // cb_SR_Frequency
             // 
             this.cb_SR_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_SR_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cb_SR_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_SR_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_SR_Frequency.FormattingEnabled = true;
             this.cb_SR_Frequency.Items.AddRange(new object[] {
@@ -1104,77 +1422,81 @@
             "6 Hour",
             "8 Hour",
             "12 Hour",
-            "24 Hour"});
-            this.cb_SR_Frequency.Location = new System.Drawing.Point(679, 130);
+            "24 Hour",
+            "Disabled"});
+            this.cb_SR_Frequency.Location = new System.Drawing.Point(703, 118);
             this.cb_SR_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_SR_Frequency.Name = "cb_SR_Frequency";
-            this.cb_SR_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_SR_Frequency.TabIndex = 32;
+            this.cb_SR_Frequency.Size = new System.Drawing.Size(344, 28);
+            this.cb_SR_Frequency.TabIndex = 50;
+            this.cb_SR_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblDEProfile
             // 
             this.lblDEProfile.AutoSize = true;
             this.lblDEProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDEProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDEProfile.Location = new System.Drawing.Point(3, 160);
+            this.lblDEProfile.Location = new System.Drawing.Point(3, 145);
             this.lblDEProfile.Name = "lblDEProfile";
-            this.lblDEProfile.Size = new System.Drawing.Size(332, 32);
+            this.lblDEProfile.Size = new System.Drawing.Size(344, 29);
             this.lblDEProfile.TabIndex = 27;
             this.lblDEProfile.Text = "Daily Energy Profile";
             this.lblDEProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_DE_DestIP
             // 
-            this.txt_DE_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_DE_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_DE_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_DE_DestIP.Location = new System.Drawing.Point(341, 162);
+            this.txt_DE_DestIP.Location = new System.Drawing.Point(353, 147);
             this.txt_DE_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_DE_DestIP.Name = "txt_DE_DestIP";
-            this.txt_DE_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_DE_DestIP.TabIndex = 28;
-            this.txt_DE_DestIP.Text = "2403:8600:2090:14::27[4059]";
+            this.txt_DE_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_DE_DestIP.TabIndex = 52;
             // 
             // cb_DE_Frequency
             // 
             this.cb_DE_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_DE_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cb_DE_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_DE_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_DE_Frequency.FormattingEnabled = true;
             this.cb_DE_Frequency.Items.AddRange(new object[] {
-            "*/*/* 00:00:00 (Midnight)"});
-            this.cb_DE_Frequency.Location = new System.Drawing.Point(679, 162);
+            "24 Hour",
+            "Disabled"});
+            this.cb_DE_Frequency.Location = new System.Drawing.Point(703, 147);
             this.cb_DE_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_DE_Frequency.Name = "cb_DE_Frequency";
-            this.cb_DE_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_DE_Frequency.TabIndex = 29;
+            this.cb_DE_Frequency.Size = new System.Drawing.Size(344, 28);
+            this.cb_DE_Frequency.TabIndex = 53;
+            this.cb_DE_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblLSProfile
             // 
             this.lblLSProfile.AutoSize = true;
             this.lblLSProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLSProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLSProfile.Location = new System.Drawing.Point(3, 192);
+            this.lblLSProfile.Location = new System.Drawing.Point(3, 174);
             this.lblLSProfile.Name = "lblLSProfile";
-            this.lblLSProfile.Size = new System.Drawing.Size(332, 32);
+            this.lblLSProfile.Size = new System.Drawing.Size(344, 29);
             this.lblLSProfile.TabIndex = 24;
             this.lblLSProfile.Text = "Load Survey Profile";
             this.lblLSProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txt_LS_DestIP
             // 
-            this.txt_LS_DestIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_LS_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_LS_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_LS_DestIP.Location = new System.Drawing.Point(341, 194);
+            this.txt_LS_DestIP.Location = new System.Drawing.Point(353, 176);
             this.txt_LS_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_LS_DestIP.Name = "txt_LS_DestIP";
-            this.txt_LS_DestIP.Size = new System.Drawing.Size(332, 27);
-            this.txt_LS_DestIP.TabIndex = 25;
-            this.txt_LS_DestIP.Text = "2403:8600:2090:14::27[4059]";
+            this.txt_LS_DestIP.Size = new System.Drawing.Size(344, 27);
+            this.txt_LS_DestIP.TabIndex = 55;
             // 
             // cb_LS_Frequency
             // 
             this.cb_LS_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_LS_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cb_LS_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cb_LS_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_LS_Frequency.FormattingEnabled = true;
             this.cb_LS_Frequency.Items.AddRange(new object[] {
@@ -1185,12 +1507,14 @@
             "6 Hour",
             "8 Hour",
             "12 Hour",
-            "24 Hour"});
-            this.cb_LS_Frequency.Location = new System.Drawing.Point(679, 194);
+            "24 Hour",
+            "Disabled"});
+            this.cb_LS_Frequency.Location = new System.Drawing.Point(703, 176);
             this.cb_LS_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_LS_Frequency.Name = "cb_LS_Frequency";
-            this.cb_LS_Frequency.Size = new System.Drawing.Size(332, 28);
-            this.cb_LS_Frequency.TabIndex = 26;
+            this.cb_LS_Frequency.Size = new System.Drawing.Size(344, 28);
+            this.cb_LS_Frequency.TabIndex = 56;
+            this.cb_LS_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblProfileHeader
             // 
@@ -1198,7 +1522,7 @@
             this.lblProfileHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfileHeader.Location = new System.Drawing.Point(3, 0);
             this.lblProfileHeader.Name = "lblProfileHeader";
-            this.lblProfileHeader.Size = new System.Drawing.Size(332, 32);
+            this.lblProfileHeader.Size = new System.Drawing.Size(344, 29);
             this.lblProfileHeader.TabIndex = 0;
             this.lblProfileHeader.Text = "Profiles";
             this.lblProfileHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1207,9 +1531,9 @@
             // 
             this.lblDestIPHeader.AutoSize = true;
             this.lblDestIPHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDestIPHeader.Location = new System.Drawing.Point(341, 0);
+            this.lblDestIPHeader.Location = new System.Drawing.Point(353, 0);
             this.lblDestIPHeader.Name = "lblDestIPHeader";
-            this.lblDestIPHeader.Size = new System.Drawing.Size(332, 32);
+            this.lblDestIPHeader.Size = new System.Drawing.Size(344, 29);
             this.lblDestIPHeader.TabIndex = 1;
             this.lblDestIPHeader.Text = "Destination IP Address";
             this.lblDestIPHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1218,19 +1542,36 @@
             // 
             this.lblPushFreqHeader.AutoSize = true;
             this.lblPushFreqHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPushFreqHeader.Location = new System.Drawing.Point(679, 0);
+            this.lblPushFreqHeader.Location = new System.Drawing.Point(703, 0);
             this.lblPushFreqHeader.Name = "lblPushFreqHeader";
-            this.lblPushFreqHeader.Size = new System.Drawing.Size(332, 32);
+            this.lblPushFreqHeader.Size = new System.Drawing.Size(344, 29);
             this.lblPushFreqHeader.TabIndex = 2;
             this.lblPushFreqHeader.Text = "Push Frequency Schedule";
             this.lblPushFreqHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cb_CB_Frequency
+            // 
+            this.cb_CB_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_CB_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cb_CB_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_CB_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_CB_Frequency.FormattingEnabled = true;
+            this.cb_CB_Frequency.Items.AddRange(new object[] {
+            "24 Hour",
+            "Disabled"});
+            this.cb_CB_Frequency.Location = new System.Drawing.Point(703, 205);
+            this.cb_CB_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cb_CB_Frequency.Name = "cb_CB_Frequency";
+            this.cb_CB_Frequency.Size = new System.Drawing.Size(344, 28);
+            this.cb_CB_Frequency.TabIndex = 59;
+            this.cb_CB_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // ListenerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(1354, 737);
+            this.ClientSize = new System.Drawing.Size(1760, 996);
             this.Controls.Add(this.tblMain);
             this.Controls.Add(this.pnlProfileSettings);
             this.Controls.Add(this.tblHeader);
@@ -1238,28 +1579,68 @@
             this.Name = "ListenerForm";
             this.Text = "DLMS Push Listener UI";
             this.tblMain.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitConMain.Panel1.ResumeLayout(false);
+            this.splitConMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitConMain)).EndInit();
+            this.splitConMain.ResumeLayout(false);
             this.PanelProfileandRawData.ResumeLayout(false);
             this.tabControlProfiles.ResumeLayout(false);
             this.tbpInstant.ResumeLayout(false);
+            this.splitcon_InstantTab.Panel1.ResumeLayout(false);
+            this.splitcon_InstantTab.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitcon_InstantTab)).EndInit();
+            this.splitcon_InstantTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgInstant)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Instant)).EndInit();
             this.tbpLS.ResumeLayout(false);
+            this.splitCon_LS.Panel1.ResumeLayout(false);
+            this.splitCon_LS.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_LS)).EndInit();
+            this.splitCon_LS.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgLS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_LS)).EndInit();
             this.tbpDE.ResumeLayout(false);
+            this.splitCon_DE.Panel1.ResumeLayout(false);
+            this.splitCon_DE.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_DE)).EndInit();
+            this.splitCon_DE.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgDE)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_DE)).EndInit();
             this.tbpSR.ResumeLayout(false);
+            this.splitCon_SR.Panel1.ResumeLayout(false);
+            this.splitCon_SR.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_SR)).EndInit();
+            this.splitCon_SR.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgSR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_SR)).EndInit();
             this.tbpBill.ResumeLayout(false);
+            this.splitCon_Bill.Panel1.ResumeLayout(false);
+            this.splitCon_Bill.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Bill)).EndInit();
+            this.splitCon_Bill.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgBill)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Bill)).EndInit();
             this.tbpCB.ResumeLayout(false);
+            this.splitCon_CB.Panel1.ResumeLayout(false);
+            this.splitCon_CB.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_CB)).EndInit();
+            this.splitCon_CB.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgCB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_CB)).EndInit();
             this.tbpAlert.ResumeLayout(false);
+            this.splitCon_Alert.Panel1.ResumeLayout(false);
+            this.splitCon_Alert.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Alert)).EndInit();
+            this.splitCon_Alert.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgAlert)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_Alert)).EndInit();
             this.tbpTamper.ResumeLayout(false);
+            this.splitCon_Tamper.Panel1.ResumeLayout(false);
+            this.splitCon_Tamper.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitCon_Tamper)).EndInit();
+            this.splitCon_Tamper.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgTamper)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_tamper)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgRawData)).EndInit();
             this.tblHeader.ResumeLayout(false);
             this.tblHeader.PerformLayout();
@@ -1276,11 +1657,7 @@
 
         private System.Windows.Forms.TableLayoutPanel tblMain;
         private System.Windows.Forms.Label lblHeader;
-        private System.Windows.Forms.Button btnStartListener;
-        private System.Windows.Forms.Button btnStopListener;
-        private System.Windows.Forms.Button btnClearLogs;
-        private System.Windows.Forms.Button btnSaveData;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitConMain;
         private System.Windows.Forms.TabControl tabControlProfiles;
         private System.Windows.Forms.TabPage tbpInstant;
         private System.Windows.Forms.TabPage tbpLS;
@@ -1302,7 +1679,6 @@
         private System.Windows.Forms.ComboBox cbInstant_Frequency;
         private System.Windows.Forms.Label lblAlert;
         private System.Windows.Forms.TextBox txt_Alert_DestIP;
-        private System.Windows.Forms.ComboBox cb_Alert_Frequency;
         private System.Windows.Forms.Label lblBillingProfile;
         private System.Windows.Forms.TextBox txt_Bill_DestIP;
         private System.Windows.Forms.ComboBox cb_Bill_Frequency;
@@ -1318,8 +1694,6 @@
         private System.Windows.Forms.Label lblProfileHeader;
         private System.Windows.Forms.Label lblDestIPHeader;
         private System.Windows.Forms.Label lblPushFreqHeader;
-        private System.Windows.Forms.FlowLayoutPanel flowPanelButtons;
-        private System.Windows.Forms.Button btnPushprofileSettings;
         private System.Windows.Forms.Label lblRandomHeader;
         private System.Windows.Forms.TextBox txt_Random_CB;
         private System.Windows.Forms.TextBox txt_Random_LS;
@@ -1329,7 +1703,6 @@
         private System.Windows.Forms.TextBox txt_Random_Alert;
         private System.Windows.Forms.TextBox txt_Random_Instant;
         private System.Windows.Forms.RichTextBox rtbPushLogs;
-        private System.Windows.Forms.Button btnRawData;
         private System.Windows.Forms.Panel PanelProfileandRawData;
         private System.Windows.Forms.DataGridView dgRawData;
         private System.Windows.Forms.Button btnSet_PS_AS;
@@ -1344,5 +1717,28 @@
         private System.Windows.Forms.DataGridView dgCB;
         private System.Windows.Forms.DataGridView dgAlert;
         private System.Windows.Forms.DataGridView dgTamper;
+        private System.Windows.Forms.SplitContainer splitcon_InstantTab;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_Instant;
+        private System.Windows.Forms.SplitContainer splitCon_LS;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_LS;
+        private System.Windows.Forms.SplitContainer splitCon_DE;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_DE;
+        private System.Windows.Forms.SplitContainer splitCon_SR;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_SR;
+        private System.Windows.Forms.SplitContainer splitCon_Bill;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_Bill;
+        private System.Windows.Forms.SplitContainer splitCon_CB;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_CB;
+        private System.Windows.Forms.SplitContainer splitCon_Alert;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_Alert;
+        private System.Windows.Forms.SplitContainer splitCon_Tamper;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_tamper;
+        private System.Windows.Forms.FlowLayoutPanel flowPanelButtons;
+        private System.Windows.Forms.Button btnPushprofileSettings;
+        private System.Windows.Forms.Button btnStartListener;
+        private System.Windows.Forms.Button btnStopListener;
+        private System.Windows.Forms.Button btnClearLogs;
+        private System.Windows.Forms.Button btnSaveData;
+        private System.Windows.Forms.Button btnRawData;
     }
 }

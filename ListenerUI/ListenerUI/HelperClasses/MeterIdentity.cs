@@ -76,6 +76,7 @@ namespace MeterReader.TestHelperClasses
             _testConfig.AccessMode = 2;
             _testConfig.AddressModeText = "0";
             _testConfig.IsLNWithCipher = false;
+            _testConfig.comPort = DLMSInfo.comPort;
             _testConfig.ApplyTestConfiguration();
             DLMSComm DLMSObj = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
             DLMSObj.nTryCount = 1;

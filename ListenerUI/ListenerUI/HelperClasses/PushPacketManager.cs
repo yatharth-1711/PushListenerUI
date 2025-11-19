@@ -2555,7 +2555,6 @@ namespace ListenerUI.HelperClasses
 
                             newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
                             newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
-
                             if (pushVal != optVal)
                             {
                                 misMatchData.Add($"Row {i + 1}, Column '{pushData.Columns[col].ColumnName}': Push='{pushVal}', Optical='{optVal}'");
@@ -2574,7 +2573,6 @@ namespace ListenerUI.HelperClasses
             return misMatchData;
         }
         #endregion
-
         // dtRecPush datatable need to be cleared 
         public void ResetRecPushDT()
         {
@@ -2586,6 +2584,24 @@ namespace ListenerUI.HelperClasses
             dtRec_Push_Instant.Reset();
             dtRec_Push_LS.Reset();
             dtRec_Push_SR.Reset();
+        }
+        public void ExportReports(string filepath)
+        {
+            try
+            {
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Alert, filepath, "Alert");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Instant, filepath, "Instant");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_LS, filepath, "Load Survey");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_DE, filepath, "Daily Energy");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_SR, filepath, "Self Registration");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_CB, filepath, "Current Bill");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Bill, filepath, "Billing");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Tamper, filepath, "Tamper");
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in exporting data" + ex.Message.ToString());
+            }
         }
     }
 }

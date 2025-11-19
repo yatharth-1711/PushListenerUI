@@ -60,6 +60,9 @@ namespace ListenerUI
             DLMSInfo.AccessMode = cbAccessLevel.SelectedIndex;
             DLMSInfo.MeterAuthPasswordWrite = txtAuthPasswordWrite.Text.Trim();
             DLMSInfo.MeterAuthPassword = txtAuthPassword.Text.Trim();
+            config.comPort = DLMSInfo.comPort = cbMeterComPort.SelectedItem.ToString();
+            DLMSInfo.BaudRate = Convert.ToInt32(cbMeterBaudRate.SelectedItem.ToString());
+
 
         }
         private void TestConfigLoad(TestConfiguration config)

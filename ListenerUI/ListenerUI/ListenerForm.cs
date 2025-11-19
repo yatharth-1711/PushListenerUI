@@ -12,6 +12,7 @@ using MeterReader.DLMSInterfaceClasses;
 using MeterReader.DLMSNetSerialCommunication;
 using MeterReader.TestHelperClasses;
 using Newtonsoft.Json.Linq;
+using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using Org.BouncyCastle.Ocsp;
 using System;
@@ -20,14 +21,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ListenerUI
 {
@@ -70,52 +75,79 @@ namespace ListenerUI
         public DataTable finalDataTable = new DataTable();
         private int lastPushRowCount = 0;
         public static CancellationTokenSource _cancellationToken;
+        private Dictionary<string, List<string>> freqHexPatterns = new Dictionary<string, List<string>>
+        {
+            { "15 Min", new List<string>
+                {
+                    "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF",
+                    "010402020904FF0000FF0905FFFFFFFFFF02020904FF0F00FF0905FFFFFFFFFF02020904FF1E00FF0905FFFFFFFFFF02020904FF2D00FF0905FFFFFFFFFF"
+                }
+            },
+            { "30 Min", new List<string>
+                {
+                    "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF",
+                    "010202020904FF0000FF0905FFFFFFFFFF02020904FF1E00FF0905FFFFFFFFFF"
+                }
+            },
+            { "1 Hour", new List<string>
+                {
+                    "010102020904FF0000000905FFFFFFFFFF",
+                    "010102020904FF0000FF0905FFFFFFFFFF"
+                }
+            },
+            { "4 Hour", new List<string>
+                {
+                    "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF",
+                    "010602020904000000FF0905FFFFFFFFFF02020904040000FF0905FFFFFFFFFF02020904080000FF0905FFFFFFFFFF020209040C0000FF0905FFFFFFFFFF02020904100000FF0905FFFFFFFFFF02020904140000FF0905FFFFFFFFFF"
+                }
+            },
+            { "6 Hour", new List<string>
+                {
+                    "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF",
+                    "010402020904000000FF0905FFFFFFFFFF02020904060000FF0905FFFFFFFFFF020209040C0000FF0905FFFFFFFFFF02020904120000FF0905FFFFFFFFFF"
+                }
+            },
+            { "8 Hour", new List<string>
+                {
+                    "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF",
+                    "010302020904000000FF0905FFFFFFFFFF02020904080000FF0905FFFFFFFFFF02020904100000FF0905FFFFFFFFFF"
+                }
+            },
+            { "12 Hour", new List<string>
+                {
+                    "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF",
+                    "010202020904000000FF0905FFFFFFFFFF020209040C0000FF0905FFFFFFFFFF"
+                }
+            },
+            { "24 Hour", new List<string>
+                {
+                    "010102020904000000000905FFFFFFFFFF",
+                    "010102020904000000FF0905FFFFFFFFFF"
+                }
+            },
+            { "Disabled", new List<string>
+                {
+                    "0100"
+                }
+            }
+        };
+        public static List<(string Name, string DisplayName, string PushSetupClassObis, string ActionScheduleClassObisAtt, TextBox txt_Dest_Add, ComboBox cbFrequency, TextBox txtRandom)> profileControls;
 
-        Dictionary<string, string> actionScheduleClassObis = new Dictionary<string, string>
-            {
-              { "Instant", "001600000F0004FF04" },
-              { "LS", "001600040F0004FF04" },
-              { "DE", "001600050F0004FF04" },
-              { "SR", "001600000F008EFF04" },
-              { "Bill", "001600000F0000FF04" },
-              { "Tamper", "001600000F008FFF04" },
-              { "Current Bill", "001600000F0093FF04" }
-            };
-        Dictionary<string, string> pushSetupClassObis = new Dictionary<string, string>
-            {
-              { "Alert", "00280004190900FF"},
-              { "Instant", "00280000190900FF" },
-              { "LS", "00280005190900FF" },
-              { "DE", "00280006190900FF" },
-              { "SR", "00280082190900FF" },
-              { "Bill", "00280084190900FF" },
-              { "Tamper", "00280086190900FF" },
-              { "Current Bill", "00280000190981FF"}
-            };
-        Dictionary<string, string> freqHexString = new Dictionary<string, string>
-            {
-                { "15 Min", "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
-                { "30 Min", "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF" },
-                { "1 Hour", "010102020904FF0000000905FFFFFFFFFF" },
-                { "4 Hour", "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF" },
-                { "6 Hour", "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF" },
-                { "8 Hour", "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
-                { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
-                { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
-                {"Disabled", "0100" }
-            };
         public ListenerForm()
         {
-            InitializeComponent();
+            InitializeComponent(); UISettings();
             StyleDataGrid(dgRawData); StyleDataGrid(dgAlert); StyleDataGrid(dgInstant); StyleDataGrid(dgLS);
             StyleDataGrid(dgTamper); StyleDataGrid(dgBill); StyleDataGrid(dgDE); StyleDataGrid(dgSR); StyleDataGrid(dgCB);
+
             InitializeLoggerAndConfigurations();
             PushPacketManager.DeviceID = "GOE12043714";
             finalDataTable.RowChanged += FinalDataTable_RowChanged;
             // Bind log event
             TestLogService.AppendColoredTextControlEventHandler += TestLogService_AppendColoredTextControlEventHandler;
-            rtbPushLogs.MouseDown += rtbPushLogs_MouseDown;
-            rtbPushLogs.MouseMove += rtbPushLogs_MouseMove;
+            rtbPushLogs.LinkClicked += rtbPushLogs_LinkClicked;
+            cbInstant_Frequency.DrawMode = DrawMode.OwnerDrawFixed;
+            cbInstant_Frequency.DrawItem += cbInstant_Frequency_DrawItem;
+
 
             PushPacketManager._logService = logService;
             PushPacketManager.logBox = rtbPushLogs;
@@ -129,30 +161,54 @@ namespace ListenerUI
             foreach (var cb in comboBoxes)
                 cb.SelectedIndex = 0;
         }
-
-        private Dictionary<string, (TextBox txtDestIP, ComboBox cbFrequency, TextBox txtRandom)> profileControls;
         private void InitializeProfileControls()
         {
-            profileControls = new Dictionary<string, (TextBox, ComboBox, TextBox)>
-            {
-                { "Instant", (txt_Instant_DestIP, cbInstant_Frequency, txt_Random_Instant) },
-                { "Alert", (txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert) },
-                { "Bill", (txt_Bill_DestIP, cb_Bill_Frequency, txt_Random_Bill) },
-                { "SR", (txt_SR_DestIP, cb_SR_Frequency, txt_Random_SR) },
-                { "DE", (txt_DE_DestIP, cb_DE_Frequency, txt_Random_DE) },
-                { "LS", (txt_LS_DestIP, cb_LS_Frequency, txt_Random_LS) },
-                { "Current Bill", (txt_CB_DestIP, cb_CB_Frequency, txt_Random_CB) },
-                { "Tamper", (txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert) } // Tamper shares Alert controls
-            };
+            profileControls = new List<(string Name, string DisplayName, string PushSetupClassObis, string ActionScheduleClassObisAtt, TextBox txt_Dest_Add, ComboBox cbFrequency, TextBox txtRandom)>
+                                        {
+                                        ("Instant",     "Instant",              "00280000190900FF",     "001600000F0004FF04",       txt_Instant_DestIP,     cbInstant_Frequency,    txt_Random_Instant),
+                                        ("Alert",       "Alert",                "00280004190900FF",     null,                       txt_Alert_DestIP,       null,                   txt_Random_Alert),
+                                        ("Bill",        "Bill",                 "00280084190900FF",     "001600000F0000FF04",       txt_Bill_DestIP,        cb_Bill_Frequency,      txt_Random_Bill),
+                                        ("SR",          "Self Registration",    "00280082190900FF",     "001600000F008EFF04",       txt_SR_DestIP,          cb_SR_Frequency,        txt_Random_SR),
+                                        ("DE",          "Daily Energy",         "00280006190900FF",     "001600050F0004FF04",       txt_DE_DestIP,          cb_DE_Frequency,        txt_Random_DE),
+                                        ("LS",          "Load Survey",          "00280005190900FF",     "001600040F0004FF04",       txt_LS_DestIP,          cb_LS_Frequency,        txt_Random_LS),
+                                        ("CB",          "Current Bill",         "00280000190981FF",     "001600000F0093FF04",       txt_CB_DestIP,          cb_CB_Frequency,        txt_Random_CB),
+                                        //("Tamper",      "Tamper",               "00280086190900FF",     "001600000F008FFF04",       txt_Alert_DestIP,       cb_Alert_Frequency,     txt_Random_Alert)
+                                        };
         }
         private void InitializeLoggerAndConfigurations()
         {
             logService = new TestLogService(rtbPushLogs);
             config = TestConfiguration.CreateDefault();
         }
+        private void cbInstant_Frequency_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            ComboBox combo = sender as ComboBox;
+
+            if (e.Index < 0) return;
+
+            // Remove default selection highlight
+            e.DrawBackground();
+            bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+
+            // Choose background color
+            Color bgColor = isSelected ? Color.White : Color.White;
+            Color textColor = Color.Black;
+
+            using (SolidBrush brush = new SolidBrush(bgColor))
+            {
+                e.Graphics.FillRectangle(brush, e.Bounds);
+            }
+
+            using (SolidBrush textBrush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawString(combo.Items[e.Index].ToString(), combo.Font, textBrush, e.Bounds.X, e.Bounds.Y);
+            }
+
+            e.DrawFocusRectangle();
+        }
         private async void btnStartListener_Click(object sender, EventArgs e)
         {
-
+            rtbPushLogs.Clear();
             logService = new TestLogService(rtbPushLogs);
             logBox = rtbPushLogs;
             try
@@ -162,8 +218,8 @@ namespace ListenerUI
                     this.Invoke(new Action(() =>
                     {
                         logService.LogMessage(rtbPushLogs, "Getting Meter Details and Push profiles...", Color.Black, true);
-                        //IniTestRun(config);
-                        //ProfileGenericInfo.FillTables();
+                        IniTestRun(config);
+                        ProfileGenericInfo.FillTables();
                     }));
                 });
             }
@@ -234,70 +290,112 @@ namespace ListenerUI
         }
         private void btnGet_PS_AS_Click(object sender, EventArgs e)
         {
-            if (cbTestProfileType.Text != "All")
+            btnGet_PS_AS.Enabled = false;
+            btnSet_PS_AS.Enabled = false;
+            DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            try
             {
-                GetPushFreqAndDestination(cbTestProfileType.Text);
+                if (!DLMSWriter.SignOnDLMS())
+                {
+                    CommonHelper.DisplayDLMSSignONError();
+                    return;
+                }
+                List<string> profilesToRead = cbTestProfileType.Text == "All"
+                    ? new List<string> { "Instant", "Alert", "Bill", "SR", "DE", "LS", "CB" }
+                    : new List<string> { cbTestProfileType.Text };
+
+                foreach (string profile in profilesToRead)
+                {
+                    try
+                    {
+                        Get_PushFreq_Destination_Randomisation(ref DLMSWriter, profile);
+                    }
+                    catch (Exception innerEx)
+                    {
+                        log.Error($"[btnGet_PS_AS_Click] Error reading profile '{profile}': {innerEx.Message}", innerEx);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                GetPushFreqAndDestination("Instant"); GetPushFreqAndDestination("LS"); GetPushFreqAndDestination("DE"); GetPushFreqAndDestination("SR");
-                GetPushFreqAndDestination("Bill"); GetPushFreqAndDestination("Current Bill"); //GetPushFreqAndDestination("Tamper"); 
+                log.Error($"[btnGet_PS_AS_Click] Unexpected error: {ex.Message}", ex);
+                MessageBox.Show($"Error fetching Push Setup / Action Schedule details.\n\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnGet_PS_AS.Enabled = true;
+                btnSet_PS_AS.Enabled = true;
+                DLMSWriter.SetDISCMode();
+                DLMSWriter.Dispose();
             }
         }
         private void btnSet_PS_AS_Click(object sender, EventArgs e)
         {
-            switch (cbTestProfileType.Text)
+            btnGet_PS_AS.Enabled = false;
+            btnSet_PS_AS.Enabled = false;
+            DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            try
             {
-                case "All":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Instant_DestIP.Text.Trim()}-{txt_Random_Instant.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_LS_DestIP.Text.Trim()}-{txt_Random_LS.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_DE_DestIP.Text.Trim()}-{txt_Random_DE.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_SR_DestIP.Text.Trim()}-{txt_Random_SR.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Bill_DestIP.Text.Trim()}-{txt_Random_Bill.Text.Trim()}");
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_CB_DestIP.Text.Trim()}-{txt_Random_CB.Text.Trim()}");
-                    break;
-                case "Alert":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
-                    break;
-                case "Instant":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Instant_DestIP.Text.Trim()}-{txt_Random_Instant.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
-                    break;
-                case "Load Survey":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_LS_DestIP.Text.Trim()}-{txt_Random_LS.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_LS_Frequency.Text.Trim());
-                    break;
-                case "Daily Energy":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_DE_DestIP.Text.Trim()}-{txt_Random_DE.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_DE_Frequency.Text.Trim());
-                    break;
-                case "Self Registration":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_SR_DestIP.Text.Trim()}-{txt_Random_SR.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_SR_Frequency.Text.Trim());
-                    break;
-                case "Billing":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Bill_DestIP.Text.Trim()}-{txt_Random_Bill.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), "0", cb_Bill_Frequency.Text.Trim());
-                    break;
-                case "Current Bill":
-                    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_CB_DestIP.Text.Trim()}-{txt_Random_CB.Text.Trim()}");
-                    SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cb_CB_Frequency.Text.Trim());
-                    break;
-                //case "Tamper":
-                //    SetDestinationAddAndRandomization(cbTestProfileType.Text.Trim(), $"{txt_Alert_DestIP.Text.Trim()}-{txt_Random_Alert.Text.Trim()}");
-                //SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
-                //    break;
-                default:
-                    break;
+                if (!DLMSWriter.SignOnDLMS())
+                {
+                    CommonHelper.DisplayDLMSSignONError();
+                    return;
+                }
+                List<string> profilesToRead = cbTestProfileType.Text == "All"
+                    ? new List<string> { "Instant", "Alert", "LS", "DE", "SR", "Bill", "CB" }
+                    : new List<string> { cbTestProfileType.Text };
+                foreach (string profile in profilesToRead)
+                {
+                    try
+                    {
+                        var controls = profileControls.Find(p => p.Name == profile);
+                        Set_PushFreq_Destination_Randomisation(ref DLMSWriter, profile);
+                    }
+                    catch (Exception innerEx)
+                    {
+                        log.Error($"[btnGet_PS_AS_Click] Error reading profile '{profile}': {innerEx.Message}", innerEx);
+                    }
+                }
+            }
+            catch
+            {
+                log.Error($"[btnGet_PS_AS_Click] Sign On Failure");
+            }
+            finally
+            {
+                btnGet_PS_AS.Enabled = true;
+                btnSet_PS_AS.Enabled = true;
+                DLMSWriter.SetDISCMode();
+                DLMSWriter.Dispose();
             }
         }
+
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
             rtbPushLogs.Clear();
         }
         private void btnSaveData_Click(object sender, EventArgs e)
         {
+            try
+            {
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.Title = "Save Push Communication Reports";
+                    sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
+                    sfd.FileName = $"Push Reports.xlsx";
+                    string filepath = Path.Combine(logService.LOG_DIRECTORY, $"Push Communication Reports\\{sfd.FileName}");
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        pushPacketManager.ExportReports(filepath);
+                    }
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(receivedPushData, filepath, "Raw Data");
+                }
+            }
+            catch
+            {
+                log.Error("Eroor in exporting data");
+            }
         }
         private void btnPushprofileSettings_Click(object sender, EventArgs e)
         {
@@ -315,254 +413,155 @@ namespace ListenerUI
             }
         }
 
-
         #region NEW IMPLEMENTATION
-        private void LogPush(string deviceId, string profile, string timestamp)
+        private void rtbPushLogs_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            string logEntry = $"Device ID: {deviceId}\t\t{timestamp}: {profile} Push Received";
-
-            // Make this entry look clickable
-            rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
-            rtbPushLogs.SelectionColor = Color.Blue;
-            rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
-            rtbPushLogs.AppendText(logEntry + Environment.NewLine);
-            rtbPushLogs.SelectionColor = rtbPushLogs.ForeColor;
-        }
-        private void rtbPushLogs_MouseDown(object sender, MouseEventArgs e)
-        {
-            /*try
+            //MessageBox.Show($"You clicked: {e.LinkText}");
+            string[] ClickedPacket = e.LinkText.Split(' ');
+            var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}:\d{3}\s?(AM|PM)\b";
+            //var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}[:\.]\d{3}\s?(AM|PM)\b";
+            var match = System.Text.RegularExpressions.Regex.Match(e.LinkText, dateTimePattern);
+            if (!match.Success)
             {
-                int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
-                int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
-                if (lineIndex < 0 || lineIndex >= rtbPushLogs.Lines.Length)
-                    return;
-
-                string clickedLine = rtbPushLogs.Lines[lineIndex].Trim();
-                if (string.IsNullOrWhiteSpace(clickedLine))
-                    return;
-                int receivedIndex = clickedLine.IndexOf("Received");
-                if (receivedIndex > 0)
-                {
-                    var match = System.Text.RegularExpressions.Regex.Match(clickedLine, @"\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}:\d{3} [AP]M");
-                    if (match.Success)
-                    {
-                        string timestamp = match.Value;
-                        if (clickedLine.Contains("Alert Push"))
-                            HighlightGridColumn(dgAlert, timestamp);
-                        else if (clickedLine.Contains("Instant Push"))
-                            HighlightGridColumn(dgInstant, timestamp);
-                        else if (clickedLine.Contains("Load Survey Push"))
-                            HighlightGridColumn(dgLS, timestamp);
-                        else if (clickedLine.Contains("Daily Energy Push"))
-                            HighlightGridColumn(dgDE, timestamp);
-                        else if (clickedLine.Contains("Self Registration Push"))
-                            HighlightGridColumn(dgSR, timestamp);
-                        else if (clickedLine.Contains("Billing Push"))
-                            HighlightGridColumn(dgBill, timestamp);
-                        else if (clickedLine.Contains("Tamper Push"))
-                            HighlightGridColumn(dgTamper, timestamp);
-                        else if (clickedLine.Contains("Current Bill Push"))
-                            HighlightGridColumn(dgCB, timestamp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                logService.LogMessage(rtbPushLogs, $"Error in rtbPushLogs_MouseDown: {ex.Message}", Color.Red, true);
-            }*/
-            try
-            {
-                int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
-                int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
-
-                if (lineIndex < 0 || lineIndex >= rtbPushLogs.Lines.Length)
-                    return;
-
-                string clickedLine = rtbPushLogs.Lines[lineIndex];
-                if (!clickedLine.Contains("🔗"))
-                    return;
-
-                int linkIndex = clickedLine.IndexOf("🔗");
-                int charIndexFromLine = rtbPushLogs.GetFirstCharIndexFromLine(lineIndex) + linkIndex;
-
-                // check if click is near the link
-                if (index >= charIndexFromLine - 1 && index <= charIndexFromLine + 2)
-                {
-                    // Extract timestamp from that line
-                    var match = System.Text.RegularExpressions.Regex.Match(
-                        clickedLine, @"\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}:\d{3} [AP]M");
-
-                    if (match.Success)
-                    {
-                        string timestamp = match.Value;
-                        if (clickedLine.Contains("Alert Push"))
-                            HighlightGridColumn(dgAlert, timestamp);
-                        else if (clickedLine.Contains("Instant Push"))
-                            HighlightGridColumn(dgInstant, timestamp);
-                        else if (clickedLine.Contains("Load Survey Push"))
-                            HighlightGridColumn(dgLS, timestamp);
-                        else if (clickedLine.Contains("Daily Energy Push"))
-                            HighlightGridColumn(dgDE, timestamp);
-                        else if (clickedLine.Contains("Self Registration Push"))
-                            HighlightGridColumn(dgSR, timestamp);
-                        else if (clickedLine.Contains("Billing Push"))
-                            HighlightGridColumn(dgBill, timestamp);
-                        else if (clickedLine.Contains("Tamper Push"))
-                            HighlightGridColumn(dgTamper, timestamp);
-                        else if (clickedLine.Contains("Current Bill Push"))
-                            HighlightGridColumn(dgCB, timestamp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                logService.LogMessage(rtbPushLogs, $"Error handling link click: {ex.Message}", Color.Red, true);
-            }
-
-        }
-        private void HighlightGridColumn(DataGridView grid, string columnHeader)
-        {
-            if (grid == null || grid.Columns.Count == 0)
+                MessageBox.Show("No valid date/time found in the clicked link.");
                 return;
-
-            var col = grid.Columns
-                .Cast<DataGridViewColumn>()
-                .FirstOrDefault(c => c.HeaderText.Equals(columnHeader, StringComparison.OrdinalIgnoreCase));
-
-            if (col == null)
-                return;
-
-            // Scroll to column
-            grid.FirstDisplayedScrollingColumnIndex = col.Index;
-
-            // Temporarily highlight column
-            col.DefaultCellStyle.BackColor = Color.Yellow;
-
-            var timer = new System.Windows.Forms.Timer();
-            timer.Interval = 1500; // 1.5 seconds
-            timer.Tick += (s, e) =>
+            }
+            string dateTimeText = match.Value.Trim();
+            string[] formats = { "dd/MM/yyyy hh:mm:ss:fff tt", "MM/dd/yyyy hh:mm:ss:fff tt" };
+            if (!DateTime.TryParseExact(dateTimeText, formats, System.Globalization.CultureInfo.InvariantCulture,
+                                        System.Globalization.DateTimeStyles.None, out DateTime parsedDateTime))
             {
-                col.DefaultCellStyle.BackColor = Color.White;
-                timer.Stop();
+                MessageBox.Show($"Invalid date/time format: {dateTimeText}");
+                return;
+            }
+            string normalizedDateTime = parsedDateTime.ToString("dd/MM/yyyy hh:mm:ss:fff tt");
+
+            //DataGridView[] grids = { dgAlert, dgInstant, dgLS, dgDE, dgCB, dgBill, dgTamper, dgSR };
+            var gridTabMap = new Dictionary<DataGridView, TabPage>
+            {
+                { dgInstant, tbpInstant },
+                { dgLS, tbpLS },
+                { dgDE, tbpDE },
+                { dgSR, tbpSR },
+                { dgBill, tbpBill },
+                { dgCB, tbpCB },
+                { dgAlert, tbpAlert },
+                { dgTamper, tbpTamper }
             };
-            timer.Start();
-        }
-        /*private void HighlightClickableLog(string updatedText)
-        {
-            try
+
+            bool found = false;
+            foreach (var kvp in gridTabMap)
             {
-                if (string.IsNullOrWhiteSpace(updatedText) || !updatedText.Contains("Push Received")) //🔗
-                    return;
+                DataGridView grid = kvp.Key;
+                TabPage tab = kvp.Value;
 
-                string targetTrim = updatedText.Trim();
-
-                // find last non-empty line
-                string[] lines = rtbPushLogs.Lines;
-                int lastNonEmptyIndex = -1;
-                for (int i = lines.Length - 1; i >= 0; i--)
+                foreach (DataGridViewColumn col in grid.Columns)
                 {
-                    if (!string.IsNullOrWhiteSpace(lines[i]))
+                    if (col.HeaderText.Contains(normalizedDateTime))
                     {
-                        lastNonEmptyIndex = i;
+                        found = true;
+                        tabControlProfiles.SelectedTab = tab;
+                        foreach (DataGridViewColumn c in grid.Columns)
+                        {
+                            c.HeaderCell.Style.BackColor = SystemColors.Control;
+                            foreach (DataGridViewRow row in grid.Rows)
+                                row.Cells[c.Index].Style.BackColor = Color.White;
+                        }
+                        foreach (DataGridViewColumn c in grid.Columns)
+                        {
+                            c.HeaderCell.Style.BackColor = SystemColors.Control;
+                            foreach (DataGridViewRow row in grid.Rows)
+                                row.Cells[c.Index].Style.BackColor = Color.White;
+                        }
+                        grid.BeginInvoke(new Action(() =>
+                        {
+                            grid.FirstDisplayedScrollingColumnIndex = col.Index;
+                            int nextCol = (col.Index + 1 < grid.Columns.Count) ? col.Index + 1 : col.Index;
+                            HighlightColumns(grid, col.Index, nextCol);
+                        }));
+
+                        break;
+                    }
+
+                    //if (col.HeaderText.Contains(normalizedDateTime))
+                    //{
+                    //    found = true;
+                    //    tabControlProfiles.SelectedTab = tab;
+                    //    grid.FirstDisplayedScrollingColumnIndex = col.Index;
+                    //    grid.EnableHeadersVisualStyles = false;
+                    //    //RESET COLORS
+                    //    foreach (DataGridViewColumn c in grid.Columns)
+                    //    {
+                    //        c.HeaderCell.Style.BackColor = SystemColors.Control;
+                    //        foreach (DataGridViewRow row in grid.Rows)
+                    //            row.Cells[c.Index].Style.BackColor = Color.White;
+                    //    }
+                    //    foreach (DataGridViewColumn c in grid.Columns)
+                    //    {
+                    //        c.HeaderCell.Style.BackColor = SystemColors.Control;
+                    //        foreach (DataGridViewRow row in grid.Rows)
+                    //            row.Cells[c.Index].Style.BackColor = Color.White;
+                    //    }
+                    //    HighlightColumns(grid, col.Index, col.Index + 1);
+                    //    break;
+                    //}
+                }
+
+
+                if (found)
+                    break;
+            }
+
+            if (!found)
+            {
+                MessageBox.Show($"DateTime {normalizedDateTime} not found in any DataGridView headers.");
+            }
+
+            /*foreach (var grid in grids)
+            {
+                foreach (DataGridViewColumn col in grid.Columns)
+                {
+                    if (col.HeaderText.Contains(normalizedDateTime))
+                    {
+                        found = true;
+                        MessageBox.Show($"DateTime {normalizedDateTime} found in {grid.Name} → Column: {col.HeaderText}");
                         break;
                     }
                 }
 
-                if (lastNonEmptyIndex >= 0)
-                {
-                    string lastLineTrim = lines[lastNonEmptyIndex].Trim();
-                    if (lastLineTrim.Equals(targetTrim, StringComparison.Ordinal))
-                    {
-                        int startIndex = rtbPushLogs.GetFirstCharIndexFromLine(lastNonEmptyIndex);
-                        int length = lines[lastNonEmptyIndex].Length;
-                        rtbPushLogs.Select(startIndex, length);
-                        rtbPushLogs.SelectionColor = Color.Blue;
-                        rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
-                        rtbPushLogs.DeselectAll();
-                        return;
-                    }
-                }
+                if (found)
+                    break;
+            }
 
-                int lastOcc = rtbPushLogs.Text.LastIndexOf(targetTrim, StringComparison.OrdinalIgnoreCase);
-                if (lastOcc >= 0)
-                {
-                    rtbPushLogs.Select(lastOcc, targetTrim.Length);
-                    rtbPushLogs.SelectionColor = Color.Blue;
-                    rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Underline);
-                    rtbPushLogs.DeselectAll();
-                }
-            }
-            catch (Exception ex)
+            if (!found)
             {
-                logService.LogMessage(rtbPushLogs, $"Error styling log: {ex.Message}", Color.Red, true);
-            }
+                MessageBox.Show($"DateTime {normalizedDateTime} not found in any DataGridView headers.");
+            }*/
         }
-        */
-        private void AppendClickableLinkIcon(string updatedText)
-        {
-            try
-            {
-                string[] lines = rtbPushLogs.Lines;
-                if (lines == null || lines.Length == 0)
-                    return;
-
-                int lastLineIndex = lines.Length - 1;
-                string lastLine = lines[lastLineIndex];
-
-                // Go to end of the last line
-                int startIndex = rtbPushLogs.GetFirstCharIndexFromLine(lastLineIndex) + lastLine.Length;
-
-                rtbPushLogs.Select(startIndex, 0);
-                rtbPushLogs.SelectionColor = Color.Blue;
-                rtbPushLogs.SelectionFont = new Font(rtbPushLogs.Font, FontStyle.Bold);
-                rtbPushLogs.SelectedText = " 🔗";
-                rtbPushLogs.DeselectAll();
-            }
-            catch (Exception ex)
-            {
-                logService.LogMessage(rtbPushLogs, $"Error appending link icon: {ex.Message}", Color.Red, true);
-            }
-        }
-
-        private void rtbPushLogs_MouseMove(object sender, MouseEventArgs e)
-        {
-            /*
-            int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
-            int line = rtbPushLogs.GetLineFromCharIndex(index);
-
-            if (line >= 0 && line < rtbPushLogs.Lines.Length)
-            {
-                string text = rtbPushLogs.Lines[line];
-                if (text.Contains("Push Received"))
-                    rtbPushLogs.Cursor = Cursors.Hand;
-                else
-                    rtbPushLogs.Cursor = Cursors.IBeam;
-            }
-            */
-            int index = rtbPushLogs.GetCharIndexFromPosition(e.Location);
-            int lineIndex = rtbPushLogs.GetLineFromCharIndex(index);
-
-            if (lineIndex >= 0 && lineIndex < rtbPushLogs.Lines.Length)
-            {
-                string line = rtbPushLogs.Lines[lineIndex];
-                if (line.Contains("🔗"))
-                {
-                    int linkIndex = line.IndexOf("🔗");
-                    int charIndexFromLine = rtbPushLogs.GetFirstCharIndexFromLine(lineIndex) + linkIndex;
-
-                    if (index >= charIndexFromLine - 1 && index <= charIndexFromLine + 2)
-                    {
-                        rtbPushLogs.Cursor = Cursors.Hand;
-                        return;
-                    }
-                }
-            }
-            rtbPushLogs.Cursor = Cursors.IBeam;
-        }
-
         #endregion
 
         #region Helper Methods
+        private bool IniTestRun(TestConfiguration _config)
+        {
+            _cancellationToken = new CancellationTokenSource();
+            var token = _cancellationToken.Token;
+            WrapperInfo.IsCommDelayRequired = false;
+            bool iniStatus = true;
+            if (!MeterIdentity.AssignMeterDetails(_config, token))
+            {
+                iniStatus = false;
+                return iniStatus;
+            }
+            if (MeterIdentity.GetCipherStatus())
+            {
+                if (!PushSetupInfo.ReadPushSetup(_config))
+                {
+                    iniStatus = false;
+                    return iniStatus;
+                }
+            }
+            return iniStatus;
+        }
         private void cbTestProfileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedProfile = cbTestProfileType.SelectedItem.ToString();
@@ -578,19 +577,19 @@ namespace ListenerUI
                     EnableProfile(txt_Instant_DestIP, cbInstant_Frequency, txt_Random_Instant);
                     break;
 
-                case "Load Survey":
+                case "LS":
                     EnableProfile(txt_LS_DestIP, cb_LS_Frequency, txt_Random_LS);
                     break;
 
-                case "Daily Energy":
+                case "DE":
                     EnableProfile(txt_DE_DestIP, cb_DE_Frequency, txt_Random_DE);
                     break;
 
-                case "Self Registration":
+                case "SR":
                     EnableProfile(txt_SR_DestIP, cb_SR_Frequency, txt_Random_SR);
                     break;
 
-                case "Billing":
+                case "Bill":
                     EnableProfile(txt_Bill_DestIP, cb_Bill_Frequency, txt_Random_Bill);
                     break;
 
@@ -599,7 +598,7 @@ namespace ListenerUI
                     break;
 
                 case "Alert":
-                    EnableProfile(txt_Alert_DestIP, cb_Alert_Frequency, txt_Random_Alert);
+                    EnableProfile(txt_Alert_DestIP, null, txt_Random_Alert);
                     break;
 
                 default:
@@ -614,7 +613,7 @@ namespace ListenerUI
     };
 
             ComboBox[] comboBoxes = {
-        cbInstant_Frequency, cb_Alert_Frequency, cb_Bill_Frequency,
+        cbInstant_Frequency, cb_Bill_Frequency,
         cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
     };
 
@@ -640,7 +639,7 @@ namespace ListenerUI
             };
 
             ComboBox[] comboBoxes = {
-            cbInstant_Frequency, cb_Alert_Frequency, cb_Bill_Frequency,
+            cbInstant_Frequency, cb_Bill_Frequency,
             cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
             };
             TextBox[] textBoxes_Randmsn = {
@@ -662,249 +661,187 @@ namespace ListenerUI
             comboBox.Enabled = true;
             txtBox_Randmsn.Enabled = true;
         }
-
-        public void GetPushFreqAndDestination(string profile)
+        public void Get_PushFreq_Destination_Randomisation(ref DLMSComm DLMSWriter, string profileName)
         {
-            string message = string.Empty;
-            DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
             try
             {
                 InitializeProfileControls();
-                string pushFreqString = string.Empty;
-                string pushFreqValue = string.Empty;
-                string destinationAddString = string.Empty;
-                string destinationAddValue = string.Empty;
-                string randomizationString = string.Empty;
-                if (!DLMSWriter.SignOnDLMS())
-                {
-                    CommonHelper.DisplayDLMSSignONError();
-                    return;
-                }
-                // push frequency
-                pushFreqString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(actionScheduleClassObis[profile].Substring(0, 4), 16), parse.HexObisToDecObis(actionScheduleClassObis[profile].Substring(4, 12)), 4).Trim();
-                if (pushFreqString.Substring(0, 2) != "0B" && pushFreqString.Substring(0, 2) == "01") //&& pushFreqString.Substring(2, 2) != "00")  "0100" if  frequency disabled
-                {
+                var controls = profileControls.Find(p => p.Name == profileName);
+                string actionObis = controls.ActionScheduleClassObisAtt;
+                string pushObis = controls.PushSetupClassObis;
 
-                    pushFreqValue = freqHexString.FirstOrDefault(x => x.Value == pushFreqString).Key;
-                    profileControls[profile].cbFrequency.Text = pushFreqValue;
-                }
-                else if (pushFreqString == "0B")
+                // Destination Address 
+                string destAddrHex = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushObis.Substring(0, 4), 16), parse.HexObisToDecObis(pushObis.Substring(4, 12)), 3).Trim();
+                if (destAddrHex == "0B")
                 {
-
+                    controls.txt_Dest_Add.Text = "Object Not Available";
                 }
-                // destination address and IP
-                destinationAddString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushSetupClassObis[profile].Substring(0, 4), 16), parse.HexObisToDecObis(pushSetupClassObis[profile].Substring(4, 12)), 3).Trim();
-                if (destinationAddString.Substring(0, 2) == "02")
+                else if (destAddrHex.StartsWith("02"))
                 {
-                    string[] structureDataArray = parse.GetStructureValueList(destinationAddString.Substring(4)).ToArray();
-                    string[] structureValueArray = new string[structureDataArray.Length];
-                    for (int i = 0; i < structureDataArray.Length; i++)
+                    string[] structArray = parse.GetStructureValueList(destAddrHex.Substring(4)).ToArray();
+                    if (structArray.Length > 1)
                     {
-                        structureValueArray[i] = parse.GetProfileValueString(structureDataArray[i]);
+                        controls.txt_Dest_Add.Text = parse.GetProfileValueString(structArray[1]);
                     }
-                    profileControls[profile].txtDestIP.Text = structureValueArray[1];
-                }
-                else if (destinationAddString == "0B")
-                {
-                }
-                // Randomization delay
-                randomizationString = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushSetupClassObis[profile].Substring(0, 4)), parse.HexObisToDecObis(pushSetupClassObis[profile].Substring(4, 12)), 5).Trim();
-                if (randomizationString == "0B")
-                {
-
+                    else
+                    {
+                        controls.txt_Dest_Add.Text = "Invalid Structure";
+                    }
                 }
                 else
                 {
-                    profileControls[profile].txtRandom.Text = parse.GetProfileValueString(randomizationString);
+                    controls.txt_Dest_Add.Text = "Unknown";
+                }
+
+                // Push Frequency 
+                if (controls.Name != "Alert" && controls.Name != "Tamper")
+                {
+                    string pushFreqHex = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(actionObis.Substring(0, 4), 16), parse.HexObisToDecObis(actionObis.Substring(4, 12)), 4).Trim();
+                    if (pushFreqHex == "0B")
+                    {
+                        controls.cbFrequency.Text = "Object Not Available";
+                    }
+                    else if (pushFreqHex.StartsWith("01"))
+                    {
+                        string freqValue = freqHexPatterns.FirstOrDefault(kvp => kvp.Value.Any(v => v.Equals(pushFreqHex, StringComparison.OrdinalIgnoreCase))).Key ?? "Unknown";
+                        controls.cbFrequency.Text = freqValue;
+                    }
+                    else
+                    {
+                        controls.cbFrequency.Text = "Unknown";
+                    }
+                }
+
+                // Randomization Delay 
+                string randomizationHex = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushObis.Substring(0, 4), 16), parse.HexObisToDecObis(pushObis.Substring(4, 12)), 5).Trim();
+                if (randomizationHex == "0B")
+                {
+                    controls.txtRandom.Text = "Object Not Available";
+                }
+                else if (randomizationHex == "0D")
+                {
+                    controls.txtRandom.Text = "No Access";
+                }
+                else
+                {
+                    controls.txtRandom.Text = parse.GetProfileValueString(randomizationHex);
                 }
             }
             catch (Exception ex)
             {
-                log.Error("Error in fetching Entries from Utilities.ReadDataFromObjectLNCipher " + ex.Message.ToString());
+                log.Error("Error in Get_PushFreq_Destination_Randomisation: " + ex.Message, ex);
             }
             finally
             {
-                DLMSWriter.Dispose();
+
             }
-            return;
         }
-
-        public void GetDestionationAddAndRandomization()
+        public void Set_PushFreq_Destination_Randomisation(ref DLMSComm DLMSWriter, string profileName)
         {
-
-        }
-        public void SetProfilePushFrequency(string profile, string pushFreqToSet, string billDateTime = null)
-        {
+            // SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
+            // SetProfilePushFrequency(cbTestProfileType.Text.Trim(), "0", cb_Bill_Frequency.Text.Trim());
             try
             {
-                //  txtBox_PushSetupSet.Text = "";     t0 update status  
-                //    Dictionary<string, string> pushProfileClassObis = new Dictionary<string, string>
-                //{
-                //  { "Instant", "001600000F0004FF04" },
-                //  { "LS", "001600040F0004FF04" },
-                //  { "DE", "001600050F0004FF04" },
-                //  { "SR", "001600000F008EFF04" },
-                //  { "Bill", "001600000F0000FF04" },
-                //  { "Tamper", "001600000F008FFF04" },
-                //  { "Current Bill", "001600000F0093FF04" }
-                //};
-                if (string.IsNullOrEmpty(pushFreqToSet))
+                InitializeProfileControls();
+                int nRetVal = 0; string sMessage = string.Empty;
+                var profile = profileControls.Find(p => p.Name == profileName);
+                string actionObis = profile.ActionScheduleClassObisAtt;
+                string pushObis = profile.PushSetupClassObis;
+                DLMSWriter.strbldDLMdata.Clear();
+                #region Destination Address 
+
+                string destAddHex = $"{DLMSParser.ConvertAsciiToHex(profile.txt_Dest_Add.Text.ToString().Trim())}";
+                string length = (destAddHex.Length / 2).ToString("X2");
+                destAddHex = $"0203160009{length}{destAddHex}1600";
+                nRetVal = DLMSWriter.SetParameter($"{profile.PushSetupClassObis.Trim()}03", (byte)0, (byte)3, (byte)5, $"{destAddHex}");
+                if (nRetVal == 0)
+                    sMessage = sMessage + "Push Setup: Destination Address Set Successfully.";
+                else if (nRetVal == 2)
+                    sMessage = sMessage + "Push Setup: Destination Address Action Denied.";
+                else if (nRetVal == 1 || nRetVal == 3)
+                    sMessage = sMessage + "Push Setup: Destination Address Error in Setting.";
+                #endregion
+
+                #region Push Frequency 
+                DLMSWriter.strbldDLMdata.Clear();
+                string billDateTime = "0100";
+                if (profile.Name == "Bill" && !string.IsNullOrEmpty(profile.cbFrequency.SelectedItem.ToString().Trim()))
                 {
-                    MessageBox.Show($"Kindly Input the Frequency Value for {profile}", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    return;
+                    billDateTime = billDateTime = $"010102020904{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(7, 2)):X2}" +
+                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(10, 2)):X2}" +
+                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(13, 2)):X2}FF0905FFFFFF" +
+                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(0, 2)):X2}FF"; //10/*/* 00:00:00
+
                 }
-                //if (cbAccessLevel.SelectedIndex != 2)
-                //{
-                //    MessageBox.Show("Kindly Connect with Access Level of Utility Settings for Write Operation", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                //    return;
-                //}
                 Dictionary<string, string> freqHexString = new Dictionary<string, string>
-            {
-                { "15 Min", "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
-                { "30 Min", "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF" },
-                { "1 Hour", "010102020904FF0000000905FFFFFFFFFF" },
-                { "4 Hour", "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF" },
-                { "6 Hour", "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF" },
-                { "8 Hour", "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
-                { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
-                { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
-                {"Disabled", "0100" },
-                { "0", billDateTime}
-            };
-                int nRetVal = 0;
-                string sMessage = string.Empty;
-                DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
-                try
                 {
-                    if (!DLMSWriter.SignOnDLMS())
-                    {
-                        CommonHelper.DisplayDLMSSignONError();
-                        DLMSWriter.Dispose();
-                        return;
-                    }
-                    DLMSWriter.strbldDLMdata.Clear();
-                    nRetVal = DLMSWriter.SetParameter($"{actionScheduleClassObis[profile]}", (byte)0, (byte)3, (byte)3, freqHexString[pushFreqToSet]);
+                    { "15 Min", "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
+                    { "30 Min", "010202020904FF0000000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF" },
+                    { "1 Hour", "010102020904FF0000000905FFFFFFFFFF" },
+                    { "4 Hour", "010602020904000000000905FFFFFFFFFF02020904040000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF02020904140000000905FFFFFFFFFF" },
+                    { "6 Hour", "010402020904000000000905FFFFFFFFFF02020904060000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF02020904120000000905FFFFFFFFFF" },
+                    { "8 Hour", "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
+                    { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
+                    { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
+                    {"Disabled", "0100" },
+                    { "0", billDateTime}
+                };
+                if (!string.IsNullOrEmpty(profile.ActionScheduleClassObisAtt))
+                {
+                    nRetVal = DLMSWriter.SetParameter($"{profile.ActionScheduleClassObisAtt}", (byte)0, (byte)3, (byte)3, freqHexString[profile.cbFrequency.SelectedItem.ToString().Trim()]);
                     if (nRetVal == 0)
-                        sMessage = sMessage + $"{profile} Push Frequency Set Successfully to {pushFreqToSet}.";
+                        sMessage = sMessage + $"{profile} Push Frequency Set Successfully to {profile.cbFrequency.SelectedItem.ToString().Trim()}.";
                     else if (nRetVal == 2)
                         sMessage = sMessage + $"{profile} Push Frequency Action Denied.";
                     else if (nRetVal == 1 || nRetVal == 3)
                         sMessage = sMessage + $"{profile} Push Frequency Error in Setting.";
-                    // txtBox_PushSetupSet.Text = sMessage;
                 }
+                #endregion
 
-                catch (Exception ex)
+                #region Randomization Delay 
+                if (!string.IsNullOrEmpty(profile.txtRandom.Text.Trim()) && int.TryParse(profile.txtRandom.Text.Trim(), out int number))
                 {
-                    log.Error(ex.Message.ToString());
-                }
-                finally
-                {
-                    DLMSWriter.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error in Setting Destination and Push Frequency" + ex.Message.ToString());
-            }
-        }
-        public void SetDestinationAddAndRandomization(string profile, string dataToSet)
-        {
-            try
-            {
-                //    Dictionary<string, string> pushSetupClassObis = new Dictionary<string, string>
-                //{
-                //  { "Alert", "00280004190900FF"},
-                //  { "Instant", "00280000190900FF" },
-                //  { "LS", "00280005190900FF" },
-                //  { "DE", "00280006190900FF" },
-                //  { "SR", "00280082190900FF" },
-                //  { "Bill", "00280084190900FF" },
-                //  { "Tamper", "00280086190900FF" },
-                //  { "Current Bill", "00280000190981FF"}
-                //};
-                //  txtBox_PushSetupSet.Text = "";     t0 update status   
-                string destinationAddData = $"{DLMSParser.ConvertAsciiToHex(dataToSet.Split('-')[0].Trim())}-{dataToSet.Split('-')[1].Trim()}";  // destination address and randomization
-                if (string.IsNullOrEmpty(destinationAddData.Split('-')[0]))
-                {
-                    MessageBox.Show($"Kindly Input the Destination Value for {profile}", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    return;
-                }
-                //if (cbAccessLevel.SelectedIndex != 2)
-                //{
-                //    MessageBox.Show("Kindly Connect with Access Level of Utility Settings for Write Operation", "ERROR !!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                //    return;
-                //}
-
-                int nRetVal = 0;
-                string sMessage = string.Empty;
-                DLMSComm DLMSWriter = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
-                try
-                {
-                    if (!DLMSWriter.SignOnDLMS())
-                    {
-                        CommonHelper.DisplayDLMSSignONError();
-                        DLMSWriter.Dispose();
-                        return;
-                    }
-                    DLMSWriter.strbldDLMdata.Clear();
-                    string length = ((destinationAddData.Split('-')[0].Trim().Length) / 2).ToString("X2");
-                    nRetVal = DLMSWriter.SetParameter($"{pushSetupClassObis[profile].Trim()}03", (byte)0, (byte)3, (byte)5, $"0203160009{length}{destinationAddData.Split('-')[0].Trim()}1600");
+                    nRetVal = DLMSWriter.SetParameter($"{profile.PushSetupClassObis.Trim()}05", (byte)0, (byte)3, (byte)5, $"12{number:X4}");
                     if (nRetVal == 0)
-                        sMessage = sMessage + "Push Setup: Destination Address Set Successfully.";
+                        sMessage = sMessage + "Push Setup: Randamisation Set Successfully.";
                     else if (nRetVal == 2)
-                        sMessage = sMessage + "Push Setup: Destination Address Action Denied.";
+                        sMessage = sMessage + "Push Setup: Randamisation Action Denied.";
                     else if (nRetVal == 1 || nRetVal == 3)
-                        sMessage = sMessage + "Push Setup: Destination Address Error in Setting.";
-                    int number;
-                    if (!string.IsNullOrEmpty(destinationAddData.Split('-')[1].Trim()) && int.TryParse(destinationAddData.Split('-')[1].Trim(), out number))
-                    {
-                        nRetVal = DLMSWriter.SetParameter($"{pushSetupClassObis[profile].Trim()}05", (byte)0, (byte)3, (byte)5, $"12{number.ToString("X4")}");
-                        if (nRetVal == 0)
-                            sMessage = sMessage + "Push Setup: Randamisation Set Successfully.";
-                        else if (nRetVal == 2)
-                            sMessage = sMessage + "Push Setup: Randamisation Action Denied.";
-                        else if (nRetVal == 1 || nRetVal == 3)
-                            sMessage = sMessage + "Push Setup: Randamisation Error in Setting.";
-                    }
-                    // txtBox_PushSetupSet.Text = sMessage;
+                        sMessage = sMessage + "Push Setup: Randamisation Error in Setting.";
                 }
-                catch (Exception ex)
-                {
-                    log.Error(ex.Message.ToString());
-                }
-                finally
-                {
-                    DLMSWriter.Dispose();
-                }
+                #endregion
+
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message.ToString());
+                log.Error("Error in Set_PushFreq_Destination_Randomisation: " + ex.Message, ex);
+            }
+            finally
+            {
+
             }
         }
         #endregion
 
         #region Logging Methods
-        private bool IniTestRun(TestConfiguration _config)
+        private void HighlightColumns(DataGridView grid, int colIndex1, int colIndex2)
         {
-            _cancellationToken = new CancellationTokenSource();
-            var token = _cancellationToken.Token;
-            WrapperInfo.IsCommDelayRequired = false;
-            bool iniStatus = true;
-            if (!MeterIdentity.AssignMeterDetails(_config, token))
+            //Color highlight = Color.LightGreen;
+            Color highlight = Color.FromArgb(232, 245, 233);
+
+            if (colIndex1 >= 0 && colIndex1 < grid.Columns.Count)
             {
-                iniStatus = false;
-                return iniStatus;
+                grid.Columns[colIndex1].HeaderCell.Style.BackColor = highlight;
+                foreach (DataGridViewRow row in grid.Rows)
+                    row.Cells[colIndex1].Style.BackColor = highlight;
             }
-            if (MeterIdentity.GetCipherStatus())
+
+            if (colIndex2 >= 0 && colIndex2 < grid.Columns.Count)
             {
-                if (!PushSetupInfo.ReadPushSetup(_config))
-                {
-                    iniStatus = false;
-                    return iniStatus;
-                }
+                grid.Columns[colIndex2].HeaderCell.Style.BackColor = highlight;
+                foreach (DataGridViewRow row in grid.Rows)
+                    row.Cells[colIndex2].Style.BackColor = highlight;
             }
-            return iniStatus;
         }
         public void PushMonitorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -976,9 +913,10 @@ namespace ListenerUI
                 string saveName = profile.Replace("/", "").Replace(":", "").Replace("-", "_").Trim();
 
                 DataGridView targetGrid = null;
+                Chart targetChart = null;
                 switch (profile)
                 {
-                    case "Instant": targetGrid = dgInstant; break;
+                    case "Instant": targetGrid = dgInstant; targetChart = chart_Instant; break;
                     case "Alert": targetGrid = dgAlert; break;
                     case "LS": targetGrid = dgLS; break;
                     case "DE": targetGrid = dgDE; break;
@@ -996,6 +934,7 @@ namespace ListenerUI
                     {
                         targetGrid.DataSource = null;
                         targetGrid.DataSource = targetTable;
+                        //PlotEnergyGraphFromDataTable(targetTable, "Cum. Energy-Wh(Imp)");
                         targetGrid.Refresh();
                     }));
                 }
@@ -1012,30 +951,21 @@ namespace ListenerUI
             }
 
         }
+
         public void OnPushDataReceived(string updatedText, Color color)
         {
-            if (rtbPushLogs.InvokeRequired)
-            {
-                rtbPushLogs.BeginInvoke(new Action(() =>
-                {
-                    logService.LogMessage(rtbPushLogs, updatedText, color, true);
-                    rtbPushLogs.ScrollToCaret();
-                    if (updatedText.Contains("Push Received"))
-                        AppendClickableLinkIcon(updatedText);
-                    //rtbPushLogs.BeginInvoke(new Action(() => HighlightClickableLog(updatedText)));
-                }));
-            }
-            else
-            {
-                logService.LogMessage(rtbPushLogs, updatedText, color, true);
-                rtbPushLogs.ScrollToCaret();
-                // Only append link if it's a push received line
-                if (updatedText.Contains("Push Received"))
-                    AppendClickableLinkIcon(updatedText);
-                //rtbPushLogs.BeginInvoke(new Action(() => HighlightClickableLog(updatedText)));
-            }
+            //if (rtbPushLogs.InvokeRequired)
+            //{
+            //    rtbPushLogs.BeginInvoke(new Action(() =>
+            //    {
+            //        HandlePushLog(updatedText, color);
+            //    }));
+            //}
+            //else
+            //{
+            HandlePushLog(updatedText, color);
+            //}
         }
-
 
         private bool isRawDataVisible = false;
         private void btnRawData_Click(object sender, EventArgs e)
@@ -1066,40 +996,47 @@ namespace ListenerUI
 
             if (_logBuffer2.IsEmpty) return;
 
-            BeginInvoke(new Action(() =>
+            rtbPushLogs.BeginInvoke(new Action(() =>
             {
-                // Check if user is at bottom before appending
                 bool atBottom = false;
                 int visibleLines = rtbPushLogs.ClientSize.Height / rtbPushLogs.Font.Height;
                 int firstVisibleLine = SendMessage(rtbPushLogs.Handle, EM_GETFIRSTVISIBLELINE, 0, 0);
                 int lastVisibleLine = firstVisibleLine + visibleLines;
                 atBottom = (lastVisibleLine >= rtbPushLogs.Lines.Length - 1);
 
-                // Stop repainting until all logs are appended
                 rtbPushLogs.SuspendLayout();
 
                 while (_logBuffer2.TryDequeue(out var log))
                 {
-                    rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
+                    int startBeforeAppend = rtbPushLogs.TextLength;
+
+                    rtbPushLogs.SelectionStart = startBeforeAppend;
                     rtbPushLogs.SelectionLength = 0;
-
-                    // Set font (cached)
                     rtbPushLogs.SelectionFont = log.IsBold ? BoldFont11 : RegularFont11;
-
-                    // Set color
                     rtbPushLogs.SelectionColor = log.Color;
-
-                    //// Append text
-                    //rtbPushLogs.AppendText(log.Message);
-                    // Append text with style preserved
                     rtbPushLogs.SelectedText = log.Message;
+
+                    if (log.Message.Contains("Device ID") && log.Message.Contains("Received"))
+                    {
+                        int start = startBeforeAppend;
+                        int length = log.Message.Length;
+
+                        if (start >= 0 && length > 0)
+                        {
+                            rtbPushLogs.Select(start, length);
+                            rtbPushLogs.SetSelectionLink(true);
+                            rtbPushLogs.Select(rtbPushLogs.TextLength, 0);
+                        }
+                    }
+                    //rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
+                    //rtbPushLogs.SelectionLength = 0;
+
+                    //rtbPushLogs.SelectionFont = log.IsBold ? BoldFont11 : RegularFont11;
+
+                    //rtbPushLogs.SelectionColor = log.Color;
+
+                    //rtbPushLogs.SelectedText = log.Message;
                 }
-
-                //// Reset to default
-                //rtbPushLogs.SelectionColor = rtbPushLogs.ForeColor;
-
-
-                // Trim old lines if needed
                 if (rtbPushLogs.Lines.Length > MaxLines)
                 {
                     int cutOffIndex = rtbPushLogs.GetFirstCharIndexFromLine(TrimLines);
@@ -1107,14 +1044,12 @@ namespace ListenerUI
                     rtbPushLogs.SelectedText = string.Empty;
                 }
 
-                // If user was already at bottom, auto-scroll
                 if (atBottom)
                 {
                     rtbPushLogs.SelectionStart = rtbPushLogs.TextLength;
                     rtbPushLogs.ScrollToCaret();
                 }
 
-                // Resume painting
                 rtbPushLogs.ResumeLayout();
             }));
         }
@@ -1143,6 +1078,167 @@ namespace ListenerUI
             grid.Font = new Font("Times New Roman", 9);
             grid.ColumnHeadersHeight = 35;
         }
+        private void UISettings()
+        {
+            splitCon_Alert.SplitterDistance = tbpAlert.Width / 4;
+            splitCon_Bill.SplitterDistance = tbpBill.Width / 4;
+            splitCon_CB.SplitterDistance = tbpCB.Width / 4;
+            splitCon_DE.SplitterDistance = tbpDE.Width / 4;
+            splitcon_InstantTab.SplitterDistance = tbpInstant.Width / 4;
+            splitCon_LS.SplitterDistance = tbpLS.Width / 4;
+            splitCon_SR.SplitterDistance = tbpSR.Width / 4;
+            splitCon_Tamper.SplitterDistance = tbpTamper.Width / 4;
+            splitConMain.SplitterDistance = tblMain.Width / 2;
+        }
+        private void HandlePushLog(string updatedText, Color color)
+        {
+            logService.LogMessage(rtbPushLogs, updatedText, color, true);
+
+            if (updatedText.Contains("Device ID") && updatedText.Contains("Received"))
+            {
+                int start = rtbPushLogs.Text.LastIndexOf(updatedText);
+                if (start >= 0)
+                {
+                    updatedText = updatedText.Trim();
+                    rtbPushLogs.Select(start, updatedText.Length);
+                    rtbPushLogs.SetSelectionLink(true);
+                    rtbPushLogs.Select(rtbPushLogs.TextLength, 0);
+                }
+            }
+
+            rtbPushLogs.ScrollToCaret();
+        }
         #endregion
+        private void PlotEnergyGraphFromDataTable(DataTable dataTable, string rowHeaderName, int startColumnIndex = 8)
+        {
+            if (dataTable == null || dataTable.Columns.Count == 0 || dataTable.Rows.Count == 0)
+            {
+                MessageBox.Show("Invalid or empty DataTable.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(rowHeaderName))
+            {
+                MessageBox.Show("Row header name must be provided.");
+                return;
+            }
+
+            // Find target row
+            int targetRowIndex = -1;
+            for (int r = 0; r < dataTable.Rows.Count; r++)
+            {
+                if (string.Equals(dataTable.Rows[r][0]?.ToString().Trim(), rowHeaderName.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    targetRowIndex = r;
+                    break;
+                }
+            }
+
+            if (targetRowIndex == -1)
+            {
+                MessageBox.Show($"Row '{rowHeaderName}' not found in DataTable.");
+                return;
+            }
+
+            // Parse numeric values from column 9 onward
+            var values = new List<double>();
+            for (int c = startColumnIndex; c < dataTable.Columns.Count; c++)
+            {
+                var raw = dataTable.Rows[targetRowIndex][c]?.ToString();
+                if (string.IsNullOrWhiteSpace(raw)) continue;
+
+                if (double.TryParse(raw.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
+                    values.Add(parsed);
+            }
+
+            if (values.Count == 0)
+            {
+                MessageBox.Show($"No numeric values found for row '{rowHeaderName}' starting at column {startColumnIndex + 1}.");
+                return;
+            }
+
+            // Configure chart
+            chart_Instant.Series.Clear();
+            chart_Instant.ChartAreas.Clear();
+            chart_Instant.Legends.Clear();
+
+            var area = new ChartArea("MainArea");
+            area.AxisX.Title = $"Push Sequence (Starting from column {startColumnIndex + 1})";
+            area.AxisY.Title = rowHeaderName;
+            area.AxisX.LabelStyle.Angle = -45;
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisY.MajorGrid.LineColor = Color.LightGray;
+            chart_Instant.ChartAreas.Add(area);
+
+            var series = new Series(rowHeaderName)
+            {
+                ChartType = SeriesChartType.Line,
+                BorderWidth = 2,
+                MarkerStyle = MarkerStyle.Circle,
+                XValueType = ChartValueType.Int32,
+                YValueType = ChartValueType.Double,
+                ToolTip = "#VALY Wh at point #INDEX"
+            };
+
+            for (int i = 0; i < values.Count; i++)
+                series.Points.AddXY(i + 1, values[i]);
+
+            chart_Instant.Series.Add(series);
+            chart_Instant.Titles.Clear();
+            chart_Instant.Titles.Add($"{rowHeaderName} Over Time");
+
+            chart_Instant.AntiAliasing = AntiAliasingStyles.Graphics;
+            chart_Instant.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
+            chart_Instant.Legends.Add(new Legend("Legend") { Docking = Docking.Top });
+
+            chart_Instant.Invalidate();
+        }
+
+
+    }
+    public static class RichTextBoxExtensions
+    {
+        const int EM_SETCHARFORMAT = 1092;
+        const int SCF_SELECTION = 1;
+        const int CFE_LINK = 32;
+        const int CFM_LINK = 32;
+
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        private struct CHARFORMAT2_STRUCT
+        {
+            public uint cbSize;
+            public uint dwMask;
+            public uint dwEffects;
+            public int yHeight;
+            public int yOffset;
+            public int crTextColor;
+            public byte bCharSet;
+            public byte bPitchAndFamily;
+            [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 32)]
+            public char[] szFaceName;
+            public ushort wWeight;
+            public short sSpacing;
+            public int crBackColor;
+            public int lcid;
+            public int dwReserved;
+            public short sStyle;
+            public short bOutline;
+            public short bShadow;
+            public short bCondense;
+            public short bExtend;
+            public int style;
+        }
+
+        [System.Runtime.InteropServices.DllImport("user32", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, ref CHARFORMAT2_STRUCT lParam);
+
+        public static void SetSelectionLink(this RichTextBox box, bool link)
+        {
+            CHARFORMAT2_STRUCT cf = new CHARFORMAT2_STRUCT();
+            cf.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(cf);
+            cf.dwMask = CFM_LINK;
+            cf.dwEffects = link ? (uint)CFE_LINK : 0;
+            SendMessage(box.Handle, EM_SETCHARFORMAT, SCF_SELECTION, ref cf);
+        }
     }
 }
