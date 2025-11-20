@@ -111,7 +111,6 @@
             this.txt_Random_DE = new System.Windows.Forms.TextBox();
             this.txt_Random_SR = new System.Windows.Forms.TextBox();
             this.txt_Random_Bill = new System.Windows.Forms.TextBox();
-            this.txt_Random_Alert = new System.Windows.Forms.TextBox();
             this.txt_Random_Instant = new System.Windows.Forms.TextBox();
             this.lblRandomHeader = new System.Windows.Forms.Label();
             this.lblCBProfile = new System.Windows.Forms.Label();
@@ -123,7 +122,6 @@
             this.txt_Alert_DestIP = new System.Windows.Forms.TextBox();
             this.lblBillingProfile = new System.Windows.Forms.Label();
             this.txt_Bill_DestIP = new System.Windows.Forms.TextBox();
-            this.cb_Bill_Frequency = new System.Windows.Forms.ComboBox();
             this.lblSRProfile = new System.Windows.Forms.Label();
             this.txt_SR_DestIP = new System.Windows.Forms.TextBox();
             this.cb_SR_Frequency = new System.Windows.Forms.ComboBox();
@@ -137,6 +135,9 @@
             this.lblDestIPHeader = new System.Windows.Forms.Label();
             this.lblPushFreqHeader = new System.Windows.Forms.Label();
             this.cb_CB_Frequency = new System.Windows.Forms.ComboBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cb_Bill_Frequency = new System.Windows.Forms.ComboBox();
+            this.txtBillFreq = new System.Windows.Forms.MaskedTextBox();
             this.tblMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitConMain)).BeginInit();
             this.splitConMain.Panel1.SuspendLayout();
@@ -206,6 +207,7 @@
             this.pnlProfileSettings.SuspendLayout();
             this.grpProfileConfig.SuspendLayout();
             this.tblProfileSettings.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tblMain
@@ -214,14 +216,14 @@
             this.tblMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.Controls.Add(this.splitConMain, 0, 0);
             this.tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblMain.Location = new System.Drawing.Point(0, 333);
+            this.tblMain.Location = new System.Drawing.Point(0, 357);
             this.tblMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tblMain.Name = "tblMain";
             this.tblMain.RowCount = 2;
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblMain.Size = new System.Drawing.Size(1760, 663);
+            this.tblMain.Size = new System.Drawing.Size(1760, 639);
             this.tblMain.TabIndex = 0;
             // 
             // splitConMain
@@ -240,7 +242,7 @@
             // 
             this.splitConMain.Panel2.Controls.Add(this.PanelProfileandRawData);
             this.splitConMain.Panel2MinSize = 80;
-            this.splitConMain.Size = new System.Drawing.Size(1754, 613);
+            this.splitConMain.Size = new System.Drawing.Size(1754, 589);
             this.splitConMain.SplitterDistance = 541;
             this.splitConMain.SplitterWidth = 2;
             this.splitConMain.TabIndex = 5;
@@ -255,7 +257,7 @@
             this.rtbPushLogs.Margin = new System.Windows.Forms.Padding(0);
             this.rtbPushLogs.Name = "rtbPushLogs";
             this.rtbPushLogs.ReadOnly = true;
-            this.rtbPushLogs.Size = new System.Drawing.Size(541, 613);
+            this.rtbPushLogs.Size = new System.Drawing.Size(541, 589);
             this.rtbPushLogs.TabIndex = 4;
             this.rtbPushLogs.Text = "";
             this.rtbPushLogs.WordWrap = false;
@@ -268,7 +270,7 @@
             this.PanelProfileandRawData.Location = new System.Drawing.Point(0, 0);
             this.PanelProfileandRawData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PanelProfileandRawData.Name = "PanelProfileandRawData";
-            this.PanelProfileandRawData.Size = new System.Drawing.Size(1211, 613);
+            this.PanelProfileandRawData.Size = new System.Drawing.Size(1211, 589);
             this.PanelProfileandRawData.TabIndex = 0;
             // 
             // tabControlProfiles
@@ -287,7 +289,7 @@
             this.tabControlProfiles.Margin = new System.Windows.Forms.Padding(0);
             this.tabControlProfiles.Name = "tabControlProfiles";
             this.tabControlProfiles.SelectedIndex = 0;
-            this.tabControlProfiles.Size = new System.Drawing.Size(1211, 613);
+            this.tabControlProfiles.Size = new System.Drawing.Size(1211, 589);
             this.tabControlProfiles.TabIndex = 0;
             // 
             // tbpInstant
@@ -299,7 +301,7 @@
             this.tbpInstant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpInstant.Name = "tbpInstant";
             this.tbpInstant.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tbpInstant.Size = new System.Drawing.Size(1203, 581);
+            this.tbpInstant.Size = new System.Drawing.Size(1203, 557);
             this.tbpInstant.TabIndex = 0;
             this.tbpInstant.Text = "Instant";
             this.tbpInstant.UseVisualStyleBackColor = true;
@@ -318,8 +320,8 @@
             // splitcon_InstantTab.Panel2
             // 
             this.splitcon_InstantTab.Panel2.Controls.Add(this.chart_Instant);
-            this.splitcon_InstantTab.Size = new System.Drawing.Size(1203, 581);
-            this.splitcon_InstantTab.SplitterDistance = 276;
+            this.splitcon_InstantTab.Size = new System.Drawing.Size(1203, 557);
+            this.splitcon_InstantTab.SplitterDistance = 264;
             this.splitcon_InstantTab.TabIndex = 1;
             // 
             // dgInstant
@@ -356,7 +358,7 @@
             this.dgInstant.RowHeadersVisible = false;
             this.dgInstant.RowHeadersWidth = 50;
             this.dgInstant.RowTemplate.Height = 24;
-            this.dgInstant.Size = new System.Drawing.Size(1203, 276);
+            this.dgInstant.Size = new System.Drawing.Size(1203, 264);
             this.dgInstant.TabIndex = 0;
             // 
             // chart_Instant
@@ -372,7 +374,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart_Instant.Series.Add(series1);
-            this.chart_Instant.Size = new System.Drawing.Size(1203, 301);
+            this.chart_Instant.Size = new System.Drawing.Size(1203, 289);
             this.chart_Instant.TabIndex = 0;
             this.chart_Instant.Text = "chart1";
             // 
@@ -383,7 +385,7 @@
             this.tbpLS.Location = new System.Drawing.Point(4, 28);
             this.tbpLS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpLS.Name = "tbpLS";
-            this.tbpLS.Size = new System.Drawing.Size(1203, 581);
+            this.tbpLS.Size = new System.Drawing.Size(1203, 557);
             this.tbpLS.TabIndex = 1;
             this.tbpLS.Text = "Load Survey";
             this.tbpLS.UseVisualStyleBackColor = true;
@@ -402,8 +404,8 @@
             // splitCon_LS.Panel2
             // 
             this.splitCon_LS.Panel2.Controls.Add(this.chart_LS);
-            this.splitCon_LS.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_LS.SplitterDistance = 337;
+            this.splitCon_LS.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_LS.SplitterDistance = 323;
             this.splitCon_LS.TabIndex = 6;
             // 
             // dgLS
@@ -428,7 +430,7 @@
             this.dgLS.RowHeadersWidth = 51;
             this.dgLS.RowTemplate.Height = 24;
             this.dgLS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgLS.Size = new System.Drawing.Size(1203, 337);
+            this.dgLS.Size = new System.Drawing.Size(1203, 323);
             this.dgLS.TabIndex = 2;
             // 
             // chart_LS
@@ -444,7 +446,7 @@
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart_LS.Series.Add(series2);
-            this.chart_LS.Size = new System.Drawing.Size(1203, 240);
+            this.chart_LS.Size = new System.Drawing.Size(1203, 230);
             this.chart_LS.TabIndex = 3;
             this.chart_LS.Text = "chart1";
             // 
@@ -455,7 +457,7 @@
             this.tbpDE.Location = new System.Drawing.Point(4, 28);
             this.tbpDE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpDE.Name = "tbpDE";
-            this.tbpDE.Size = new System.Drawing.Size(1203, 581);
+            this.tbpDE.Size = new System.Drawing.Size(1203, 557);
             this.tbpDE.TabIndex = 2;
             this.tbpDE.Text = "Daily Energy";
             this.tbpDE.UseVisualStyleBackColor = true;
@@ -474,8 +476,8 @@
             // splitCon_DE.Panel2
             // 
             this.splitCon_DE.Panel2.Controls.Add(this.chart_DE);
-            this.splitCon_DE.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_DE.SplitterDistance = 267;
+            this.splitCon_DE.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_DE.SplitterDistance = 255;
             this.splitCon_DE.TabIndex = 7;
             // 
             // dgDE
@@ -500,7 +502,7 @@
             this.dgDE.RowHeadersWidth = 51;
             this.dgDE.RowTemplate.Height = 24;
             this.dgDE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgDE.Size = new System.Drawing.Size(1203, 267);
+            this.dgDE.Size = new System.Drawing.Size(1203, 255);
             this.dgDE.TabIndex = 2;
             // 
             // chart_DE
@@ -516,7 +518,7 @@
             series3.Legend = "Legend1";
             series3.Name = "Series1";
             this.chart_DE.Series.Add(series3);
-            this.chart_DE.Size = new System.Drawing.Size(1203, 310);
+            this.chart_DE.Size = new System.Drawing.Size(1203, 298);
             this.chart_DE.TabIndex = 3;
             this.chart_DE.Text = "chart1";
             // 
@@ -527,7 +529,7 @@
             this.tbpSR.Location = new System.Drawing.Point(4, 28);
             this.tbpSR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpSR.Name = "tbpSR";
-            this.tbpSR.Size = new System.Drawing.Size(1203, 581);
+            this.tbpSR.Size = new System.Drawing.Size(1203, 557);
             this.tbpSR.TabIndex = 3;
             this.tbpSR.Text = "Self Registration";
             this.tbpSR.UseVisualStyleBackColor = true;
@@ -546,8 +548,8 @@
             // splitCon_SR.Panel2
             // 
             this.splitCon_SR.Panel2.Controls.Add(this.chart_SR);
-            this.splitCon_SR.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_SR.SplitterDistance = 222;
+            this.splitCon_SR.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_SR.SplitterDistance = 212;
             this.splitCon_SR.TabIndex = 7;
             // 
             // dgSR
@@ -572,7 +574,7 @@
             this.dgSR.RowHeadersWidth = 51;
             this.dgSR.RowTemplate.Height = 24;
             this.dgSR.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgSR.Size = new System.Drawing.Size(1203, 222);
+            this.dgSR.Size = new System.Drawing.Size(1203, 212);
             this.dgSR.TabIndex = 2;
             // 
             // chart_SR
@@ -588,7 +590,7 @@
             series4.Legend = "Legend1";
             series4.Name = "Series1";
             this.chart_SR.Series.Add(series4);
-            this.chart_SR.Size = new System.Drawing.Size(1203, 355);
+            this.chart_SR.Size = new System.Drawing.Size(1203, 341);
             this.chart_SR.TabIndex = 3;
             this.chart_SR.Text = "chart1";
             // 
@@ -599,7 +601,7 @@
             this.tbpBill.Location = new System.Drawing.Point(4, 28);
             this.tbpBill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpBill.Name = "tbpBill";
-            this.tbpBill.Size = new System.Drawing.Size(1203, 581);
+            this.tbpBill.Size = new System.Drawing.Size(1203, 557);
             this.tbpBill.TabIndex = 4;
             this.tbpBill.Text = "Billing";
             this.tbpBill.UseVisualStyleBackColor = true;
@@ -618,8 +620,8 @@
             // splitCon_Bill.Panel2
             // 
             this.splitCon_Bill.Panel2.Controls.Add(this.chart_Bill);
-            this.splitCon_Bill.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_Bill.SplitterDistance = 267;
+            this.splitCon_Bill.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_Bill.SplitterDistance = 255;
             this.splitCon_Bill.TabIndex = 7;
             // 
             // dgBill
@@ -644,7 +646,7 @@
             this.dgBill.RowHeadersWidth = 51;
             this.dgBill.RowTemplate.Height = 24;
             this.dgBill.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgBill.Size = new System.Drawing.Size(1203, 267);
+            this.dgBill.Size = new System.Drawing.Size(1203, 255);
             this.dgBill.TabIndex = 2;
             // 
             // chart_Bill
@@ -660,7 +662,7 @@
             series5.Legend = "Legend1";
             series5.Name = "Series1";
             this.chart_Bill.Series.Add(series5);
-            this.chart_Bill.Size = new System.Drawing.Size(1203, 310);
+            this.chart_Bill.Size = new System.Drawing.Size(1203, 298);
             this.chart_Bill.TabIndex = 3;
             this.chart_Bill.Text = "chart1";
             // 
@@ -671,7 +673,7 @@
             this.tbpCB.Location = new System.Drawing.Point(4, 28);
             this.tbpCB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpCB.Name = "tbpCB";
-            this.tbpCB.Size = new System.Drawing.Size(1203, 581);
+            this.tbpCB.Size = new System.Drawing.Size(1203, 557);
             this.tbpCB.TabIndex = 5;
             this.tbpCB.Text = "Current Bill";
             this.tbpCB.UseVisualStyleBackColor = true;
@@ -690,8 +692,8 @@
             // splitCon_CB.Panel2
             // 
             this.splitCon_CB.Panel2.Controls.Add(this.chart_CB);
-            this.splitCon_CB.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_CB.SplitterDistance = 267;
+            this.splitCon_CB.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_CB.SplitterDistance = 255;
             this.splitCon_CB.TabIndex = 7;
             // 
             // dgCB
@@ -716,7 +718,7 @@
             this.dgCB.RowHeadersWidth = 51;
             this.dgCB.RowTemplate.Height = 24;
             this.dgCB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgCB.Size = new System.Drawing.Size(1203, 267);
+            this.dgCB.Size = new System.Drawing.Size(1203, 255);
             this.dgCB.TabIndex = 2;
             // 
             // chart_CB
@@ -732,7 +734,7 @@
             series6.Legend = "Legend1";
             series6.Name = "Series1";
             this.chart_CB.Series.Add(series6);
-            this.chart_CB.Size = new System.Drawing.Size(1203, 310);
+            this.chart_CB.Size = new System.Drawing.Size(1203, 298);
             this.chart_CB.TabIndex = 3;
             this.chart_CB.Text = "chart1";
             // 
@@ -743,7 +745,7 @@
             this.tbpAlert.Location = new System.Drawing.Point(4, 28);
             this.tbpAlert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpAlert.Name = "tbpAlert";
-            this.tbpAlert.Size = new System.Drawing.Size(1203, 581);
+            this.tbpAlert.Size = new System.Drawing.Size(1203, 557);
             this.tbpAlert.TabIndex = 6;
             this.tbpAlert.Text = "Alert";
             this.tbpAlert.UseVisualStyleBackColor = true;
@@ -762,8 +764,8 @@
             // splitCon_Alert.Panel2
             // 
             this.splitCon_Alert.Panel2.Controls.Add(this.chart_Alert);
-            this.splitCon_Alert.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_Alert.SplitterDistance = 267;
+            this.splitCon_Alert.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_Alert.SplitterDistance = 255;
             this.splitCon_Alert.TabIndex = 7;
             // 
             // dgAlert
@@ -788,7 +790,7 @@
             this.dgAlert.RowHeadersWidth = 51;
             this.dgAlert.RowTemplate.Height = 24;
             this.dgAlert.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgAlert.Size = new System.Drawing.Size(1203, 267);
+            this.dgAlert.Size = new System.Drawing.Size(1203, 255);
             this.dgAlert.TabIndex = 2;
             // 
             // chart_Alert
@@ -804,7 +806,7 @@
             series7.Legend = "Legend1";
             series7.Name = "Series1";
             this.chart_Alert.Series.Add(series7);
-            this.chart_Alert.Size = new System.Drawing.Size(1203, 310);
+            this.chart_Alert.Size = new System.Drawing.Size(1203, 298);
             this.chart_Alert.TabIndex = 3;
             this.chart_Alert.Text = "chart1";
             // 
@@ -815,7 +817,7 @@
             this.tbpTamper.Location = new System.Drawing.Point(4, 28);
             this.tbpTamper.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpTamper.Name = "tbpTamper";
-            this.tbpTamper.Size = new System.Drawing.Size(1203, 581);
+            this.tbpTamper.Size = new System.Drawing.Size(1203, 557);
             this.tbpTamper.TabIndex = 7;
             this.tbpTamper.Text = "Tamper";
             this.tbpTamper.UseVisualStyleBackColor = true;
@@ -834,8 +836,8 @@
             // splitCon_Tamper.Panel2
             // 
             this.splitCon_Tamper.Panel2.Controls.Add(this.chart_tamper);
-            this.splitCon_Tamper.Size = new System.Drawing.Size(1203, 581);
-            this.splitCon_Tamper.SplitterDistance = 267;
+            this.splitCon_Tamper.Size = new System.Drawing.Size(1203, 557);
+            this.splitCon_Tamper.SplitterDistance = 255;
             this.splitCon_Tamper.TabIndex = 7;
             // 
             // dgTamper
@@ -860,7 +862,7 @@
             this.dgTamper.RowHeadersWidth = 51;
             this.dgTamper.RowTemplate.Height = 24;
             this.dgTamper.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgTamper.Size = new System.Drawing.Size(1203, 267);
+            this.dgTamper.Size = new System.Drawing.Size(1203, 255);
             this.dgTamper.TabIndex = 2;
             // 
             // chart_tamper
@@ -876,7 +878,7 @@
             series8.Legend = "Legend1";
             series8.Name = "Series1";
             this.chart_tamper.Series.Add(series8);
-            this.chart_tamper.Size = new System.Drawing.Size(1203, 310);
+            this.chart_tamper.Size = new System.Drawing.Size(1203, 298);
             this.chart_tamper.TabIndex = 3;
             this.chart_tamper.Text = "chart1";
             // 
@@ -912,7 +914,7 @@
             this.dgRawData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgRawData.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.dgRawData.RowTemplate.Height = 24;
-            this.dgRawData.Size = new System.Drawing.Size(1211, 613);
+            this.dgRawData.Size = new System.Drawing.Size(1211, 589);
             this.dgRawData.TabIndex = 1;
             // 
             // lblHeader
@@ -942,7 +944,7 @@
             this.tblHeader.RowCount = 2;
             this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblHeader.Size = new System.Drawing.Size(1760, 73);
+            this.tblHeader.Size = new System.Drawing.Size(1760, 76);
             this.tblHeader.TabIndex = 9;
             // 
             // flowPanelButtons
@@ -1044,10 +1046,10 @@
             // 
             this.pnlProfileSettings.Controls.Add(this.grpProfileConfig);
             this.pnlProfileSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 73);
+            this.pnlProfileSettings.Location = new System.Drawing.Point(0, 76);
             this.pnlProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlProfileSettings.Name = "pnlProfileSettings";
-            this.pnlProfileSettings.Size = new System.Drawing.Size(1760, 260);
+            this.pnlProfileSettings.Size = new System.Drawing.Size(1760, 281);
             this.pnlProfileSettings.TabIndex = 0;
             this.pnlProfileSettings.Visible = false;
             // 
@@ -1055,13 +1057,12 @@
             // 
             this.grpProfileConfig.Controls.Add(this.tblProfileSettings);
             this.grpProfileConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpProfileConfig.Font = new System.Drawing.Font("Times New Roman", 10.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpProfileConfig.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpProfileConfig.ForeColor = System.Drawing.Color.Black;
             this.grpProfileConfig.Location = new System.Drawing.Point(0, 0);
-            this.grpProfileConfig.Margin = new System.Windows.Forms.Padding(11, 5, 11, 5);
             this.grpProfileConfig.Name = "grpProfileConfig";
             this.grpProfileConfig.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpProfileConfig.Size = new System.Drawing.Size(1760, 260);
+            this.grpProfileConfig.Size = new System.Drawing.Size(1760, 281);
             this.grpProfileConfig.TabIndex = 10;
             this.grpProfileConfig.TabStop = false;
             this.grpProfileConfig.Text = "Push Setup And Action Schedule settings";
@@ -1083,7 +1084,6 @@
             this.tblProfileSettings.Controls.Add(this.txt_Random_DE, 3, 5);
             this.tblProfileSettings.Controls.Add(this.txt_Random_SR, 3, 4);
             this.tblProfileSettings.Controls.Add(this.txt_Random_Bill, 3, 3);
-            this.tblProfileSettings.Controls.Add(this.txt_Random_Alert, 3, 2);
             this.tblProfileSettings.Controls.Add(this.txt_Random_Instant, 3, 1);
             this.tblProfileSettings.Controls.Add(this.lblRandomHeader, 3, 0);
             this.tblProfileSettings.Controls.Add(this.lblCBProfile, 0, 7);
@@ -1095,7 +1095,6 @@
             this.tblProfileSettings.Controls.Add(this.txt_Alert_DestIP, 1, 2);
             this.tblProfileSettings.Controls.Add(this.lblBillingProfile, 0, 3);
             this.tblProfileSettings.Controls.Add(this.txt_Bill_DestIP, 1, 3);
-            this.tblProfileSettings.Controls.Add(this.cb_Bill_Frequency, 2, 3);
             this.tblProfileSettings.Controls.Add(this.lblSRProfile, 0, 4);
             this.tblProfileSettings.Controls.Add(this.txt_SR_DestIP, 1, 4);
             this.tblProfileSettings.Controls.Add(this.cb_SR_Frequency, 2, 4);
@@ -1109,6 +1108,7 @@
             this.tblProfileSettings.Controls.Add(this.lblDestIPHeader, 1, 0);
             this.tblProfileSettings.Controls.Add(this.lblPushFreqHeader, 2, 0);
             this.tblProfileSettings.Controls.Add(this.cb_CB_Frequency, 2, 7);
+            this.tblProfileSettings.Controls.Add(this.tableLayoutPanel1, 2, 3);
             this.tblProfileSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblProfileSettings.Location = new System.Drawing.Point(3, 22);
             this.tblProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -1122,7 +1122,7 @@
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tblProfileSettings.Size = new System.Drawing.Size(1754, 236);
+            this.tblProfileSettings.Size = new System.Drawing.Size(1754, 257);
             this.tblProfileSettings.TabIndex = 0;
             // 
             // cbTestProfileType
@@ -1138,9 +1138,9 @@
             "SR",
             "Bill",
             "Current Bill"});
-            this.cbTestProfileType.Location = new System.Drawing.Point(1403, 32);
+            this.cbTestProfileType.Location = new System.Drawing.Point(1403, 35);
             this.cbTestProfileType.Name = "cbTestProfileType";
-            this.cbTestProfileType.Size = new System.Drawing.Size(348, 28);
+            this.cbTestProfileType.Size = new System.Drawing.Size(348, 27);
             this.cbTestProfileType.TabIndex = 67;
             this.cbTestProfileType.SelectedIndexChanged += new System.EventHandler(this.cbTestProfileType_SelectedIndexChanged);
             // 
@@ -1150,38 +1150,46 @@
             this.lblProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfile.Location = new System.Drawing.Point(1403, 0);
             this.lblProfile.Name = "lblProfile";
-            this.lblProfile.Size = new System.Drawing.Size(348, 29);
+            this.lblProfile.Size = new System.Drawing.Size(348, 32);
             this.lblProfile.TabIndex = 66;
             this.lblProfile.Text = "Test Profile";
             this.lblProfile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnSet_PS_AS
             // 
+            this.btnSet_PS_AS.BackColor = System.Drawing.Color.Transparent;
             this.btnSet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSet_PS_AS.Location = new System.Drawing.Point(1403, 206);
+            this.btnSet_PS_AS.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSet_PS_AS.ForeColor = System.Drawing.Color.Black;
+            this.btnSet_PS_AS.Location = new System.Drawing.Point(1400, 224);
+            this.btnSet_PS_AS.Margin = new System.Windows.Forms.Padding(0);
             this.btnSet_PS_AS.Name = "btnSet_PS_AS";
-            this.btnSet_PS_AS.Size = new System.Drawing.Size(348, 27);
+            this.btnSet_PS_AS.Size = new System.Drawing.Size(354, 33);
             this.btnSet_PS_AS.TabIndex = 61;
-            this.btnSet_PS_AS.Text = "Set";
-            this.btnSet_PS_AS.UseVisualStyleBackColor = true;
+            this.btnSet_PS_AS.Text = "Set Push Setup and Action Schedule";
+            this.btnSet_PS_AS.UseVisualStyleBackColor = false;
             this.btnSet_PS_AS.Click += new System.EventHandler(this.btnSet_PS_AS_Click);
             // 
             // btnGet_PS_AS
             // 
+            this.btnGet_PS_AS.BackColor = System.Drawing.Color.Transparent;
             this.btnGet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGet_PS_AS.Location = new System.Drawing.Point(1403, 177);
+            this.btnGet_PS_AS.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGet_PS_AS.ForeColor = System.Drawing.Color.Black;
+            this.btnGet_PS_AS.Location = new System.Drawing.Point(1400, 192);
+            this.btnGet_PS_AS.Margin = new System.Windows.Forms.Padding(0);
             this.btnGet_PS_AS.Name = "btnGet_PS_AS";
-            this.btnGet_PS_AS.Size = new System.Drawing.Size(348, 23);
+            this.btnGet_PS_AS.Size = new System.Drawing.Size(354, 32);
             this.btnGet_PS_AS.TabIndex = 62;
-            this.btnGet_PS_AS.Text = "Get";
-            this.btnGet_PS_AS.UseVisualStyleBackColor = true;
+            this.btnGet_PS_AS.Text = "Get Push Setup and Action Schedule";
+            this.btnGet_PS_AS.UseVisualStyleBackColor = false;
             this.btnGet_PS_AS.Click += new System.EventHandler(this.btnGet_PS_AS_Click);
             // 
             // txt_Random_CB
             // 
             this.txt_Random_CB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_CB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_CB.Location = new System.Drawing.Point(1053, 205);
+            this.txt_Random_CB.Location = new System.Drawing.Point(1053, 226);
             this.txt_Random_CB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_CB.Name = "txt_Random_CB";
             this.txt_Random_CB.Size = new System.Drawing.Size(344, 27);
@@ -1191,7 +1199,7 @@
             // 
             this.txt_Random_LS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_LS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_LS.Location = new System.Drawing.Point(1053, 176);
+            this.txt_Random_LS.Location = new System.Drawing.Point(1053, 194);
             this.txt_Random_LS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_LS.Name = "txt_Random_LS";
             this.txt_Random_LS.Size = new System.Drawing.Size(344, 27);
@@ -1201,7 +1209,7 @@
             // 
             this.txt_Random_DE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_DE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_DE.Location = new System.Drawing.Point(1053, 147);
+            this.txt_Random_DE.Location = new System.Drawing.Point(1053, 162);
             this.txt_Random_DE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_DE.Name = "txt_Random_DE";
             this.txt_Random_DE.Size = new System.Drawing.Size(344, 27);
@@ -1211,7 +1219,7 @@
             // 
             this.txt_Random_SR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_SR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_SR.Location = new System.Drawing.Point(1053, 118);
+            this.txt_Random_SR.Location = new System.Drawing.Point(1053, 130);
             this.txt_Random_SR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_SR.Name = "txt_Random_SR";
             this.txt_Random_SR.Size = new System.Drawing.Size(344, 27);
@@ -1221,27 +1229,17 @@
             // 
             this.txt_Random_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Bill.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Bill.Location = new System.Drawing.Point(1053, 89);
+            this.txt_Random_Bill.Location = new System.Drawing.Point(1053, 98);
             this.txt_Random_Bill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Bill.Name = "txt_Random_Bill";
             this.txt_Random_Bill.Size = new System.Drawing.Size(344, 27);
             this.txt_Random_Bill.TabIndex = 48;
             // 
-            // txt_Random_Alert
-            // 
-            this.txt_Random_Alert.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txt_Random_Alert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Alert.Location = new System.Drawing.Point(1053, 60);
-            this.txt_Random_Alert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt_Random_Alert.Name = "txt_Random_Alert";
-            this.txt_Random_Alert.Size = new System.Drawing.Size(344, 27);
-            this.txt_Random_Alert.TabIndex = 45;
-            // 
             // txt_Random_Instant
             // 
             this.txt_Random_Instant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Instant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Instant.Location = new System.Drawing.Point(1053, 31);
+            this.txt_Random_Instant.Location = new System.Drawing.Point(1053, 34);
             this.txt_Random_Instant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Instant.Name = "txt_Random_Instant";
             this.txt_Random_Instant.Size = new System.Drawing.Size(344, 27);
@@ -1253,7 +1251,7 @@
             this.lblRandomHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRandomHeader.Location = new System.Drawing.Point(1053, 0);
             this.lblRandomHeader.Name = "lblRandomHeader";
-            this.lblRandomHeader.Size = new System.Drawing.Size(344, 29);
+            this.lblRandomHeader.Size = new System.Drawing.Size(344, 32);
             this.lblRandomHeader.TabIndex = 48;
             this.lblRandomHeader.Text = "Randomisation (In Min)";
             this.lblRandomHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1263,7 +1261,7 @@
             this.lblCBProfile.AutoSize = true;
             this.lblCBProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCBProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCBProfile.Location = new System.Drawing.Point(3, 203);
+            this.lblCBProfile.Location = new System.Drawing.Point(3, 224);
             this.lblCBProfile.Name = "lblCBProfile";
             this.lblCBProfile.Size = new System.Drawing.Size(344, 33);
             this.lblCBProfile.TabIndex = 45;
@@ -1274,7 +1272,7 @@
             // 
             this.txt_CB_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_CB_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_CB_DestIP.Location = new System.Drawing.Point(353, 205);
+            this.txt_CB_DestIP.Location = new System.Drawing.Point(353, 226);
             this.txt_CB_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_CB_DestIP.Name = "txt_CB_DestIP";
             this.txt_CB_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1285,9 +1283,9 @@
             this.lblInstant.AutoSize = true;
             this.lblInstant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInstant.Location = new System.Drawing.Point(3, 29);
+            this.lblInstant.Location = new System.Drawing.Point(3, 32);
             this.lblInstant.Name = "lblInstant";
-            this.lblInstant.Size = new System.Drawing.Size(344, 29);
+            this.lblInstant.Size = new System.Drawing.Size(344, 32);
             this.lblInstant.TabIndex = 39;
             this.lblInstant.Text = "Instant Profile";
             this.lblInstant.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1296,7 +1294,7 @@
             // 
             this.txt_Instant_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Instant_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Instant_DestIP.Location = new System.Drawing.Point(353, 31);
+            this.txt_Instant_DestIP.Location = new System.Drawing.Point(353, 34);
             this.txt_Instant_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Instant_DestIP.Name = "txt_Instant_DestIP";
             this.txt_Instant_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1319,7 +1317,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cbInstant_Frequency.Location = new System.Drawing.Point(703, 31);
+            this.cbInstant_Frequency.Location = new System.Drawing.Point(703, 34);
             this.cbInstant_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbInstant_Frequency.Name = "cbInstant_Frequency";
             this.cbInstant_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1331,9 +1329,9 @@
             this.lblAlert.AutoSize = true;
             this.lblAlert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAlert.Location = new System.Drawing.Point(3, 58);
+            this.lblAlert.Location = new System.Drawing.Point(3, 64);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(344, 29);
+            this.lblAlert.Size = new System.Drawing.Size(344, 32);
             this.lblAlert.TabIndex = 36;
             this.lblAlert.Text = "Alert Profile";
             this.lblAlert.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1342,7 +1340,7 @@
             // 
             this.txt_Alert_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Alert_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Alert_DestIP.Location = new System.Drawing.Point(353, 60);
+            this.txt_Alert_DestIP.Location = new System.Drawing.Point(353, 66);
             this.txt_Alert_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Alert_DestIP.Name = "txt_Alert_DestIP";
             this.txt_Alert_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1353,9 +1351,9 @@
             this.lblBillingProfile.AutoSize = true;
             this.lblBillingProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBillingProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBillingProfile.Location = new System.Drawing.Point(3, 87);
+            this.lblBillingProfile.Location = new System.Drawing.Point(3, 96);
             this.lblBillingProfile.Name = "lblBillingProfile";
-            this.lblBillingProfile.Size = new System.Drawing.Size(344, 29);
+            this.lblBillingProfile.Size = new System.Drawing.Size(344, 32);
             this.lblBillingProfile.TabIndex = 33;
             this.lblBillingProfile.Text = "Billing Profile";
             this.lblBillingProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1364,35 +1362,20 @@
             // 
             this.txt_Bill_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Bill_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Bill_DestIP.Location = new System.Drawing.Point(353, 89);
+            this.txt_Bill_DestIP.Location = new System.Drawing.Point(353, 98);
             this.txt_Bill_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Bill_DestIP.Name = "txt_Bill_DestIP";
             this.txt_Bill_DestIP.Size = new System.Drawing.Size(344, 27);
             this.txt_Bill_DestIP.TabIndex = 46;
-            // 
-            // cb_Bill_Frequency
-            // 
-            this.cb_Bill_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cb_Bill_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cb_Bill_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_Bill_Frequency.FormattingEnabled = true;
-            this.cb_Bill_Frequency.Items.AddRange(new object[] {
-            "Disabled"});
-            this.cb_Bill_Frequency.Location = new System.Drawing.Point(703, 89);
-            this.cb_Bill_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cb_Bill_Frequency.Name = "cb_Bill_Frequency";
-            this.cb_Bill_Frequency.Size = new System.Drawing.Size(344, 28);
-            this.cb_Bill_Frequency.TabIndex = 47;
-            this.cb_Bill_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
             // 
             // lblSRProfile
             // 
             this.lblSRProfile.AutoSize = true;
             this.lblSRProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSRProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSRProfile.Location = new System.Drawing.Point(3, 116);
+            this.lblSRProfile.Location = new System.Drawing.Point(3, 128);
             this.lblSRProfile.Name = "lblSRProfile";
-            this.lblSRProfile.Size = new System.Drawing.Size(344, 29);
+            this.lblSRProfile.Size = new System.Drawing.Size(344, 32);
             this.lblSRProfile.TabIndex = 30;
             this.lblSRProfile.Text = "Self Registration Profile";
             this.lblSRProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1401,7 +1384,7 @@
             // 
             this.txt_SR_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_SR_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_SR_DestIP.Location = new System.Drawing.Point(353, 118);
+            this.txt_SR_DestIP.Location = new System.Drawing.Point(353, 130);
             this.txt_SR_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_SR_DestIP.Name = "txt_SR_DestIP";
             this.txt_SR_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1424,7 +1407,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cb_SR_Frequency.Location = new System.Drawing.Point(703, 118);
+            this.cb_SR_Frequency.Location = new System.Drawing.Point(703, 130);
             this.cb_SR_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_SR_Frequency.Name = "cb_SR_Frequency";
             this.cb_SR_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1436,9 +1419,9 @@
             this.lblDEProfile.AutoSize = true;
             this.lblDEProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDEProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDEProfile.Location = new System.Drawing.Point(3, 145);
+            this.lblDEProfile.Location = new System.Drawing.Point(3, 160);
             this.lblDEProfile.Name = "lblDEProfile";
-            this.lblDEProfile.Size = new System.Drawing.Size(344, 29);
+            this.lblDEProfile.Size = new System.Drawing.Size(344, 32);
             this.lblDEProfile.TabIndex = 27;
             this.lblDEProfile.Text = "Daily Energy Profile";
             this.lblDEProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1447,7 +1430,7 @@
             // 
             this.txt_DE_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_DE_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_DE_DestIP.Location = new System.Drawing.Point(353, 147);
+            this.txt_DE_DestIP.Location = new System.Drawing.Point(353, 162);
             this.txt_DE_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_DE_DestIP.Name = "txt_DE_DestIP";
             this.txt_DE_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1463,7 +1446,7 @@
             this.cb_DE_Frequency.Items.AddRange(new object[] {
             "24 Hour",
             "Disabled"});
-            this.cb_DE_Frequency.Location = new System.Drawing.Point(703, 147);
+            this.cb_DE_Frequency.Location = new System.Drawing.Point(703, 162);
             this.cb_DE_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_DE_Frequency.Name = "cb_DE_Frequency";
             this.cb_DE_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1475,9 +1458,9 @@
             this.lblLSProfile.AutoSize = true;
             this.lblLSProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLSProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLSProfile.Location = new System.Drawing.Point(3, 174);
+            this.lblLSProfile.Location = new System.Drawing.Point(3, 192);
             this.lblLSProfile.Name = "lblLSProfile";
-            this.lblLSProfile.Size = new System.Drawing.Size(344, 29);
+            this.lblLSProfile.Size = new System.Drawing.Size(344, 32);
             this.lblLSProfile.TabIndex = 24;
             this.lblLSProfile.Text = "Load Survey Profile";
             this.lblLSProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1486,7 +1469,7 @@
             // 
             this.txt_LS_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_LS_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_LS_DestIP.Location = new System.Drawing.Point(353, 176);
+            this.txt_LS_DestIP.Location = new System.Drawing.Point(353, 194);
             this.txt_LS_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_LS_DestIP.Name = "txt_LS_DestIP";
             this.txt_LS_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1509,7 +1492,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cb_LS_Frequency.Location = new System.Drawing.Point(703, 176);
+            this.cb_LS_Frequency.Location = new System.Drawing.Point(703, 194);
             this.cb_LS_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_LS_Frequency.Name = "cb_LS_Frequency";
             this.cb_LS_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1522,7 +1505,7 @@
             this.lblProfileHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfileHeader.Location = new System.Drawing.Point(3, 0);
             this.lblProfileHeader.Name = "lblProfileHeader";
-            this.lblProfileHeader.Size = new System.Drawing.Size(344, 29);
+            this.lblProfileHeader.Size = new System.Drawing.Size(344, 32);
             this.lblProfileHeader.TabIndex = 0;
             this.lblProfileHeader.Text = "Profiles";
             this.lblProfileHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1533,7 +1516,7 @@
             this.lblDestIPHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDestIPHeader.Location = new System.Drawing.Point(353, 0);
             this.lblDestIPHeader.Name = "lblDestIPHeader";
-            this.lblDestIPHeader.Size = new System.Drawing.Size(344, 29);
+            this.lblDestIPHeader.Size = new System.Drawing.Size(344, 32);
             this.lblDestIPHeader.TabIndex = 1;
             this.lblDestIPHeader.Text = "Destination IP Address";
             this.lblDestIPHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1544,7 +1527,7 @@
             this.lblPushFreqHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPushFreqHeader.Location = new System.Drawing.Point(703, 0);
             this.lblPushFreqHeader.Name = "lblPushFreqHeader";
-            this.lblPushFreqHeader.Size = new System.Drawing.Size(344, 29);
+            this.lblPushFreqHeader.Size = new System.Drawing.Size(344, 32);
             this.lblPushFreqHeader.TabIndex = 2;
             this.lblPushFreqHeader.Text = "Push Frequency Schedule";
             this.lblPushFreqHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1559,12 +1542,56 @@
             this.cb_CB_Frequency.Items.AddRange(new object[] {
             "24 Hour",
             "Disabled"});
-            this.cb_CB_Frequency.Location = new System.Drawing.Point(703, 205);
+            this.cb_CB_Frequency.Location = new System.Drawing.Point(703, 226);
             this.cb_CB_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_CB_Frequency.Name = "cb_CB_Frequency";
             this.cb_CB_Frequency.Size = new System.Drawing.Size(344, 28);
             this.cb_CB_Frequency.TabIndex = 59;
             this.cb_CB_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel1.Controls.Add(this.cb_Bill_Frequency, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.txtBillFreq, 1, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(700, 96);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 32);
+            this.tableLayoutPanel1.TabIndex = 69;
+            // 
+            // cb_Bill_Frequency
+            // 
+            this.cb_Bill_Frequency.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cb_Bill_Frequency.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cb_Bill_Frequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_Bill_Frequency.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_Bill_Frequency.FormattingEnabled = true;
+            this.cb_Bill_Frequency.Items.AddRange(new object[] {
+            "Custom",
+            "Disabled"});
+            this.cb_Bill_Frequency.Location = new System.Drawing.Point(3, 3);
+            this.cb_Bill_Frequency.Name = "cb_Bill_Frequency";
+            this.cb_Bill_Frequency.Size = new System.Drawing.Size(134, 28);
+            this.cb_Bill_Frequency.TabIndex = 47;
+            this.cb_Bill_Frequency.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbInstant_Frequency_DrawItem);
+            this.cb_Bill_Frequency.SelectedIndexChanged += new System.EventHandler(this.cb_Bill_Frequency_SelectedIndexChanged);
+            // 
+            // txtBillFreq
+            // 
+            this.txtBillFreq.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBillFreq.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBillFreq.Location = new System.Drawing.Point(143, 3);
+            this.txtBillFreq.Mask = "00/\\*/\\* 00:00:00";
+            this.txtBillFreq.Name = "txtBillFreq";
+            this.txtBillFreq.Size = new System.Drawing.Size(204, 27);
+            this.txtBillFreq.TabIndex = 70;
+            this.txtBillFreq.Leave += new System.EventHandler(this.txtBillFreq_Leave);
             // 
             // ListenerForm
             // 
@@ -1649,6 +1676,8 @@
             this.grpProfileConfig.ResumeLayout(false);
             this.tblProfileSettings.ResumeLayout(false);
             this.tblProfileSettings.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1700,7 +1729,6 @@
         private System.Windows.Forms.TextBox txt_Random_DE;
         private System.Windows.Forms.TextBox txt_Random_SR;
         private System.Windows.Forms.TextBox txt_Random_Bill;
-        private System.Windows.Forms.TextBox txt_Random_Alert;
         private System.Windows.Forms.TextBox txt_Random_Instant;
         private System.Windows.Forms.RichTextBox rtbPushLogs;
         private System.Windows.Forms.Panel PanelProfileandRawData;
@@ -1740,5 +1768,7 @@
         private System.Windows.Forms.Button btnClearLogs;
         private System.Windows.Forms.Button btnSaveData;
         private System.Windows.Forms.Button btnRawData;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.MaskedTextBox txtBillFreq;
     }
 }

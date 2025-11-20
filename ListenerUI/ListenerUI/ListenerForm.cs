@@ -148,6 +148,8 @@ namespace ListenerUI
             cbInstant_Frequency.DrawMode = DrawMode.OwnerDrawFixed;
             cbInstant_Frequency.DrawItem += cbInstant_Frequency_DrawItem;
 
+            pnlProfileSettings.Click += BlockHide;
+            grpProfileConfig.Click += BlockHide;
 
             PushPacketManager._logService = logService;
             PushPacketManager.logBox = rtbPushLogs;
@@ -157,7 +159,7 @@ namespace ListenerUI
             _flushTimer2.Start();
 
             ComboBox[] comboBoxes = {
-                cbTestProfileType, cbInstant_Frequency,cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency };
+                cbTestProfileType, cbInstant_Frequency,cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency, cb_Bill_Frequency };
             foreach (var cb in comboBoxes)
                 cb.SelectedIndex = 0;
         }
@@ -166,7 +168,7 @@ namespace ListenerUI
             profileControls = new List<(string Name, string DisplayName, string PushSetupClassObis, string ActionScheduleClassObisAtt, TextBox txt_Dest_Add, ComboBox cbFrequency, TextBox txtRandom)>
                                         {
                                         ("Instant",     "Instant",              "00280000190900FF",     "001600000F0004FF04",       txt_Instant_DestIP,     cbInstant_Frequency,    txt_Random_Instant),
-                                        ("Alert",       "Alert",                "00280004190900FF",     null,                       txt_Alert_DestIP,       null,                   txt_Random_Alert),
+                                        ("Alert",       "Alert",                "00280004190900FF",     null,                       txt_Alert_DestIP,       null,                   null),
                                         ("Bill",        "Bill",                 "00280084190900FF",     "001600000F0000FF04",       txt_Bill_DestIP,        cb_Bill_Frequency,      txt_Random_Bill),
                                         ("SR",          "Self Registration",    "00280082190900FF",     "001600000F008EFF04",       txt_SR_DestIP,          cb_SR_Frequency,        txt_Random_SR),
                                         ("DE",          "Daily Energy",         "00280006190900FF",     "001600050F0004FF04",       txt_DE_DestIP,          cb_DE_Frequency,        txt_Random_DE),
@@ -591,6 +593,7 @@ namespace ListenerUI
 
                 case "Bill":
                     EnableProfile(txt_Bill_DestIP, cb_Bill_Frequency, txt_Random_Bill);
+                    txtBillFreq.Enabled = true;
                     break;
 
                 case "Current Bill":
@@ -598,7 +601,7 @@ namespace ListenerUI
                     break;
 
                 case "Alert":
-                    EnableProfile(txt_Alert_DestIP, null, txt_Random_Alert);
+                    EnableProfile(txt_Alert_DestIP, null, null);
                     break;
 
                 default:
@@ -608,17 +611,17 @@ namespace ListenerUI
         private void DisableAllProfiles()
         {
             TextBox[] textBoxes = {
-        txt_Instant_DestIP, txt_Alert_DestIP, txt_Bill_DestIP,
-        txt_SR_DestIP, txt_DE_DestIP, txt_LS_DestIP, txt_CB_DestIP
-    };
+                txt_Instant_DestIP, txt_Alert_DestIP, txt_Bill_DestIP,
+                txt_SR_DestIP, txt_DE_DestIP, txt_LS_DestIP, txt_CB_DestIP
+            };
 
             ComboBox[] comboBoxes = {
-        cbInstant_Frequency, cb_Bill_Frequency,
-        cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
-    };
+                cbInstant_Frequency, cb_Bill_Frequency,
+                cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
+            };
 
             TextBox[] textBoxes_Randmsn = {
-            txt_Random_Instant, txt_Random_Alert, txt_Random_Bill,
+            txt_Random_Instant, txt_Random_Bill,
             txt_Random_CB, txt_Random_DE, txt_Random_LS, txt_Random_SR
         };
 
@@ -630,6 +633,7 @@ namespace ListenerUI
 
             foreach (var tb in textBoxes_Randmsn)
                 tb.Enabled = false;
+            txtBillFreq.Enabled = false;
         }
         private void EnableAllProfiles()
         {
@@ -643,7 +647,7 @@ namespace ListenerUI
             cb_SR_Frequency, cb_DE_Frequency, cb_LS_Frequency, cb_CB_Frequency
             };
             TextBox[] textBoxes_Randmsn = {
-            txt_Random_Instant, txt_Random_Alert, txt_Random_Bill,
+            txt_Random_Instant, txt_Random_Bill,
             txt_Random_CB, txt_Random_DE, txt_Random_LS, txt_Random_SR
             };
 
@@ -654,6 +658,7 @@ namespace ListenerUI
                 cb.Enabled = true;
             foreach (var tb in textBoxes_Randmsn)
                 tb.Enabled = true;
+            txtBillFreq.Enabled = true;
         }
         private void EnableProfile(TextBox txtBox, ComboBox comboBox, TextBox txtBox_Randmsn)
         {
@@ -703,7 +708,21 @@ namespace ListenerUI
                     }
                     else if (pushFreqHex.StartsWith("01"))
                     {
-                        string freqValue = freqHexPatterns.FirstOrDefault(kvp => kvp.Value.Any(v => v.Equals(pushFreqHex, StringComparison.OrdinalIgnoreCase))).Key ?? "Unknown";
+                        string freqValue = string.Empty;
+                        if (controls.Name == "Bill")
+                        {
+                            freqValue = freqHexPatterns.FirstOrDefault(kvp => kvp.Value.Any(v => v.Equals(pushFreqHex, StringComparison.OrdinalIgnoreCase))).Key ?? "Custom";
+                            if (freqValue == "Custom")
+                            {
+                                int hh = Convert.ToInt32(pushFreqHex.Substring(12, 2), 16);
+                                int mm = Convert.ToInt32(pushFreqHex.Substring(14, 2), 16);
+                                int ss = Convert.ToInt32(pushFreqHex.Substring(16, 2), 16);
+                                int dd = Convert.ToInt32(pushFreqHex.Substring(30, 2), 16);
+                                txtBillFreq.Text = $"{dd:00}/*/* {hh:00}:{mm:00}:{ss:00}";
+                            }
+                        }
+                        else
+                            freqValue = freqHexPatterns.FirstOrDefault(kvp => kvp.Value.Any(v => v.Equals(pushFreqHex, StringComparison.OrdinalIgnoreCase))).Key ?? "Unknown";
                         controls.cbFrequency.Text = freqValue;
                     }
                     else
@@ -713,18 +732,21 @@ namespace ListenerUI
                 }
 
                 // Randomization Delay 
-                string randomizationHex = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushObis.Substring(0, 4), 16), parse.HexObisToDecObis(pushObis.Substring(4, 12)), 5).Trim();
-                if (randomizationHex == "0B")
+                if (controls.txtRandom != null)
                 {
-                    controls.txtRandom.Text = "Object Not Available";
-                }
-                else if (randomizationHex == "0D")
-                {
-                    controls.txtRandom.Text = "No Access";
-                }
-                else
-                {
-                    controls.txtRandom.Text = parse.GetProfileValueString(randomizationHex);
+                    string randomizationHex = SetGetFromMeter.GetDataFromObject(ref DLMSWriter, Convert.ToInt32(pushObis.Substring(0, 4), 16), parse.HexObisToDecObis(pushObis.Substring(4, 12)), 5).Trim();
+                    if (randomizationHex == "0B")
+                    {
+                        controls.txtRandom.Text = "Object Not Available";
+                    }
+                    else if (randomizationHex == "0D")
+                    {
+                        controls.txtRandom.Text = "No Access";
+                    }
+                    else
+                    {
+                        controls.txtRandom.Text = parse.GetProfileValueString(randomizationHex);
+                    }
                 }
             }
             catch (Exception ex)
@@ -738,8 +760,6 @@ namespace ListenerUI
         }
         public void Set_PushFreq_Destination_Randomisation(ref DLMSComm DLMSWriter, string profileName)
         {
-            // SetProfilePushFrequency(cbTestProfileType.Text.Trim(), cbInstant_Frequency.Text.Trim());
-            // SetProfilePushFrequency(cbTestProfileType.Text.Trim(), "0", cb_Bill_Frequency.Text.Trim());
             try
             {
                 InitializeProfileControls();
@@ -765,13 +785,12 @@ namespace ListenerUI
                 #region Push Frequency 
                 DLMSWriter.strbldDLMdata.Clear();
                 string billDateTime = "0100";
-                if (profile.Name == "Bill" && !string.IsNullOrEmpty(profile.cbFrequency.SelectedItem.ToString().Trim()))
+                if (profile.Name == "Bill" && !string.IsNullOrEmpty(profile.cbFrequency.Text.ToString()))
                 {
-                    billDateTime = billDateTime = $"010102020904{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(7, 2)):X2}" +
-                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(10, 2)):X2}" +
-                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(13, 2)):X2}FF0905FFFFFF" +
-                                $"{int.Parse(profile.cbFrequency.SelectedItem.ToString().Substring(0, 2)):X2}FF"; //10/*/* 00:00:00
-
+                    billDateTime = billDateTime = $"010102020904{int.Parse(txtBillFreq.Text.ToString().Substring(7, 2)):X2}" +
+                                $"{int.Parse(txtBillFreq.Text.ToString().Substring(10, 2)):X2}" +
+                                $"{int.Parse(txtBillFreq.Text.ToString().Substring(13, 2)):X2}FF0905FFFFFF" +
+                                $"{int.Parse(txtBillFreq.Text.ToString().Substring(0, 2)):X2}FF"; //10/*/* 00:00:00
                 }
                 Dictionary<string, string> freqHexString = new Dictionary<string, string>
                 {
@@ -784,8 +803,9 @@ namespace ListenerUI
                     { "12 Hour", "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
                     { "24 Hour", "010102020904000000000905FFFFFFFFFF"},
                     {"Disabled", "0100" },
-                    { "0", billDateTime}
+                    { "Custom", billDateTime}
                 };
+                DLMSWriter.SignOnDLMS();
                 if (!string.IsNullOrEmpty(profile.ActionScheduleClassObisAtt))
                 {
                     nRetVal = DLMSWriter.SetParameter($"{profile.ActionScheduleClassObisAtt}", (byte)0, (byte)3, (byte)3, freqHexString[profile.cbFrequency.SelectedItem.ToString().Trim()]);
@@ -954,17 +974,17 @@ namespace ListenerUI
 
         public void OnPushDataReceived(string updatedText, Color color)
         {
-            //if (rtbPushLogs.InvokeRequired)
-            //{
-            //    rtbPushLogs.BeginInvoke(new Action(() =>
-            //    {
-            //        HandlePushLog(updatedText, color);
-            //    }));
-            //}
-            //else
-            //{
-            HandlePushLog(updatedText, color);
-            //}
+            if (rtbPushLogs.InvokeRequired)
+            {
+                rtbPushLogs.BeginInvoke(new Action(() =>
+                {
+                    HandlePushLog(updatedText, color);
+                }));
+            }
+            else
+            {
+                HandlePushLog(updatedText, color);
+            }
         }
 
         private bool isRawDataVisible = false;
@@ -1194,7 +1214,101 @@ namespace ListenerUI
             chart_Instant.Invalidate();
         }
 
+        private void cb_Bill_Frequency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_Bill_Frequency.SelectedItem != null && cb_Bill_Frequency.SelectedItem.ToString() == "Custom")
+            {
+                txtBillFreq.Visible = true;
+                txtBillFreq.Enabled = true;
 
+            }
+            else
+            {
+                txtBillFreq.Visible = false;
+                txtBillFreq.Enabled = false;
+                txtBillFreq.Text = string.Empty;
+            }
+        }
+        private void SetPlaceholder(TextBox txt, string placeholder)
+        {
+            if (string.IsNullOrWhiteSpace(txt.Text))
+            {
+                txt.Text = placeholder;
+                txt.ForeColor = Color.Gray;
+            }
+
+            txt.GotFocus += (s, e) =>
+            {
+                if (txt.Text == placeholder)
+                {
+                    txt.Text = "";
+                    txt.ForeColor = Color.Black;
+                }
+            };
+
+            txt.LostFocus += (s, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txt.Text))
+                {
+                    txt.Text = placeholder;
+                    txt.ForeColor = Color.Gray;
+                }
+            };
+        }
+        private void BlockHide(object sender, EventArgs e)
+        {
+            // Do NOTHING HANDLER METHOD added by YS
+            // DO NOT REMOVE THIS METHOD, MANDATORY TO PREVENT A FUNCTIONALIY ISSUE
+        }
+
+        private void txtBillFreq_Leave(object sender, EventArgs e)
+        {
+            if (!txtBillFreq.MaskCompleted)
+            {
+                MessageBox.Show("Incomplete format! Please fill all values.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string text = txtBillFreq.Text;
+
+            int dd = int.Parse(text.Substring(0, 2));  // Day
+            int hh = int.Parse(text.Substring(7, 2));  // Hour
+            int mm = int.Parse(text.Substring(10, 2)); // Minute
+            int ss = int.Parse(text.Substring(13, 2)); // Second
+
+            bool isValid = true;
+            string msg = "";
+
+            if (dd < 1 || dd > 31)
+            {
+                isValid = false;
+                msg += "Day must be between 01 and 31.\n";
+            }
+            if (hh < 0 || hh > 23)
+            {
+                isValid = false;
+                msg += "Hours must be between 00 and 23.\n";
+            }
+            if (mm < 0 || mm > 59)
+            {
+                isValid = false;
+                msg += "Minutes must be between 00 and 59.\n";
+            }
+            if (ss < 0 || ss > 59)
+            {
+                isValid = false;
+                msg += "Seconds must be between 00 and 59.\n";
+            }
+
+            if (!isValid)
+            {
+                MessageBox.Show(msg, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Reset to placeholder format
+                txtBillFreq.Text = "__/*/* __:__:__";
+                txtBillFreq.SelectionStart = 0;
+            }
+        }
     }
     public static class RichTextBoxExtensions
     {
@@ -1238,6 +1352,7 @@ namespace ListenerUI
             cf.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(cf);
             cf.dwMask = CFM_LINK;
             cf.dwEffects = link ? (uint)CFE_LINK : 0;
+            cf.crTextColor = Color.Red.ToArgb();
             SendMessage(box.Handle, EM_SETCHARFORMAT, SCF_SELECTION, ref cf);
         }
     }

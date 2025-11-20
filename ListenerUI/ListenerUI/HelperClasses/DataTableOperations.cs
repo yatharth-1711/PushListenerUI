@@ -133,10 +133,11 @@ namespace MeterReader.CommonClasses
                         }
                     }
                 }
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
                 if (worksheet.Dimension != null)
+                {
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                     worksheet.Cells[worksheet.Dimension.Address].AutoFilter = true;
+                }
 
                 string directoryPath = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(directoryPath))
