@@ -54,7 +54,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.splitConMain = new System.Windows.Forms.SplitContainer();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.rtbPushLogs = new System.Windows.Forms.RichTextBox();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.PanelProfileandRawData = new System.Windows.Forms.Panel();
             this.tabControlProfiles = new System.Windows.Forms.TabControl();
             this.tbpInstant = new System.Windows.Forms.TabPage();
@@ -90,6 +93,7 @@
             this.dgTamper = new System.Windows.Forms.DataGridView();
             this.chart_tamper = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dgRawData = new System.Windows.Forms.DataGridView();
+            this.label2 = new System.Windows.Forms.Label();
             this.lblHeader = new System.Windows.Forms.Label();
             this.tblHeader = new System.Windows.Forms.TableLayoutPanel();
             this.flowPanelButtons = new System.Windows.Forms.FlowLayoutPanel();
@@ -99,7 +103,12 @@
             this.btnClearLogs = new System.Windows.Forms.Button();
             this.btnSaveData = new System.Windows.Forms.Button();
             this.btnRawData = new System.Windows.Forms.Button();
+            this.btnPSO = new System.Windows.Forms.Button();
             this.pnlProfileSettings = new System.Windows.Forms.Panel();
+            this.gb_PSO = new System.Windows.Forms.GroupBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.grpProfileConfig = new System.Windows.Forms.GroupBox();
             this.tblProfileSettings = new System.Windows.Forms.TableLayoutPanel();
             this.cbTestProfileType = new System.Windows.Forms.ComboBox();
@@ -143,6 +152,8 @@
             this.splitConMain.Panel1.SuspendLayout();
             this.splitConMain.Panel2.SuspendLayout();
             this.splitConMain.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.PanelProfileandRawData.SuspendLayout();
             this.tabControlProfiles.SuspendLayout();
             this.tbpInstant.SuspendLayout();
@@ -205,6 +216,8 @@
             this.tblHeader.SuspendLayout();
             this.flowPanelButtons.SuspendLayout();
             this.pnlProfileSettings.SuspendLayout();
+            this.gb_PSO.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.grpProfileConfig.SuspendLayout();
             this.tblProfileSettings.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -216,14 +229,14 @@
             this.tblMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.Controls.Add(this.splitConMain, 0, 0);
             this.tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblMain.Location = new System.Drawing.Point(0, 357);
+            this.tblMain.Location = new System.Drawing.Point(0, 332);
             this.tblMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tblMain.Name = "tblMain";
             this.tblMain.RowCount = 2;
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tblMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblMain.Size = new System.Drawing.Size(1760, 639);
+            this.tblMain.Size = new System.Drawing.Size(1760, 664);
             this.tblMain.TabIndex = 0;
             // 
             // splitConMain
@@ -235,17 +248,44 @@
             // 
             // splitConMain.Panel1
             // 
-            this.splitConMain.Panel1.Controls.Add(this.rtbPushLogs);
+            this.splitConMain.Panel1.Controls.Add(this.tableLayoutPanel2);
             this.splitConMain.Panel1MinSize = 50;
             // 
             // splitConMain.Panel2
             // 
-            this.splitConMain.Panel2.Controls.Add(this.PanelProfileandRawData);
+            this.splitConMain.Panel2.Controls.Add(this.tableLayoutPanel3);
             this.splitConMain.Panel2MinSize = 80;
-            this.splitConMain.Size = new System.Drawing.Size(1754, 589);
-            this.splitConMain.SplitterDistance = 541;
+            this.splitConMain.Size = new System.Drawing.Size(1754, 614);
+            this.splitConMain.SplitterDistance = 765;
             this.splitConMain.SplitterWidth = 2;
             this.splitConMain.TabIndex = 5;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.rtbPushLogs, 0, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(765, 614);
+            this.tableLayoutPanel2.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(759, 30);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Push Notifications and Logs";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // rtbPushLogs
             // 
@@ -253,24 +293,39 @@
             this.rtbPushLogs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbPushLogs.DetectUrls = false;
             this.rtbPushLogs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbPushLogs.Location = new System.Drawing.Point(0, 0);
+            this.rtbPushLogs.Location = new System.Drawing.Point(0, 30);
             this.rtbPushLogs.Margin = new System.Windows.Forms.Padding(0);
             this.rtbPushLogs.Name = "rtbPushLogs";
             this.rtbPushLogs.ReadOnly = true;
-            this.rtbPushLogs.Size = new System.Drawing.Size(541, 589);
+            this.rtbPushLogs.Size = new System.Drawing.Size(765, 584);
             this.rtbPushLogs.TabIndex = 4;
             this.rtbPushLogs.Text = "";
             this.rtbPushLogs.WordWrap = false;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.PanelProfileandRawData, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(987, 614);
+            this.tableLayoutPanel3.TabIndex = 6;
             // 
             // PanelProfileandRawData
             // 
             this.PanelProfileandRawData.Controls.Add(this.tabControlProfiles);
             this.PanelProfileandRawData.Controls.Add(this.dgRawData);
             this.PanelProfileandRawData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelProfileandRawData.Location = new System.Drawing.Point(0, 0);
+            this.PanelProfileandRawData.Location = new System.Drawing.Point(3, 32);
             this.PanelProfileandRawData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PanelProfileandRawData.Name = "PanelProfileandRawData";
-            this.PanelProfileandRawData.Size = new System.Drawing.Size(1211, 589);
+            this.PanelProfileandRawData.Size = new System.Drawing.Size(981, 580);
             this.PanelProfileandRawData.TabIndex = 0;
             // 
             // tabControlProfiles
@@ -289,7 +344,7 @@
             this.tabControlProfiles.Margin = new System.Windows.Forms.Padding(0);
             this.tabControlProfiles.Name = "tabControlProfiles";
             this.tabControlProfiles.SelectedIndex = 0;
-            this.tabControlProfiles.Size = new System.Drawing.Size(1211, 589);
+            this.tabControlProfiles.Size = new System.Drawing.Size(981, 580);
             this.tabControlProfiles.TabIndex = 0;
             // 
             // tbpInstant
@@ -301,7 +356,7 @@
             this.tbpInstant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpInstant.Name = "tbpInstant";
             this.tbpInstant.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tbpInstant.Size = new System.Drawing.Size(1203, 557);
+            this.tbpInstant.Size = new System.Drawing.Size(973, 548);
             this.tbpInstant.TabIndex = 0;
             this.tbpInstant.Text = "Instant";
             this.tbpInstant.UseVisualStyleBackColor = true;
@@ -320,8 +375,8 @@
             // splitcon_InstantTab.Panel2
             // 
             this.splitcon_InstantTab.Panel2.Controls.Add(this.chart_Instant);
-            this.splitcon_InstantTab.Size = new System.Drawing.Size(1203, 557);
-            this.splitcon_InstantTab.SplitterDistance = 264;
+            this.splitcon_InstantTab.Size = new System.Drawing.Size(973, 548);
+            this.splitcon_InstantTab.SplitterDistance = 259;
             this.splitcon_InstantTab.TabIndex = 1;
             // 
             // dgInstant
@@ -358,7 +413,7 @@
             this.dgInstant.RowHeadersVisible = false;
             this.dgInstant.RowHeadersWidth = 50;
             this.dgInstant.RowTemplate.Height = 24;
-            this.dgInstant.Size = new System.Drawing.Size(1203, 264);
+            this.dgInstant.Size = new System.Drawing.Size(973, 259);
             this.dgInstant.TabIndex = 0;
             // 
             // chart_Instant
@@ -374,7 +429,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart_Instant.Series.Add(series1);
-            this.chart_Instant.Size = new System.Drawing.Size(1203, 289);
+            this.chart_Instant.Size = new System.Drawing.Size(973, 285);
             this.chart_Instant.TabIndex = 0;
             this.chart_Instant.Text = "chart1";
             // 
@@ -385,7 +440,7 @@
             this.tbpLS.Location = new System.Drawing.Point(4, 28);
             this.tbpLS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpLS.Name = "tbpLS";
-            this.tbpLS.Size = new System.Drawing.Size(1203, 557);
+            this.tbpLS.Size = new System.Drawing.Size(973, 548);
             this.tbpLS.TabIndex = 1;
             this.tbpLS.Text = "Load Survey";
             this.tbpLS.UseVisualStyleBackColor = true;
@@ -404,8 +459,8 @@
             // splitCon_LS.Panel2
             // 
             this.splitCon_LS.Panel2.Controls.Add(this.chart_LS);
-            this.splitCon_LS.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_LS.SplitterDistance = 323;
+            this.splitCon_LS.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_LS.SplitterDistance = 317;
             this.splitCon_LS.TabIndex = 6;
             // 
             // dgLS
@@ -413,6 +468,7 @@
             this.dgLS.AllowUserToDeleteRows = false;
             this.dgLS.AllowUserToResizeRows = false;
             this.dgLS.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgLS.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgLS.BackgroundColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
@@ -430,7 +486,7 @@
             this.dgLS.RowHeadersWidth = 51;
             this.dgLS.RowTemplate.Height = 24;
             this.dgLS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgLS.Size = new System.Drawing.Size(1203, 323);
+            this.dgLS.Size = new System.Drawing.Size(973, 317);
             this.dgLS.TabIndex = 2;
             // 
             // chart_LS
@@ -446,7 +502,7 @@
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart_LS.Series.Add(series2);
-            this.chart_LS.Size = new System.Drawing.Size(1203, 230);
+            this.chart_LS.Size = new System.Drawing.Size(973, 227);
             this.chart_LS.TabIndex = 3;
             this.chart_LS.Text = "chart1";
             // 
@@ -457,7 +513,7 @@
             this.tbpDE.Location = new System.Drawing.Point(4, 28);
             this.tbpDE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpDE.Name = "tbpDE";
-            this.tbpDE.Size = new System.Drawing.Size(1203, 557);
+            this.tbpDE.Size = new System.Drawing.Size(973, 548);
             this.tbpDE.TabIndex = 2;
             this.tbpDE.Text = "Daily Energy";
             this.tbpDE.UseVisualStyleBackColor = true;
@@ -476,8 +532,8 @@
             // splitCon_DE.Panel2
             // 
             this.splitCon_DE.Panel2.Controls.Add(this.chart_DE);
-            this.splitCon_DE.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_DE.SplitterDistance = 255;
+            this.splitCon_DE.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_DE.SplitterDistance = 249;
             this.splitCon_DE.TabIndex = 7;
             // 
             // dgDE
@@ -502,7 +558,7 @@
             this.dgDE.RowHeadersWidth = 51;
             this.dgDE.RowTemplate.Height = 24;
             this.dgDE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgDE.Size = new System.Drawing.Size(1203, 255);
+            this.dgDE.Size = new System.Drawing.Size(973, 249);
             this.dgDE.TabIndex = 2;
             // 
             // chart_DE
@@ -518,7 +574,7 @@
             series3.Legend = "Legend1";
             series3.Name = "Series1";
             this.chart_DE.Series.Add(series3);
-            this.chart_DE.Size = new System.Drawing.Size(1203, 298);
+            this.chart_DE.Size = new System.Drawing.Size(973, 295);
             this.chart_DE.TabIndex = 3;
             this.chart_DE.Text = "chart1";
             // 
@@ -529,7 +585,7 @@
             this.tbpSR.Location = new System.Drawing.Point(4, 28);
             this.tbpSR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpSR.Name = "tbpSR";
-            this.tbpSR.Size = new System.Drawing.Size(1203, 557);
+            this.tbpSR.Size = new System.Drawing.Size(973, 548);
             this.tbpSR.TabIndex = 3;
             this.tbpSR.Text = "Self Registration";
             this.tbpSR.UseVisualStyleBackColor = true;
@@ -548,8 +604,8 @@
             // splitCon_SR.Panel2
             // 
             this.splitCon_SR.Panel2.Controls.Add(this.chart_SR);
-            this.splitCon_SR.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_SR.SplitterDistance = 212;
+            this.splitCon_SR.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_SR.SplitterDistance = 208;
             this.splitCon_SR.TabIndex = 7;
             // 
             // dgSR
@@ -574,7 +630,7 @@
             this.dgSR.RowHeadersWidth = 51;
             this.dgSR.RowTemplate.Height = 24;
             this.dgSR.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgSR.Size = new System.Drawing.Size(1203, 212);
+            this.dgSR.Size = new System.Drawing.Size(973, 208);
             this.dgSR.TabIndex = 2;
             // 
             // chart_SR
@@ -590,7 +646,7 @@
             series4.Legend = "Legend1";
             series4.Name = "Series1";
             this.chart_SR.Series.Add(series4);
-            this.chart_SR.Size = new System.Drawing.Size(1203, 341);
+            this.chart_SR.Size = new System.Drawing.Size(973, 336);
             this.chart_SR.TabIndex = 3;
             this.chart_SR.Text = "chart1";
             // 
@@ -601,7 +657,7 @@
             this.tbpBill.Location = new System.Drawing.Point(4, 28);
             this.tbpBill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpBill.Name = "tbpBill";
-            this.tbpBill.Size = new System.Drawing.Size(1203, 557);
+            this.tbpBill.Size = new System.Drawing.Size(973, 548);
             this.tbpBill.TabIndex = 4;
             this.tbpBill.Text = "Billing";
             this.tbpBill.UseVisualStyleBackColor = true;
@@ -620,8 +676,8 @@
             // splitCon_Bill.Panel2
             // 
             this.splitCon_Bill.Panel2.Controls.Add(this.chart_Bill);
-            this.splitCon_Bill.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_Bill.SplitterDistance = 255;
+            this.splitCon_Bill.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_Bill.SplitterDistance = 249;
             this.splitCon_Bill.TabIndex = 7;
             // 
             // dgBill
@@ -646,7 +702,7 @@
             this.dgBill.RowHeadersWidth = 51;
             this.dgBill.RowTemplate.Height = 24;
             this.dgBill.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgBill.Size = new System.Drawing.Size(1203, 255);
+            this.dgBill.Size = new System.Drawing.Size(973, 249);
             this.dgBill.TabIndex = 2;
             // 
             // chart_Bill
@@ -662,7 +718,7 @@
             series5.Legend = "Legend1";
             series5.Name = "Series1";
             this.chart_Bill.Series.Add(series5);
-            this.chart_Bill.Size = new System.Drawing.Size(1203, 298);
+            this.chart_Bill.Size = new System.Drawing.Size(973, 295);
             this.chart_Bill.TabIndex = 3;
             this.chart_Bill.Text = "chart1";
             // 
@@ -673,7 +729,7 @@
             this.tbpCB.Location = new System.Drawing.Point(4, 28);
             this.tbpCB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpCB.Name = "tbpCB";
-            this.tbpCB.Size = new System.Drawing.Size(1203, 557);
+            this.tbpCB.Size = new System.Drawing.Size(973, 548);
             this.tbpCB.TabIndex = 5;
             this.tbpCB.Text = "Current Bill";
             this.tbpCB.UseVisualStyleBackColor = true;
@@ -692,8 +748,8 @@
             // splitCon_CB.Panel2
             // 
             this.splitCon_CB.Panel2.Controls.Add(this.chart_CB);
-            this.splitCon_CB.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_CB.SplitterDistance = 255;
+            this.splitCon_CB.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_CB.SplitterDistance = 249;
             this.splitCon_CB.TabIndex = 7;
             // 
             // dgCB
@@ -718,7 +774,7 @@
             this.dgCB.RowHeadersWidth = 51;
             this.dgCB.RowTemplate.Height = 24;
             this.dgCB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgCB.Size = new System.Drawing.Size(1203, 255);
+            this.dgCB.Size = new System.Drawing.Size(973, 249);
             this.dgCB.TabIndex = 2;
             // 
             // chart_CB
@@ -734,7 +790,7 @@
             series6.Legend = "Legend1";
             series6.Name = "Series1";
             this.chart_CB.Series.Add(series6);
-            this.chart_CB.Size = new System.Drawing.Size(1203, 298);
+            this.chart_CB.Size = new System.Drawing.Size(973, 295);
             this.chart_CB.TabIndex = 3;
             this.chart_CB.Text = "chart1";
             // 
@@ -745,7 +801,7 @@
             this.tbpAlert.Location = new System.Drawing.Point(4, 28);
             this.tbpAlert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpAlert.Name = "tbpAlert";
-            this.tbpAlert.Size = new System.Drawing.Size(1203, 557);
+            this.tbpAlert.Size = new System.Drawing.Size(973, 548);
             this.tbpAlert.TabIndex = 6;
             this.tbpAlert.Text = "Alert";
             this.tbpAlert.UseVisualStyleBackColor = true;
@@ -764,8 +820,8 @@
             // splitCon_Alert.Panel2
             // 
             this.splitCon_Alert.Panel2.Controls.Add(this.chart_Alert);
-            this.splitCon_Alert.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_Alert.SplitterDistance = 255;
+            this.splitCon_Alert.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_Alert.SplitterDistance = 249;
             this.splitCon_Alert.TabIndex = 7;
             // 
             // dgAlert
@@ -790,7 +846,7 @@
             this.dgAlert.RowHeadersWidth = 51;
             this.dgAlert.RowTemplate.Height = 24;
             this.dgAlert.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgAlert.Size = new System.Drawing.Size(1203, 255);
+            this.dgAlert.Size = new System.Drawing.Size(973, 249);
             this.dgAlert.TabIndex = 2;
             // 
             // chart_Alert
@@ -806,7 +862,7 @@
             series7.Legend = "Legend1";
             series7.Name = "Series1";
             this.chart_Alert.Series.Add(series7);
-            this.chart_Alert.Size = new System.Drawing.Size(1203, 298);
+            this.chart_Alert.Size = new System.Drawing.Size(973, 295);
             this.chart_Alert.TabIndex = 3;
             this.chart_Alert.Text = "chart1";
             // 
@@ -817,7 +873,7 @@
             this.tbpTamper.Location = new System.Drawing.Point(4, 28);
             this.tbpTamper.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpTamper.Name = "tbpTamper";
-            this.tbpTamper.Size = new System.Drawing.Size(1203, 557);
+            this.tbpTamper.Size = new System.Drawing.Size(973, 548);
             this.tbpTamper.TabIndex = 7;
             this.tbpTamper.Text = "Tamper";
             this.tbpTamper.UseVisualStyleBackColor = true;
@@ -836,8 +892,8 @@
             // splitCon_Tamper.Panel2
             // 
             this.splitCon_Tamper.Panel2.Controls.Add(this.chart_tamper);
-            this.splitCon_Tamper.Size = new System.Drawing.Size(1203, 557);
-            this.splitCon_Tamper.SplitterDistance = 255;
+            this.splitCon_Tamper.Size = new System.Drawing.Size(973, 548);
+            this.splitCon_Tamper.SplitterDistance = 249;
             this.splitCon_Tamper.TabIndex = 7;
             // 
             // dgTamper
@@ -862,7 +918,7 @@
             this.dgTamper.RowHeadersWidth = 51;
             this.dgTamper.RowTemplate.Height = 24;
             this.dgTamper.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgTamper.Size = new System.Drawing.Size(1203, 255);
+            this.dgTamper.Size = new System.Drawing.Size(973, 249);
             this.dgTamper.TabIndex = 2;
             // 
             // chart_tamper
@@ -878,7 +934,7 @@
             series8.Legend = "Legend1";
             series8.Name = "Series1";
             this.chart_tamper.Series.Add(series8);
-            this.chart_tamper.Size = new System.Drawing.Size(1203, 298);
+            this.chart_tamper.Size = new System.Drawing.Size(973, 295);
             this.chart_tamper.TabIndex = 3;
             this.chart_tamper.Text = "chart1";
             // 
@@ -914,19 +970,31 @@
             this.dgRawData.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgRawData.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.dgRawData.RowTemplate.Height = 24;
-            this.dgRawData.Size = new System.Drawing.Size(1211, 589);
+            this.dgRawData.Size = new System.Drawing.Size(981, 580);
             this.dgRawData.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(981, 30);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Data and Reports";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblHeader
             // 
             this.lblHeader.AutoSize = true;
-            this.lblHeader.BackColor = System.Drawing.Color.Indigo;
+            this.lblHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
             this.lblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold);
+            this.lblHeader.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHeader.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblHeader.Location = new System.Drawing.Point(3, 0);
             this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(1754, 40);
+            this.lblHeader.Size = new System.Drawing.Size(1754, 30);
             this.lblHeader.TabIndex = 0;
             this.lblHeader.Text = "Push Settings and Notifications";
             this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -942,7 +1010,7 @@
             this.tblHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tblHeader.Name = "tblHeader";
             this.tblHeader.RowCount = 2;
-            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tblHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblHeader.Size = new System.Drawing.Size(1760, 76);
             this.tblHeader.TabIndex = 9;
@@ -956,8 +1024,9 @@
             this.flowPanelButtons.Controls.Add(this.btnClearLogs);
             this.flowPanelButtons.Controls.Add(this.btnSaveData);
             this.flowPanelButtons.Controls.Add(this.btnRawData);
+            this.flowPanelButtons.Controls.Add(this.btnPSO);
             this.flowPanelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowPanelButtons.Location = new System.Drawing.Point(0, 40);
+            this.flowPanelButtons.Location = new System.Drawing.Point(0, 30);
             this.flowPanelButtons.Margin = new System.Windows.Forms.Padding(0);
             this.flowPanelButtons.MinimumSize = new System.Drawing.Size(0, 34);
             this.flowPanelButtons.Name = "flowPanelButtons";
@@ -973,7 +1042,7 @@
             this.btnPushprofileSettings.Name = "btnPushprofileSettings";
             this.btnPushprofileSettings.Size = new System.Drawing.Size(252, 30);
             this.btnPushprofileSettings.TabIndex = 62;
-            this.btnPushprofileSettings.Text = "▼ Push Profile Settings";
+            this.btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
             this.btnPushprofileSettings.UseVisualStyleBackColor = false;
             this.btnPushprofileSettings.Click += new System.EventHandler(this.btnPushprofileSettings_Click);
             // 
@@ -984,7 +1053,7 @@
             this.btnStartListener.Location = new System.Drawing.Point(261, 2);
             this.btnStartListener.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnStartListener.Name = "btnStartListener";
-            this.btnStartListener.Size = new System.Drawing.Size(177, 30);
+            this.btnStartListener.Size = new System.Drawing.Size(184, 30);
             this.btnStartListener.TabIndex = 0;
             this.btnStartListener.Text = "▶ Start Listening";
             this.btnStartListener.UseVisualStyleBackColor = false;
@@ -994,10 +1063,10 @@
             // 
             this.btnStopListener.BackColor = System.Drawing.Color.Transparent;
             this.btnStopListener.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStopListener.Location = new System.Drawing.Point(444, 2);
+            this.btnStopListener.Location = new System.Drawing.Point(451, 2);
             this.btnStopListener.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnStopListener.Name = "btnStopListener";
-            this.btnStopListener.Size = new System.Drawing.Size(181, 30);
+            this.btnStopListener.Size = new System.Drawing.Size(184, 30);
             this.btnStopListener.TabIndex = 1;
             this.btnStopListener.Text = "⏹ Stop Listening";
             this.btnStopListener.UseVisualStyleBackColor = false;
@@ -1007,10 +1076,10 @@
             // 
             this.btnClearLogs.BackColor = System.Drawing.Color.Transparent;
             this.btnClearLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClearLogs.Location = new System.Drawing.Point(631, 2);
+            this.btnClearLogs.Location = new System.Drawing.Point(641, 2);
             this.btnClearLogs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnClearLogs.Name = "btnClearLogs";
-            this.btnClearLogs.Size = new System.Drawing.Size(151, 30);
+            this.btnClearLogs.Size = new System.Drawing.Size(152, 30);
             this.btnClearLogs.TabIndex = 2;
             this.btnClearLogs.Text = "🧹 Clear Logs";
             this.btnClearLogs.UseVisualStyleBackColor = false;
@@ -1020,10 +1089,10 @@
             // 
             this.btnSaveData.BackColor = System.Drawing.Color.Transparent;
             this.btnSaveData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveData.Location = new System.Drawing.Point(788, 2);
+            this.btnSaveData.Location = new System.Drawing.Point(799, 2);
             this.btnSaveData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSaveData.Name = "btnSaveData";
-            this.btnSaveData.Size = new System.Drawing.Size(147, 30);
+            this.btnSaveData.Size = new System.Drawing.Size(175, 30);
             this.btnSaveData.TabIndex = 3;
             this.btnSaveData.Text = "💾 Save Data";
             this.btnSaveData.UseVisualStyleBackColor = false;
@@ -1033,25 +1102,84 @@
             // 
             this.btnRawData.BackColor = System.Drawing.Color.Transparent;
             this.btnRawData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRawData.Location = new System.Drawing.Point(941, 2);
+            this.btnRawData.Location = new System.Drawing.Point(980, 2);
             this.btnRawData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRawData.Name = "btnRawData";
-            this.btnRawData.Size = new System.Drawing.Size(183, 30);
+            this.btnRawData.Size = new System.Drawing.Size(188, 30);
             this.btnRawData.TabIndex = 5;
             this.btnRawData.Text = "Raw Data View";
             this.btnRawData.UseVisualStyleBackColor = false;
             this.btnRawData.Click += new System.EventHandler(this.btnRawData_Click);
             // 
+            // btnPSO
+            // 
+            this.btnPSO.BackColor = System.Drawing.Color.Transparent;
+            this.btnPSO.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPSO.Location = new System.Drawing.Point(1174, 2);
+            this.btnPSO.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnPSO.Name = "btnPSO";
+            this.btnPSO.Size = new System.Drawing.Size(252, 30);
+            this.btnPSO.TabIndex = 63;
+            this.btnPSO.Text = "▼ Show Push Setup Objects";
+            this.btnPSO.UseVisualStyleBackColor = false;
+            this.btnPSO.Click += new System.EventHandler(this.btnPSO_Click);
+            // 
             // pnlProfileSettings
             // 
+            this.pnlProfileSettings.Controls.Add(this.gb_PSO);
             this.pnlProfileSettings.Controls.Add(this.grpProfileConfig);
             this.pnlProfileSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlProfileSettings.Location = new System.Drawing.Point(0, 76);
             this.pnlProfileSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlProfileSettings.Name = "pnlProfileSettings";
-            this.pnlProfileSettings.Size = new System.Drawing.Size(1760, 281);
+            this.pnlProfileSettings.Size = new System.Drawing.Size(1760, 256);
             this.pnlProfileSettings.TabIndex = 0;
             this.pnlProfileSettings.Visible = false;
+            // 
+            // gb_PSO
+            // 
+            this.gb_PSO.Controls.Add(this.tabControl1);
+            this.gb_PSO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gb_PSO.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gb_PSO.ForeColor = System.Drawing.Color.Black;
+            this.gb_PSO.Location = new System.Drawing.Point(0, 0);
+            this.gb_PSO.Name = "gb_PSO";
+            this.gb_PSO.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.gb_PSO.Size = new System.Drawing.Size(1760, 256);
+            this.gb_PSO.TabIndex = 11;
+            this.gb_PSO.TabStop = false;
+            this.gb_PSO.Text = "Push Setup Obects";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 22);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1754, 232);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 28);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1746, 200);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 28);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1746, 200);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // grpProfileConfig
             // 
@@ -1062,7 +1190,7 @@
             this.grpProfileConfig.Location = new System.Drawing.Point(0, 0);
             this.grpProfileConfig.Name = "grpProfileConfig";
             this.grpProfileConfig.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.grpProfileConfig.Size = new System.Drawing.Size(1760, 281);
+            this.grpProfileConfig.Size = new System.Drawing.Size(1760, 256);
             this.grpProfileConfig.TabIndex = 10;
             this.grpProfileConfig.TabStop = false;
             this.grpProfileConfig.Text = "Push Setup And Action Schedule settings";
@@ -1122,7 +1250,7 @@
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tblProfileSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tblProfileSettings.Size = new System.Drawing.Size(1754, 257);
+            this.tblProfileSettings.Size = new System.Drawing.Size(1754, 232);
             this.tblProfileSettings.TabIndex = 0;
             // 
             // cbTestProfileType
@@ -1138,7 +1266,7 @@
             "SR",
             "Bill",
             "Current Bill"});
-            this.cbTestProfileType.Location = new System.Drawing.Point(1403, 35);
+            this.cbTestProfileType.Location = new System.Drawing.Point(1403, 32);
             this.cbTestProfileType.Name = "cbTestProfileType";
             this.cbTestProfileType.Size = new System.Drawing.Size(348, 27);
             this.cbTestProfileType.TabIndex = 67;
@@ -1150,7 +1278,7 @@
             this.lblProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfile.Location = new System.Drawing.Point(1403, 0);
             this.lblProfile.Name = "lblProfile";
-            this.lblProfile.Size = new System.Drawing.Size(348, 32);
+            this.lblProfile.Size = new System.Drawing.Size(348, 29);
             this.lblProfile.TabIndex = 66;
             this.lblProfile.Text = "Test Profile";
             this.lblProfile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1161,10 +1289,10 @@
             this.btnSet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSet_PS_AS.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSet_PS_AS.ForeColor = System.Drawing.Color.Black;
-            this.btnSet_PS_AS.Location = new System.Drawing.Point(1400, 224);
+            this.btnSet_PS_AS.Location = new System.Drawing.Point(1400, 203);
             this.btnSet_PS_AS.Margin = new System.Windows.Forms.Padding(0);
             this.btnSet_PS_AS.Name = "btnSet_PS_AS";
-            this.btnSet_PS_AS.Size = new System.Drawing.Size(354, 33);
+            this.btnSet_PS_AS.Size = new System.Drawing.Size(354, 29);
             this.btnSet_PS_AS.TabIndex = 61;
             this.btnSet_PS_AS.Text = "Set Push Setup and Action Schedule";
             this.btnSet_PS_AS.UseVisualStyleBackColor = false;
@@ -1176,10 +1304,10 @@
             this.btnGet_PS_AS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnGet_PS_AS.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGet_PS_AS.ForeColor = System.Drawing.Color.Black;
-            this.btnGet_PS_AS.Location = new System.Drawing.Point(1400, 192);
+            this.btnGet_PS_AS.Location = new System.Drawing.Point(1400, 174);
             this.btnGet_PS_AS.Margin = new System.Windows.Forms.Padding(0);
             this.btnGet_PS_AS.Name = "btnGet_PS_AS";
-            this.btnGet_PS_AS.Size = new System.Drawing.Size(354, 32);
+            this.btnGet_PS_AS.Size = new System.Drawing.Size(354, 29);
             this.btnGet_PS_AS.TabIndex = 62;
             this.btnGet_PS_AS.Text = "Get Push Setup and Action Schedule";
             this.btnGet_PS_AS.UseVisualStyleBackColor = false;
@@ -1189,7 +1317,7 @@
             // 
             this.txt_Random_CB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_CB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_CB.Location = new System.Drawing.Point(1053, 226);
+            this.txt_Random_CB.Location = new System.Drawing.Point(1053, 205);
             this.txt_Random_CB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_CB.Name = "txt_Random_CB";
             this.txt_Random_CB.Size = new System.Drawing.Size(344, 27);
@@ -1199,7 +1327,7 @@
             // 
             this.txt_Random_LS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_LS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_LS.Location = new System.Drawing.Point(1053, 194);
+            this.txt_Random_LS.Location = new System.Drawing.Point(1053, 176);
             this.txt_Random_LS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_LS.Name = "txt_Random_LS";
             this.txt_Random_LS.Size = new System.Drawing.Size(344, 27);
@@ -1209,7 +1337,7 @@
             // 
             this.txt_Random_DE.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_DE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_DE.Location = new System.Drawing.Point(1053, 162);
+            this.txt_Random_DE.Location = new System.Drawing.Point(1053, 147);
             this.txt_Random_DE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_DE.Name = "txt_Random_DE";
             this.txt_Random_DE.Size = new System.Drawing.Size(344, 27);
@@ -1219,7 +1347,7 @@
             // 
             this.txt_Random_SR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_SR.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_SR.Location = new System.Drawing.Point(1053, 130);
+            this.txt_Random_SR.Location = new System.Drawing.Point(1053, 118);
             this.txt_Random_SR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_SR.Name = "txt_Random_SR";
             this.txt_Random_SR.Size = new System.Drawing.Size(344, 27);
@@ -1229,7 +1357,7 @@
             // 
             this.txt_Random_Bill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Bill.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Bill.Location = new System.Drawing.Point(1053, 98);
+            this.txt_Random_Bill.Location = new System.Drawing.Point(1053, 89);
             this.txt_Random_Bill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Bill.Name = "txt_Random_Bill";
             this.txt_Random_Bill.Size = new System.Drawing.Size(344, 27);
@@ -1239,7 +1367,7 @@
             // 
             this.txt_Random_Instant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Random_Instant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Random_Instant.Location = new System.Drawing.Point(1053, 34);
+            this.txt_Random_Instant.Location = new System.Drawing.Point(1053, 31);
             this.txt_Random_Instant.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Random_Instant.Name = "txt_Random_Instant";
             this.txt_Random_Instant.Size = new System.Drawing.Size(344, 27);
@@ -1251,7 +1379,7 @@
             this.lblRandomHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRandomHeader.Location = new System.Drawing.Point(1053, 0);
             this.lblRandomHeader.Name = "lblRandomHeader";
-            this.lblRandomHeader.Size = new System.Drawing.Size(344, 32);
+            this.lblRandomHeader.Size = new System.Drawing.Size(344, 29);
             this.lblRandomHeader.TabIndex = 48;
             this.lblRandomHeader.Text = "Randomisation (In Min)";
             this.lblRandomHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1261,9 +1389,9 @@
             this.lblCBProfile.AutoSize = true;
             this.lblCBProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCBProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCBProfile.Location = new System.Drawing.Point(3, 224);
+            this.lblCBProfile.Location = new System.Drawing.Point(3, 203);
             this.lblCBProfile.Name = "lblCBProfile";
-            this.lblCBProfile.Size = new System.Drawing.Size(344, 33);
+            this.lblCBProfile.Size = new System.Drawing.Size(344, 29);
             this.lblCBProfile.TabIndex = 45;
             this.lblCBProfile.Text = "Current Bill Profile";
             this.lblCBProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1272,7 +1400,7 @@
             // 
             this.txt_CB_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_CB_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_CB_DestIP.Location = new System.Drawing.Point(353, 226);
+            this.txt_CB_DestIP.Location = new System.Drawing.Point(353, 205);
             this.txt_CB_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_CB_DestIP.Name = "txt_CB_DestIP";
             this.txt_CB_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1283,9 +1411,9 @@
             this.lblInstant.AutoSize = true;
             this.lblInstant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInstant.Location = new System.Drawing.Point(3, 32);
+            this.lblInstant.Location = new System.Drawing.Point(3, 29);
             this.lblInstant.Name = "lblInstant";
-            this.lblInstant.Size = new System.Drawing.Size(344, 32);
+            this.lblInstant.Size = new System.Drawing.Size(344, 29);
             this.lblInstant.TabIndex = 39;
             this.lblInstant.Text = "Instant Profile";
             this.lblInstant.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1294,7 +1422,7 @@
             // 
             this.txt_Instant_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Instant_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Instant_DestIP.Location = new System.Drawing.Point(353, 34);
+            this.txt_Instant_DestIP.Location = new System.Drawing.Point(353, 31);
             this.txt_Instant_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Instant_DestIP.Name = "txt_Instant_DestIP";
             this.txt_Instant_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1317,7 +1445,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cbInstant_Frequency.Location = new System.Drawing.Point(703, 34);
+            this.cbInstant_Frequency.Location = new System.Drawing.Point(703, 31);
             this.cbInstant_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbInstant_Frequency.Name = "cbInstant_Frequency";
             this.cbInstant_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1329,9 +1457,9 @@
             this.lblAlert.AutoSize = true;
             this.lblAlert.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAlert.Location = new System.Drawing.Point(3, 64);
+            this.lblAlert.Location = new System.Drawing.Point(3, 58);
             this.lblAlert.Name = "lblAlert";
-            this.lblAlert.Size = new System.Drawing.Size(344, 32);
+            this.lblAlert.Size = new System.Drawing.Size(344, 29);
             this.lblAlert.TabIndex = 36;
             this.lblAlert.Text = "Alert Profile";
             this.lblAlert.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1340,7 +1468,7 @@
             // 
             this.txt_Alert_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Alert_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Alert_DestIP.Location = new System.Drawing.Point(353, 66);
+            this.txt_Alert_DestIP.Location = new System.Drawing.Point(353, 60);
             this.txt_Alert_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Alert_DestIP.Name = "txt_Alert_DestIP";
             this.txt_Alert_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1351,9 +1479,9 @@
             this.lblBillingProfile.AutoSize = true;
             this.lblBillingProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBillingProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBillingProfile.Location = new System.Drawing.Point(3, 96);
+            this.lblBillingProfile.Location = new System.Drawing.Point(3, 87);
             this.lblBillingProfile.Name = "lblBillingProfile";
-            this.lblBillingProfile.Size = new System.Drawing.Size(344, 32);
+            this.lblBillingProfile.Size = new System.Drawing.Size(344, 29);
             this.lblBillingProfile.TabIndex = 33;
             this.lblBillingProfile.Text = "Billing Profile";
             this.lblBillingProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1362,7 +1490,7 @@
             // 
             this.txt_Bill_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_Bill_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Bill_DestIP.Location = new System.Drawing.Point(353, 98);
+            this.txt_Bill_DestIP.Location = new System.Drawing.Point(353, 89);
             this.txt_Bill_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_Bill_DestIP.Name = "txt_Bill_DestIP";
             this.txt_Bill_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1373,9 +1501,9 @@
             this.lblSRProfile.AutoSize = true;
             this.lblSRProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSRProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSRProfile.Location = new System.Drawing.Point(3, 128);
+            this.lblSRProfile.Location = new System.Drawing.Point(3, 116);
             this.lblSRProfile.Name = "lblSRProfile";
-            this.lblSRProfile.Size = new System.Drawing.Size(344, 32);
+            this.lblSRProfile.Size = new System.Drawing.Size(344, 29);
             this.lblSRProfile.TabIndex = 30;
             this.lblSRProfile.Text = "Self Registration Profile";
             this.lblSRProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1384,7 +1512,7 @@
             // 
             this.txt_SR_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_SR_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_SR_DestIP.Location = new System.Drawing.Point(353, 130);
+            this.txt_SR_DestIP.Location = new System.Drawing.Point(353, 118);
             this.txt_SR_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_SR_DestIP.Name = "txt_SR_DestIP";
             this.txt_SR_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1407,7 +1535,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cb_SR_Frequency.Location = new System.Drawing.Point(703, 130);
+            this.cb_SR_Frequency.Location = new System.Drawing.Point(703, 118);
             this.cb_SR_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_SR_Frequency.Name = "cb_SR_Frequency";
             this.cb_SR_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1419,9 +1547,9 @@
             this.lblDEProfile.AutoSize = true;
             this.lblDEProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDEProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDEProfile.Location = new System.Drawing.Point(3, 160);
+            this.lblDEProfile.Location = new System.Drawing.Point(3, 145);
             this.lblDEProfile.Name = "lblDEProfile";
-            this.lblDEProfile.Size = new System.Drawing.Size(344, 32);
+            this.lblDEProfile.Size = new System.Drawing.Size(344, 29);
             this.lblDEProfile.TabIndex = 27;
             this.lblDEProfile.Text = "Daily Energy Profile";
             this.lblDEProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1430,7 +1558,7 @@
             // 
             this.txt_DE_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_DE_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_DE_DestIP.Location = new System.Drawing.Point(353, 162);
+            this.txt_DE_DestIP.Location = new System.Drawing.Point(353, 147);
             this.txt_DE_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_DE_DestIP.Name = "txt_DE_DestIP";
             this.txt_DE_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1446,7 +1574,7 @@
             this.cb_DE_Frequency.Items.AddRange(new object[] {
             "24 Hour",
             "Disabled"});
-            this.cb_DE_Frequency.Location = new System.Drawing.Point(703, 162);
+            this.cb_DE_Frequency.Location = new System.Drawing.Point(703, 147);
             this.cb_DE_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_DE_Frequency.Name = "cb_DE_Frequency";
             this.cb_DE_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1458,9 +1586,9 @@
             this.lblLSProfile.AutoSize = true;
             this.lblLSProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLSProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLSProfile.Location = new System.Drawing.Point(3, 192);
+            this.lblLSProfile.Location = new System.Drawing.Point(3, 174);
             this.lblLSProfile.Name = "lblLSProfile";
-            this.lblLSProfile.Size = new System.Drawing.Size(344, 32);
+            this.lblLSProfile.Size = new System.Drawing.Size(344, 29);
             this.lblLSProfile.TabIndex = 24;
             this.lblLSProfile.Text = "Load Survey Profile";
             this.lblLSProfile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1469,7 +1597,7 @@
             // 
             this.txt_LS_DestIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_LS_DestIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_LS_DestIP.Location = new System.Drawing.Point(353, 194);
+            this.txt_LS_DestIP.Location = new System.Drawing.Point(353, 176);
             this.txt_LS_DestIP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt_LS_DestIP.Name = "txt_LS_DestIP";
             this.txt_LS_DestIP.Size = new System.Drawing.Size(344, 27);
@@ -1492,7 +1620,7 @@
             "12 Hour",
             "24 Hour",
             "Disabled"});
-            this.cb_LS_Frequency.Location = new System.Drawing.Point(703, 194);
+            this.cb_LS_Frequency.Location = new System.Drawing.Point(703, 176);
             this.cb_LS_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_LS_Frequency.Name = "cb_LS_Frequency";
             this.cb_LS_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1505,7 +1633,7 @@
             this.lblProfileHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblProfileHeader.Location = new System.Drawing.Point(3, 0);
             this.lblProfileHeader.Name = "lblProfileHeader";
-            this.lblProfileHeader.Size = new System.Drawing.Size(344, 32);
+            this.lblProfileHeader.Size = new System.Drawing.Size(344, 29);
             this.lblProfileHeader.TabIndex = 0;
             this.lblProfileHeader.Text = "Profiles";
             this.lblProfileHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1516,7 +1644,7 @@
             this.lblDestIPHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDestIPHeader.Location = new System.Drawing.Point(353, 0);
             this.lblDestIPHeader.Name = "lblDestIPHeader";
-            this.lblDestIPHeader.Size = new System.Drawing.Size(344, 32);
+            this.lblDestIPHeader.Size = new System.Drawing.Size(344, 29);
             this.lblDestIPHeader.TabIndex = 1;
             this.lblDestIPHeader.Text = "Destination IP Address";
             this.lblDestIPHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1527,7 +1655,7 @@
             this.lblPushFreqHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPushFreqHeader.Location = new System.Drawing.Point(703, 0);
             this.lblPushFreqHeader.Name = "lblPushFreqHeader";
-            this.lblPushFreqHeader.Size = new System.Drawing.Size(344, 32);
+            this.lblPushFreqHeader.Size = new System.Drawing.Size(344, 29);
             this.lblPushFreqHeader.TabIndex = 2;
             this.lblPushFreqHeader.Text = "Push Frequency Schedule";
             this.lblPushFreqHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1542,7 +1670,7 @@
             this.cb_CB_Frequency.Items.AddRange(new object[] {
             "24 Hour",
             "Disabled"});
-            this.cb_CB_Frequency.Location = new System.Drawing.Point(703, 226);
+            this.cb_CB_Frequency.Location = new System.Drawing.Point(703, 205);
             this.cb_CB_Frequency.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cb_CB_Frequency.Name = "cb_CB_Frequency";
             this.cb_CB_Frequency.Size = new System.Drawing.Size(344, 28);
@@ -1557,12 +1685,12 @@
             this.tableLayoutPanel1.Controls.Add(this.cb_Bill_Frequency, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtBillFreq, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(700, 96);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(700, 87);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 32);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(350, 29);
             this.tableLayoutPanel1.TabIndex = 69;
             // 
             // cb_Bill_Frequency
@@ -1610,6 +1738,10 @@
             this.splitConMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitConMain)).EndInit();
             this.splitConMain.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.PanelProfileandRawData.ResumeLayout(false);
             this.tabControlProfiles.ResumeLayout(false);
             this.tbpInstant.ResumeLayout(false);
@@ -1673,6 +1805,8 @@
             this.tblHeader.PerformLayout();
             this.flowPanelButtons.ResumeLayout(false);
             this.pnlProfileSettings.ResumeLayout(false);
+            this.gb_PSO.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
             this.grpProfileConfig.ResumeLayout(false);
             this.tblProfileSettings.ResumeLayout(false);
             this.tblProfileSettings.PerformLayout();
@@ -1770,5 +1904,14 @@
         private System.Windows.Forms.Button btnRawData;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.MaskedTextBox txtBillFreq;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnPSO;
+        private System.Windows.Forms.GroupBox gb_PSO;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }

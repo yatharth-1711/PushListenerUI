@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MeterComm.DLMS
+﻿namespace MeterComm.DLMS
 {
     public static class DLMSInfo
     {
@@ -12,7 +6,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// Hold the Com - Port for the Meter communication 
         /// </summary>
-        public static string comPort = "COM3";
+        public static string comPort = "COM4";
         /// <summary>
         /// Hold the Baud Rate for the Meter communication 
         /// </summary>
@@ -24,7 +18,7 @@ namespace MeterComm.DLMS
         /// 2=US
         /// 3=PUSH
         /// </summary>
-        public static int AccessMode = 2;
+        public static int AccessMode = 1;
         /// <summary>
         ///Read Password
         /// </summary>
@@ -95,7 +89,7 @@ namespace MeterComm.DLMS
         /// <summary>
         /// LN with Cipher
         /// </summary>
-        public static bool IsLNWithCipher = true;
+        public static bool IsLNWithCipher = false;
         /// <summary>
         /// with GMAC
         /// </summary>
@@ -145,6 +139,10 @@ namespace MeterComm.DLMS
         /// 
         /// </summary>
         public static byte NTimeOut = 10;
+        /// <summary>
+        /// This hold the status for communication Interface
+        /// </summary>
+        public static bool IsInterfaceHDLC = true;
         #endregion
 
         #region Net Serial Communication
@@ -156,6 +154,13 @@ namespace MeterComm.DLMS
         public static bool TransactionVerificationcancelled = false;
         public static bool IsModuleFotaToBeSet = false;
         public static bool IsNICFOTAToBeSet = false;
+        #endregion
+
+        #region Timeouts
+        public static long InactivityTimeout = 120000;
+        public static long InterFrameTimeout = 1000;
+        public static long ResponseTimeout = 5000;
+        public static long DISCToNDMTimeout = 2000;
         #endregion
     }
 }

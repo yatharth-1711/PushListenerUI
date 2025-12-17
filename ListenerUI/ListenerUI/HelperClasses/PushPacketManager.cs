@@ -33,6 +33,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
@@ -2585,12 +2586,12 @@ namespace ListenerUI.HelperClasses
             dtRec_Push_LS.Reset();
             dtRec_Push_SR.Reset();
         }
-        public void ExportReports(string filepath)
+        public void ExportReports(string filepath, Chart chart = null)
         {
             try
             {
                 DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Alert, filepath, "Alert");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Instant, filepath, "Instant");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Instant, filepath, "Instant", chart);
                 DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_LS, filepath, "Load Survey");
                 DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_DE, filepath, "Daily Energy");
                 DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_SR, filepath, "Self Registration");

@@ -1,7 +1,6 @@
 ﻿using AutoTest.FrameWork;
 using AutoTest.FrameWork.Converts;
 using AutoTestDesktopWFA;
-using Gurux.DLMS.AMI.Messages.DB;
 using ListenerUI.HelperClasses;
 using log4net;
 using log4net.Util;
@@ -28,8 +27,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Messaging;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -64,7 +65,7 @@ namespace ListenerUI
         #endregion
 
         private TestLogService logService;
-        private TestConfiguration config;
+        //private TestConfiguration config;
         private TestStopWatch stopWatch;
         private TCPTestNotifier tcpTestNotifier;
         PushPacketManager pushPacketManager = new PushPacketManager();
@@ -74,7 +75,6 @@ namespace ListenerUI
         private DataTable receivedPushData = new DataTable();
         public DataTable finalDataTable = new DataTable();
         private int lastPushRowCount = 0;
-        public static CancellationTokenSource _cancellationToken;
         private Dictionary<string, List<string>> freqHexPatterns = new Dictionary<string, List<string>>
         {
             { "15 Min", new List<string>
@@ -138,8 +138,9 @@ namespace ListenerUI
             InitializeComponent(); UISettings();
             StyleDataGrid(dgRawData); StyleDataGrid(dgAlert); StyleDataGrid(dgInstant); StyleDataGrid(dgLS);
             StyleDataGrid(dgTamper); StyleDataGrid(dgBill); StyleDataGrid(dgDE); StyleDataGrid(dgSR); StyleDataGrid(dgCB);
+            logService = new TestLogService(rtbPushLogs);
+            //InitializeLoggerAndConfigurations();
 
-            InitializeLoggerAndConfigurations();
             PushPacketManager.DeviceID = "GOE12043714";
             finalDataTable.RowChanged += FinalDataTable_RowChanged;
             // Bind log event
@@ -176,11 +177,6 @@ namespace ListenerUI
                                         ("CB",          "Current Bill",         "00280000190981FF",     "001600000F0093FF04",       txt_CB_DestIP,          cb_CB_Frequency,        txt_Random_CB),
                                         //("Tamper",      "Tamper",               "00280086190900FF",     "001600000F008FFF04",       txt_Alert_DestIP,       cb_Alert_Frequency,     txt_Random_Alert)
                                         };
-        }
-        private void InitializeLoggerAndConfigurations()
-        {
-            logService = new TestLogService(rtbPushLogs);
-            config = TestConfiguration.CreateDefault();
         }
         private void cbInstant_Frequency_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -220,7 +216,7 @@ namespace ListenerUI
                     this.Invoke(new Action(() =>
                     {
                         logService.LogMessage(rtbPushLogs, "Getting Meter Details and Push profiles...", Color.Black, true);
-                        IniTestRun(config);
+                        IniTestRun();
                         ProfileGenericInfo.FillTables();
                     }));
                 });
@@ -244,7 +240,7 @@ namespace ListenerUI
                     USdataTable = DLMSAssociationLN.US_AssociationDataTable.Copy();
                 else
                 {
-                    if (dlmsReader.GetParameter("000F0000280003FF02", (byte)(config.InterFrameTimeout / 1000), (byte)5, (byte)(config.ResponseTimeout / 1000), (byte)0, DateTime.Now, DateTime.Now, string.Empty, 0UL, 0UL))
+                    if (dlmsReader.GetParameter("000F0000280003FF02", (byte)(DLMSInfo.InterFrameTimeout / 1000), (byte)5, (byte)(DLMSInfo.ResponseTimeout / 1000), (byte)0, DateTime.Now, DateTime.Now, string.Empty, 0UL, 0UL))
                         _recData = dlmsReader.strbldDLMdata.ToString().Trim().Split(' ')[3];
                     if (_recData.Length > 20)
                         USdataTable = DLMSAssociationLN.GetObjectListTable(_recData, DLMSAssociationLN.AssociationType.Utility_Settings, out obisCount);
@@ -288,7 +284,6 @@ namespace ListenerUI
                 pushMonitorTimer = null;
                 logService.LogMessage(logBox, $"\n----------------------------*** Listener Port disconnected ***----------------------------", Color.DeepPink, true);
             }
-
         }
         private void btnGet_PS_AS_Click(object sender, EventArgs e)
         {
@@ -372,7 +367,6 @@ namespace ListenerUI
                 DLMSWriter.Dispose();
             }
         }
-
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
             rtbPushLogs.Clear();
@@ -386,12 +380,22 @@ namespace ListenerUI
                     sfd.Title = "Save Push Communication Reports";
                     sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
                     sfd.FileName = $"Push Reports.xlsx";
-                    string filepath = Path.Combine(logService.LOG_DIRECTORY, $"Push Communication Reports\\{sfd.FileName}");
+
+                    // Prevent changing folder
+                    sfd.InitialDirectory = logService.LOG_DIRECTORY;
+                    sfd.RestoreDirectory = true;
+
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        pushPacketManager.ExportReports(filepath);
+                        string fileName = Path.GetFileName(sfd.FileName);
+                        string reportFolder = Path.Combine(logService.LOG_DIRECTORY, "Push Communication Reports");
+                        Directory.CreateDirectory(reportFolder);
+                        string filePath = Path.Combine(reportFolder, fileName);
+                        pushPacketManager.ExportReports(filePath, chart_Instant);
+                        //DataTableOperations.ExportDataTableToExcelWithDifferentSheet(receivedPushData, filePath, "Raw Data");
+                        DataTableOperations.ExportDataTableToExcelWithDifferentSheet(finalDataTable, filePath, "Raw Data");
+
                     }
-                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(receivedPushData, filepath, "Raw Data");
                 }
             }
             catch
@@ -401,45 +405,87 @@ namespace ListenerUI
         }
         private void btnPushprofileSettings_Click(object sender, EventArgs e)
         {
-            pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
-
-            if (pnlProfileSettings.Visible)
+            if (pnlProfileSettings.Visible == true && gb_PSO.Visible)
             {
+                gb_PSO.Visible = false;
+                grpProfileConfig.Visible = true;
+                btnPSO.Text = "▼ Show Push Setup Objects";
+                btnPSO.ForeColor = Color.Black;
                 btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
                 btnPushprofileSettings.ForeColor = Color.Blue;
             }
             else
             {
+                pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
+                gb_PSO.Visible = false;
+                grpProfileConfig.Visible = true;
+                if (pnlProfileSettings.Visible)
+                {
+                    btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
+                    btnPushprofileSettings.ForeColor = Color.Blue;
+                }
+                else
+                {
+                    btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
+                    btnPushprofileSettings.ForeColor = Color.Black;
+                }
+            }
+        }
+        private void btnPSO_Click(object sender, EventArgs e)
+        {
+            if (pnlProfileSettings.Visible == true && grpProfileConfig.Visible)
+            {
+                grpProfileConfig.Visible = false;
+                gb_PSO.Visible = true;
                 btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
                 btnPushprofileSettings.ForeColor = Color.Black;
+                btnPSO.Text = "▲ Hide Push Setup Objects";
+                btnPSO.ForeColor = Color.Blue;
+            }
+            else
+            {
+                pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
+                grpProfileConfig.Visible = false;
+                gb_PSO.Visible = true;
+                if (pnlProfileSettings.Visible)
+                {
+                    btnPSO.Text = "▲ Hide Push Setup Objects";
+                    btnPSO.ForeColor = Color.Blue;
+                }
+                else
+                {
+                    btnPSO.Text = "▼ Show Push Setup Objects";
+                    btnPSO.ForeColor = Color.Black;
+                }
             }
         }
 
         #region NEW IMPLEMENTATION
         private void rtbPushLogs_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            //MessageBox.Show($"You clicked: {e.LinkText}");
-            string[] ClickedPacket = e.LinkText.Split(' ');
-            var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}:\d{3}\s?(AM|PM)\b";
-            //var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}[:\.]\d{3}\s?(AM|PM)\b";
-            var match = System.Text.RegularExpressions.Regex.Match(e.LinkText, dateTimePattern);
-            if (!match.Success)
+            try
             {
-                MessageBox.Show("No valid date/time found in the clicked link.");
-                return;
-            }
-            string dateTimeText = match.Value.Trim();
-            string[] formats = { "dd/MM/yyyy hh:mm:ss:fff tt", "MM/dd/yyyy hh:mm:ss:fff tt" };
-            if (!DateTime.TryParseExact(dateTimeText, formats, System.Globalization.CultureInfo.InvariantCulture,
-                                        System.Globalization.DateTimeStyles.None, out DateTime parsedDateTime))
-            {
-                MessageBox.Show($"Invalid date/time format: {dateTimeText}");
-                return;
-            }
-            string normalizedDateTime = parsedDateTime.ToString("dd/MM/yyyy hh:mm:ss:fff tt");
+                string[] ClickedPacket = e.LinkText.Split(' ');
+                var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}:\d{3}\s?(AM|PM)\b";
+                //var dateTimePattern = @"\b\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}[:\.]\d{3}\s?(AM|PM)\b";
+                var match = System.Text.RegularExpressions.Regex.Match(e.LinkText, dateTimePattern);
+                if (!match.Success)
+                {
+                    MessageBox.Show("No valid date/time found in the clicked link.");
+                    return;
+                }
+                string dateTimeText = match.Value.Trim();
+                string[] formats = { "dd/MM/yyyy hh:mm:ss:fff tt", "MM/dd/yyyy hh:mm:ss:fff tt" };
+                if (!DateTime.TryParseExact(dateTimeText, formats, System.Globalization.CultureInfo.InvariantCulture,
+                                            System.Globalization.DateTimeStyles.None, out DateTime parsedDateTime))
+                {
+                    MessageBox.Show($"Invalid date/time format: {dateTimeText}");
+                    return;
+                }
+                string normalizedDateTime = parsedDateTime.ToString("dd/MM/yyyy hh:mm:ss:fff tt");
 
-            //DataGridView[] grids = { dgAlert, dgInstant, dgLS, dgDE, dgCB, dgBill, dgTamper, dgSR };
-            var gridTabMap = new Dictionary<DataGridView, TabPage>
+                //DataGridView[] grids = { dgAlert, dgInstant, dgLS, dgDE, dgCB, dgBill, dgTamper, dgSR };
+                var gridTabMap = new Dictionary<DataGridView, TabPage>
             {
                 { dgInstant, tbpInstant },
                 { dgLS, tbpLS },
@@ -451,74 +497,108 @@ namespace ListenerUI
                 { dgTamper, tbpTamper }
             };
 
-            bool found = false;
-            foreach (var kvp in gridTabMap)
-            {
-                DataGridView grid = kvp.Key;
-                TabPage tab = kvp.Value;
-
-                foreach (DataGridViewColumn col in grid.Columns)
+                bool found = false;
+                foreach (var kvp in gridTabMap)
                 {
-                    if (col.HeaderText.Contains(normalizedDateTime))
-                    {
-                        found = true;
-                        tabControlProfiles.SelectedTab = tab;
-                        foreach (DataGridViewColumn c in grid.Columns)
-                        {
-                            c.HeaderCell.Style.BackColor = SystemColors.Control;
-                            foreach (DataGridViewRow row in grid.Rows)
-                                row.Cells[c.Index].Style.BackColor = Color.White;
-                        }
-                        foreach (DataGridViewColumn c in grid.Columns)
-                        {
-                            c.HeaderCell.Style.BackColor = SystemColors.Control;
-                            foreach (DataGridViewRow row in grid.Rows)
-                                row.Cells[c.Index].Style.BackColor = Color.White;
-                        }
-                        grid.BeginInvoke(new Action(() =>
-                        {
-                            grid.FirstDisplayedScrollingColumnIndex = col.Index;
-                            int nextCol = (col.Index + 1 < grid.Columns.Count) ? col.Index + 1 : col.Index;
-                            HighlightColumns(grid, col.Index, nextCol);
-                        }));
+                    DataGridView grid = kvp.Key;
+                    TabPage tab = kvp.Value;
 
-                        break;
+                    foreach (DataGridViewColumn col in grid.Columns)
+                    {
+                        if (col.HeaderText.Contains(normalizedDateTime))
+                        {
+                            found = true;
+                            tabControlProfiles.SelectedTab = tab;
+                            //foreach (DataGridViewColumn c in grid.Columns)
+                            //{
+                            //    c.HeaderCell.Style.BackColor = SystemColors.Control;
+                            //    foreach (DataGridViewRow row in grid.Rows)
+                            //        row.Cells[c.Index].Style.BackColor = Color.White;
+                            //}
+                            ClearHighlight(grid);
+                            grid.BeginInvoke(new Action(() =>
+                            {
+                                grid.FirstDisplayedScrollingColumnIndex = col.Index;
+                                int nextCol = (col.Index + 1 < grid.Columns.Count) ? col.Index + 1 : col.Index;
+                                HighlightColumns(grid, col.Index, nextCol);
+                            }));
+                            break;
+                        }
+
+                        //if (col.HeaderText.Contains(normalizedDateTime))
+                        //{
+                        //    found = true;
+                        //    tabControlProfiles.SelectedTab = tab;
+                        //    grid.FirstDisplayedScrollingColumnIndex = col.Index;
+                        //    grid.EnableHeadersVisualStyles = false;
+                        //    //RESET COLORS
+                        //    foreach (DataGridViewColumn c in grid.Columns)
+                        //    {
+                        //        c.HeaderCell.Style.BackColor = SystemColors.Control;
+                        //        foreach (DataGridViewRow row in grid.Rows)
+                        //            row.Cells[c.Index].Style.BackColor = Color.White;
+                        //    }
+                        //    foreach (DataGridViewColumn c in grid.Columns)
+                        //    {
+                        //        c.HeaderCell.Style.BackColor = SystemColors.Control;
+                        //        foreach (DataGridViewRow row in grid.Rows)
+                        //            row.Cells[c.Index].Style.BackColor = Color.White;
+                        //    }
+                        //    HighlightColumns(grid, col.Index, col.Index + 1);
+                        //    break;
+                        //}
                     }
 
-                    //if (col.HeaderText.Contains(normalizedDateTime))
-                    //{
-                    //    found = true;
-                    //    tabControlProfiles.SelectedTab = tab;
-                    //    grid.FirstDisplayedScrollingColumnIndex = col.Index;
-                    //    grid.EnableHeadersVisualStyles = false;
-                    //    //RESET COLORS
-                    //    foreach (DataGridViewColumn c in grid.Columns)
-                    //    {
-                    //        c.HeaderCell.Style.BackColor = SystemColors.Control;
-                    //        foreach (DataGridViewRow row in grid.Rows)
-                    //            row.Cells[c.Index].Style.BackColor = Color.White;
-                    //    }
-                    //    foreach (DataGridViewColumn c in grid.Columns)
-                    //    {
-                    //        c.HeaderCell.Style.BackColor = SystemColors.Control;
-                    //        foreach (DataGridViewRow row in grid.Rows)
-                    //            row.Cells[c.Index].Style.BackColor = Color.White;
-                    //    }
-                    //    HighlightColumns(grid, col.Index, col.Index + 1);
-                    //    break;
-                    //}
+
+                    if (found)
+                        break;
                 }
+                if (!found)
+                {
+                    foreach (DataGridViewRow row in dgLS.Rows)
+                    {
+                        if (row.Cells[0].Value != null &&
+                            row.Cells[0].Value.ToString().Contains(normalizedDateTime))
+                        {
+                            found = true;
+                            tabControlProfiles.SelectedTab = tbpLS;
+                            ClearHighlight(dgLS);
 
+                            dgLS.BeginInvoke(new Action(() =>
+                            {
+                                int startRow = row.Index;
 
-                if (found)
-                    break;
+                                for (int i = startRow; i < dgLS.Rows.Count; i++)
+                                {
+                                    if (dgLS.Rows[i].Cells[0].Value == null ||
+                                        !dgLS.Rows[i].Cells[0].Value.ToString().Contains(normalizedDateTime))
+                                        break;
+
+                                    foreach (DataGridViewCell cell in dgLS.Rows[i].Cells)
+                                    {
+                                        cell.Style.BackColor = Color.FromArgb(232, 245, 233);
+                                    }
+                                }
+
+                                dgLS.FirstDisplayedScrollingRowIndex = row.Index;
+                            }));
+                            break;
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    MessageBox.Show($"DateTime {normalizedDateTime} not found in any DataGridView headers.");
+                }
             }
-
-            if (!found)
+            catch
             {
-                MessageBox.Show($"DateTime {normalizedDateTime} not found in any DataGridView headers.");
+                MessageBox.Show("Error in redirecting to related packet");
             }
+            finally
+            {
 
+            }
             /*foreach (var grid in grids)
             {
                 foreach (DataGridViewColumn col in grid.Columns)
@@ -540,23 +620,25 @@ namespace ListenerUI
                 MessageBox.Show($"DateTime {normalizedDateTime} not found in any DataGridView headers.");
             }*/
         }
+        private void ClearHighlight(DataGridView grid)
+        {
+            foreach (DataGridViewColumn c in grid.Columns)
+                c.HeaderCell.Style.BackColor = SystemColors.Control;
+
+            foreach (DataGridViewRow r in grid.Rows)
+                foreach (DataGridViewCell cell in r.Cells)
+                    cell.Style.BackColor = Color.White;
+        }
         #endregion
 
         #region Helper Methods
-        private bool IniTestRun(TestConfiguration _config)
+        private bool IniTestRun()
         {
-            _cancellationToken = new CancellationTokenSource();
-            var token = _cancellationToken.Token;
             WrapperInfo.IsCommDelayRequired = false;
             bool iniStatus = true;
-            if (!MeterIdentity.AssignMeterDetails(_config, token))
-            {
-                iniStatus = false;
-                return iniStatus;
-            }
             if (MeterIdentity.GetCipherStatus())
             {
-                if (!PushSetupInfo.ReadPushSetup(_config))
+                if (!PushSetupInfo.ReadPushSetup(TestConfiguration.CreateDefault()))
                 {
                     iniStatus = false;
                     return iniStatus;
@@ -819,15 +901,18 @@ namespace ListenerUI
                 #endregion
 
                 #region Randomization Delay 
-                if (!string.IsNullOrEmpty(profile.txtRandom.Text.Trim()) && int.TryParse(profile.txtRandom.Text.Trim(), out int number))
+                if (profile.Name != "Alert" && profile.Name != "SR")
                 {
-                    nRetVal = DLMSWriter.SetParameter($"{profile.PushSetupClassObis.Trim()}05", (byte)0, (byte)3, (byte)5, $"12{number:X4}");
-                    if (nRetVal == 0)
-                        sMessage = sMessage + "Push Setup: Randamisation Set Successfully.";
-                    else if (nRetVal == 2)
-                        sMessage = sMessage + "Push Setup: Randamisation Action Denied.";
-                    else if (nRetVal == 1 || nRetVal == 3)
-                        sMessage = sMessage + "Push Setup: Randamisation Error in Setting.";
+                    if (!string.IsNullOrEmpty(profile.txtRandom.Text.Trim()) && int.TryParse(profile.txtRandom.Text.Trim(), out int number))
+                    {
+                        nRetVal = DLMSWriter.SetParameter($"{profile.PushSetupClassObis.Trim()}05", (byte)0, (byte)3, (byte)5, $"12{number:X4}");
+                        if (nRetVal == 0)
+                            sMessage = sMessage + "Push Setup: Randamisation Set Successfully.";
+                        else if (nRetVal == 2)
+                            sMessage = sMessage + "Push Setup: Randamisation Action Denied.";
+                        else if (nRetVal == 1 || nRetVal == 3)
+                            sMessage = sMessage + "Push Setup: Randamisation Error in Setting.";
+                    }
                 }
                 #endregion
 
@@ -954,7 +1039,8 @@ namespace ListenerUI
                     {
                         targetGrid.DataSource = null;
                         targetGrid.DataSource = targetTable;
-                        //PlotEnergyGraphFromDataTable(targetTable, "Cum. Energy-Wh(Imp)");
+                        if (profile == "Instant" || profile == "DE")
+                            PlotEnergyGraphFromDataTable(targetTable);
                         targetGrid.Refresh();
                     }));
                 }
@@ -1129,7 +1215,8 @@ namespace ListenerUI
             rtbPushLogs.ScrollToCaret();
         }
         #endregion
-        private void PlotEnergyGraphFromDataTable(DataTable dataTable, string rowHeaderName, int startColumnIndex = 8)
+
+        private void PlotEnergyGraphFromDataTable(DataTable dataTable)
         {
             if (dataTable == null || dataTable.Columns.Count == 0 || dataTable.Rows.Count == 0)
             {
@@ -1137,83 +1224,189 @@ namespace ListenerUI
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(rowHeaderName))
+            Task.Run(() =>
             {
-                MessageBox.Show("Row header name must be provided.");
-                return;
-            }
-
-            // Find target row
-            int targetRowIndex = -1;
-            for (int r = 0; r < dataTable.Rows.Count; r++)
-            {
-                if (string.Equals(dataTable.Rows[r][0]?.ToString().Trim(), rowHeaderName.Trim(), StringComparison.OrdinalIgnoreCase))
+                this.Invoke(new Action(() =>
                 {
-                    targetRowIndex = r;
-                    break;
-                }
-            }
+                    var targetParameters = new List<string>
+                    {
+                        "1.0.1.8.0.255",
+                        "1.0.9.8.0.255",
+                        "1.0.2.8.0.255",
+                        "1.0.10.8.0.255",
+                        "1.0.5.8.0.255",
+                        "1.0.8.8.0.255"
+                    };
+                    var timestamps = new List<DateTime>();
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        if (!column.ColumnName.StartsWith("Push Value", StringComparison.OrdinalIgnoreCase)) continue;
 
-            if (targetRowIndex == -1)
-            {
-                MessageBox.Show($"Row '{rowHeaderName}' not found in DataTable.");
-                return;
-            }
+                        string dateString = column.ColumnName.Replace("Push Value-", "").Trim();
 
-            // Parse numeric values from column 9 onward
-            var values = new List<double>();
-            for (int c = startColumnIndex; c < dataTable.Columns.Count; c++)
-            {
-                var raw = dataTable.Rows[targetRowIndex][c]?.ToString();
-                if (string.IsNullOrWhiteSpace(raw)) continue;
+                        if (DateTime.TryParseExact(dateString, "dd/MM/yyyy hh:mm:ss:fff tt",
+                            CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                        {
+                            timestamps.Add(dt);
+                        }
+                    }
 
-                if (double.TryParse(raw.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
-                    values.Add(parsed);
-            }
+                    if (timestamps.Count == 0)
+                    {
+                        MessageBox.Show("No timestamps found.");
+                        return;
+                    }
 
-            if (values.Count == 0)
-            {
-                MessageBox.Show($"No numeric values found for row '{rowHeaderName}' starting at column {startColumnIndex + 1}.");
-                return;
-            }
+                    chart_Instant.Series.Clear();
+                    chart_Instant.ChartAreas.Clear();
+                    chart_Instant.Titles.Clear();
+                    chart_Instant.Legends.Clear();
 
-            // Configure chart
-            chart_Instant.Series.Clear();
-            chart_Instant.ChartAreas.Clear();
-            chart_Instant.Legends.Clear();
+                    var area = new ChartArea("MainArea");
+                    area.AxisX.Interval = 1;
+                    area.AxisX.Title = "Timestamp";
+                    area.AxisY.Title = "Energy Values";
+                    area.AxisX.MajorGrid.Enabled = false;
+                    area.AxisY.MajorGrid.LineColor = Color.LightGray;
+                    area.AxisX.LabelStyle.Angle = -45;
 
-            var area = new ChartArea("MainArea");
-            area.AxisX.Title = $"Push Sequence (Starting from column {startColumnIndex + 1})";
-            area.AxisY.Title = rowHeaderName;
-            area.AxisX.LabelStyle.Angle = -45;
-            area.AxisX.MajorGrid.Enabled = false;
-            area.AxisY.MajorGrid.LineColor = Color.LightGray;
-            chart_Instant.ChartAreas.Add(area);
+                    chart_Instant.ChartAreas.Add(area);
 
-            var series = new Series(rowHeaderName)
-            {
-                ChartType = SeriesChartType.Line,
-                BorderWidth = 2,
-                MarkerStyle = MarkerStyle.Circle,
-                XValueType = ChartValueType.Int32,
-                YValueType = ChartValueType.Double,
-                ToolTip = "#VALY Wh at point #INDEX"
-            };
+                    foreach (string obis in targetParameters)
+                    {
+                        int rowIndex = Enumerable.Range(0, dataTable.Rows.Count)
+                            .FirstOrDefault(r => dataTable.Rows[r][2]?.ToString() == obis);
 
-            for (int i = 0; i < values.Count; i++)
-                series.Points.AddXY(i + 1, values[i]);
+                        if (rowIndex < 0) continue;
 
-            chart_Instant.Series.Add(series);
-            chart_Instant.Titles.Clear();
-            chart_Instant.Titles.Add($"{rowHeaderName} Over Time");
+                        var series = new Series(obis)
+                        {
+                            ChartType = SeriesChartType.Line,
+                            BorderWidth = 2,
+                            MarkerStyle = MarkerStyle.Circle,
+                            XValueType = ChartValueType.String,
+                            YValueType = ChartValueType.Double,
+                        };
 
-            chart_Instant.AntiAliasing = AntiAliasingStyles.Graphics;
-            chart_Instant.TextAntiAliasingQuality = TextAntiAliasingQuality.High;
-            chart_Instant.Legends.Add(new Legend("Legend") { Docking = Docking.Top });
+                        int t = 0;
+                        for (int c = 1; c < dataTable.Columns.Count; c++)
+                        {
+                            if (!dataTable.Columns[c].ColumnName.StartsWith("Push Value")) continue;
 
-            chart_Instant.Invalidate();
+                            string raw = dataTable.Rows[rowIndex][c]?.ToString();
+                            if (double.TryParse(raw.Replace(',', '.'), NumberStyles.Any,
+                                CultureInfo.InvariantCulture, out double yVal))
+                            {
+                                series.Points.AddXY(timestamps[t].ToString("dd/MM HH:mm:ss"), yVal);
+                                t++;
+                            }
+                        }
+
+                        if (series.Points.Count > 0)
+                            chart_Instant.Series.Add(series);
+                    }
+
+                    chart_Instant.Titles.Add("Energy Trends Comparison");
+                    chart_Instant.Legends.Add(new Legend("Legend") { Docking = Docking.Top });
+
+                    chart_Instant.Invalidate();
+                }));
+            });
         }
 
+        //private void PlotEnergyGraphFromDataTable(DataTable dataTable, string rowHeaderName)
+        //{
+        //    if (dataTable == null || dataTable.Columns.Count == 0 || dataTable.Rows.Count == 0)
+        //    {
+        //        MessageBox.Show("Invalid or empty DataTable.");
+        //        return;
+        //    }
+        //    Task.Run(() =>
+        //    {
+        //        this.Invoke(new Action(() =>
+        //        {
+        //            int targetRowIndex = -1;
+        //            for (int r = 0; r < dataTable.Rows.Count; r++)
+        //            {
+        //                if (string.Equals(dataTable.Rows[r][2]?.ToString().Trim(), rowHeaderName.Trim(), StringComparison.OrdinalIgnoreCase))
+        //                {
+        //                    targetRowIndex = r;
+        //                    break;
+        //                }
+        //            }
+
+        //            if (targetRowIndex == -1)
+        //            {
+        //                MessageBox.Show($"Row with '{rowHeaderName}' not found in DataTable.");
+        //                return;
+        //            }
+
+        //            var xLabels = new List<string>();
+        //            var yValues = new List<double>();
+
+        //            for (int c = 1; c < dataTable.Columns.Count; c++)
+        //            {
+        //                string columnName = dataTable.Columns[c].ColumnName;
+
+        //                if (!columnName.StartsWith("Push Value", StringComparison.OrdinalIgnoreCase))
+        //                    continue;
+
+        //                string dateString = columnName.Replace("Push Value-", "").Trim();
+
+        //                if (!DateTime.TryParseExact(dateString, "dd/MM/yyyy hh:mm:ss:fff tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateValue))
+        //                {
+        //                    continue;
+        //                }
+
+
+        //                string raw = dataTable.Rows[targetRowIndex][c]?.ToString();
+        //                if (double.TryParse(raw.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double yVal))
+        //                {
+        //                    xLabels.Add(dateValue.ToString("dd/MM HH:mm:ss"));
+        //                    yValues.Add(yVal);
+        //                }
+        //            }
+
+        //            if (yValues.Count == 0)
+        //            {
+        //                MessageBox.Show($"No numeric data found for '{rowHeaderName}'.");
+        //                return;
+        //            }
+
+        //            chart_Instant.Series.Clear();
+        //            chart_Instant.ChartAreas.Clear();
+        //            chart_Instant.Legends.Clear();
+
+        //            var area = new ChartArea("MainArea");
+        //            area.AxisX.Interval = 1;
+        //            area.AxisX.Title = "Timestamp";
+        //            area.AxisY.Title = rowHeaderName;
+        //            area.AxisX.MajorGrid.Enabled = false;
+        //            area.AxisY.MajorGrid.LineColor = Color.LightGray;
+        //            chart_Instant.ChartAreas.Add(area);
+
+        //            var series = new Series(rowHeaderName)
+        //            {
+        //                ChartType = SeriesChartType.Line,
+        //                BorderWidth = 2,
+        //                MarkerStyle = MarkerStyle.Circle,
+        //                XValueType = ChartValueType.String,
+        //                YValueType = ChartValueType.Double
+        //            };
+
+        //            for (int i = 0; i < yValues.Count; i++)
+        //                series.Points.AddXY(xLabels[i], yValues[i]);
+
+        //            chart_Instant.Series.Add(series);
+
+        //            chart_Instant.Titles.Clear();
+        //            chart_Instant.Titles.Add($"{rowHeaderName} Trend");
+
+        //            chart_Instant.Legends.Add(new Legend("Legend") { Docking = Docking.Top });
+        //            chart_Instant.Invalidate();
+        //        }));
+        //    });
+        //}
         private void cb_Bill_Frequency_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cb_Bill_Frequency.SelectedItem != null && cb_Bill_Frequency.SelectedItem.ToString() == "Custom")
@@ -1260,7 +1453,6 @@ namespace ListenerUI
             // Do NOTHING HANDLER METHOD added by YS
             // DO NOT REMOVE THIS METHOD, MANDATORY TO PREVENT A FUNCTIONALIY ISSUE
         }
-
         private void txtBillFreq_Leave(object sender, EventArgs e)
         {
             if (!txtBillFreq.MaskCompleted)
@@ -1309,6 +1501,7 @@ namespace ListenerUI
                 txtBillFreq.SelectionStart = 0;
             }
         }
+
     }
     public static class RichTextBoxExtensions
     {
@@ -1348,6 +1541,7 @@ namespace ListenerUI
 
         public static void SetSelectionLink(this RichTextBox box, bool link)
         {
+            box.SelectionColor = Color.Green;
             CHARFORMAT2_STRUCT cf = new CHARFORMAT2_STRUCT();
             cf.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(cf);
             cf.dwMask = CFM_LINK;

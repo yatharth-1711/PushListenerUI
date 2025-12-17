@@ -1,12 +1,14 @@
-﻿using OfficeOpenXml.Style;
+﻿
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms.DataVisualization.Charting;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace MeterReader.CommonClasses
@@ -93,7 +95,7 @@ namespace MeterReader.CommonClasses
         }
 
         //By YS
-        public static void ExportDataTableToExcelWithDifferentSheet(DataTable table, string filePath, string sheetName)
+        public static void ExportDataTableToExcelWithDifferentSheet(DataTable table, string filePath, string sheetName, Chart chart = null)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             FileInfo excelFile = new FileInfo(filePath);
@@ -138,7 +140,8 @@ namespace MeterReader.CommonClasses
                     worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                     worksheet.Cells[worksheet.Dimension.Address].AutoFilter = true;
                 }
-
+                if (chart != null && chart.Series.Count > 0)
+                    ExportChartToWorksheet(worksheet, chart);
                 string directoryPath = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(directoryPath))
                 {
@@ -147,6 +150,78 @@ namespace MeterReader.CommonClasses
                 package.SaveAs(excelFile);
             }
         }
+
+        public static void AddChartToWorksheet(ExcelWorksheet worksheet, DataTable table, string sheetName)
+        {
+            try
+            {
+                // Validate minimum columns for chart (at least 2 columns: X & Y)
+                if (table.Columns.Count < 2 || table.Rows.Count == 0)
+                    return;
+
+                var chart = worksheet.Drawings.AddChart($"Chart_{sheetName}", OfficeOpenXml.Drawing.Chart.eChartType.Line);
+                chart.Title.Text = $"{sheetName} Trend";
+
+                // X axis = first column, Y axis = second column
+                string xRange = worksheet.Cells[2, 1, table.Rows.Count + 1, 1].Address;
+                string yRange = worksheet.Cells[2, 2, table.Rows.Count + 1, 2].Address;
+
+                var series = chart.Series.Add(yRange, xRange);
+                series.Header = table.Columns[1].ColumnName;
+
+                // Position chart below data table
+                chart.SetPosition(table.Rows.Count + 3, 0, 0, 0);
+                chart.SetSize(1000, 400);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Chart creation skipped: " + ex.Message);
+            }
+        }
+        public static void ExportSheetWithChart(DataTable table, string filePath, string sheetName, Chart chart)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            FileInfo excelFile = new FileInfo(filePath);
+
+            using (ExcelPackage package = excelFile.Exists ? new ExcelPackage(excelFile) : new ExcelPackage())
+            {
+                var existingSheet = package.Workbook.Worksheets[sheetName];
+                if (existingSheet != null)
+                    package.Workbook.Worksheets.Delete(existingSheet);
+
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(sheetName);
+                worksheet.Cells["A1"].LoadFromDataTable(table, true);
+
+                ExportChartToWorksheet(worksheet, chart);
+
+                package.SaveAs(excelFile);
+            }
+        }
+        private static void ExportChartToWorksheet(ExcelWorksheet worksheet, Chart chart)
+        {
+            try
+            {
+                if (chart == null || chart.Series.Count == 0)
+                    return;
+
+                // Save chart image to a temporary file
+                string tempPath = Path.Combine(Path.GetTempPath(), chart.Name + ".png");
+
+                chart.SaveImage(tempPath, ChartImageFormat.Png);
+
+                // Load image into worksheet
+                var picture = worksheet.Drawings.AddPicture(chart.Name, new FileInfo(tempPath));
+
+                int lastRow = worksheet.Dimension?.End.Row + 2 ?? 2;
+                picture.SetPosition(lastRow, 0, 0, 0);
+                picture.SetSize(900, 400);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error exporting chart: " + ex.Message);
+            }
+        }
+
         //End By YS
         public static object[][] GetColumnsAsArray(DataTable dataTable, string[] searchHeaders, bool IsIncludeHeader = false)
         {
