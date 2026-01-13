@@ -5,7 +5,6 @@ using log4net;
 using MeterComm;
 using MeterReader.DLMSNetSerialCommunication;
 using MeterReader.TestHelperClasses;
-using MeterReader.TestHelperClasses.ManufacturerConfigurableParameters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,12 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using static MeterReader.DLMSInterfaceClasses.ProfileGeneric.DLMSProfileGenericObisCodes;
 
 namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
 {
@@ -38,6 +32,8 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
         public static bool IsControlAvailable = false;
         public static bool IsLSAvailable = false;
         public static bool IsDEAvailable = false;
+        public static bool IsScalerandColumnsAvailable = false;
+        static readonly DLMSParser parse = new DLMSParser();
 
         public static void SaveToXml(DLMSProfileGenericCollection collection)
         {
@@ -89,11 +85,12 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
             IsControlAvailable = false;
             IsLSAvailable = false;
             IsDEAvailable = false;
+            IsScalerandColumnsAvailable = false;
         }
 
         public static Dictionary<string, object> GetNameplateProfileDataTable(ref DLMSComm DLMSObj)
         {
-            DLMSParser parse = new DLMSParser();
+            //DLMSParser parse = new DLMSParser();
             string recivedObisString = "", recivedValueString = "", profileObis = "";
             DataTable obisDataTable = new DataTable();
             // Add columns to the DataTable
@@ -190,11 +187,106 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                         };
         }
 
+        public static Dictionary<string, object> GetNameplateProfileDataTableWrapper(ref WrapperComm WrapperObj)
+        {
+            //DLMSParser parse = new DLMSParser();
+            string recivedObisString = "", recivedValueString = "", profileObis = "";
+            DataTable obisDataTable = new DataTable();
+            // Add columns to the DataTable
+            obisDataTable.Columns.Add("Obis", typeof(string));
+            obisDataTable.Columns.Add("Name", typeof(string));
+            obisDataTable.Columns.Add("Data", typeof(string));
+            DataTable resultDataTable = new DataTable();
+            bool result = false;
+            byte nWait = 0, nTryCount = 3, nTimeOut = 3;
+            string _recData = "";
+            try
+            {
+                profileObis = string.Concat("0.0.94.91.10.255".Trim().Split('.').Select(part => int.Parse(part).ToString("X2")));
+                #region Data Getting Logic
+                if (!DLMSProfileGenericHelper.IsNameplateAvailable)
+                {
+                    //Get Profile Objects
+                    if (SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, ObjectType.ProfileGeneric, "0.0.94.91.10.255", 3, out _recData))
+                    {
+                        recivedObisString = _recData;
+                        DLMSProfileGenericHelper.UpdateProfile("0.0.94.91.10.255", profile =>
+                        {
+                            profile.capture_objects = _recData;
+                        });
+                        SetProfileStatus(profileObis, true);
+                    }
+                    else
+                    {
+                        recivedObisString = "";
+                        SetProfileStatus(profileObis, false);
+                    }
+                    //Get Profile Values
+                    if (SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, ObjectType.ProfileGeneric, "0.0.94.91.10.255", 2, out _recData))
+                    {
+                        recivedValueString = _recData;
+                        DLMSProfileGenericHelper.UpdateProfile("0.0.94.91.10.255", profile =>
+                        {
+                            profile.buffer = _recData;
+                        });
+                        SetProfileStatus(profileObis, true);
+                    }
+                    else
+                    {
+                        recivedValueString = "";
+                        SetProfileStatus(profileObis, false);
+                    }
+                }
+                else
+                {
+                    recivedObisString = DLMSProfileGenericHelper.GetProfileByLogicalName("0.0.94.91.10.255").capture_objects;
+                    recivedValueString = DLMSProfileGenericHelper.GetProfileByLogicalName("0.0.94.91.10.255").buffer;
+                }
+                #endregion
+                obisDataTable = parse.GetParameterTableHorizontal(recivedObisString);
+                //obisDataTable = parse.GetClassObisAttScalerListParsing(recivedObisString, option);
+                #region Add a new column for serial numbers
+                DataColumn snColumn = new DataColumn("SN", typeof(string));
+                obisDataTable.Columns.Add(snColumn);
+                // Set the new column to be the first column
+                snColumn.SetOrdinal(0);
+                // Populate the SN column with row numbers
+                for (int i = 0; i < obisDataTable.Rows.Count; i++)
+                {
+                    obisDataTable.Rows[i]["SN"] = i + 1;
+                }
+                obisDataTable.AcceptChanges();
+                #endregion
+
+                resultDataTable = parse.GetBillingValuesDataTableParsing(recivedValueString, obisDataTable);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+                // Create a dictionary to hold the DataTable and strings
+                return new Dictionary<string, object>
+                        {
+                            { "DataTable", resultDataTable },
+                            { "ProfileObis", recivedObisString},
+                            { "ProfileValues", recivedValueString }
+                        };
+            }
+
+            // Create a dictionary to hold the DataTable and strings
+            return new Dictionary<string, object>
+                        {
+                            { "DataTable", resultDataTable },
+                            { "ProfileObis", recivedObisString},
+                            { "ProfileValues", recivedValueString }
+                        };
+        }
+
 
         #region Methods to GET EVENTS RELATED, INSTANT and LS DE DATA TABLE
         public static Dictionary<string, object> GetProfileDataTable(ref DLMSComm DLMSObj, string profileObis, string scalerObis, int _startIndex = 0, int _endIndex = 0, byte nType = 2, string _startDT = null, string _endDT = null)
         {
-            DLMSParser parse = new DLMSParser();
+            //DLMSParser parse = new DLMSParser();
             string recivedObisString = "", recivedValueString = "", recivedScalerObisString = "", recivedScalerValueString = "", inUseEntries = "", profileEntries = "";
             DataTable obisDataTable = new DataTable();
             DataTable resultDataTable = new DataTable();
@@ -623,7 +715,10 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                     }
                     //Get Profile Values
                     SetGetFromMeter.Wait(500);
-                    WrapperObj.ReadCOSEMObject(ObjectType.ProfileGeneric, profileObisInt, 2);
+                    if (nType != 0)
+                        WrapperObj.ReadProfileGenericBuffer(profileObisInt, _startIndex, _endIndex, nType, _startDT, _endDT);
+                    else
+                        WrapperObj.ReadCOSEMObject(ObjectType.ProfileGeneric, profileObisInt, 2);
                     _recData = WrapperComm.recData.Trim();
                     if (_recData.Length > 14)
                     {
@@ -711,7 +806,10 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                     }
                     //Get Profile Values
                     SetGetFromMeter.Wait(500);
-                    WrapperObj.ReadCOSEMObject(ObjectType.ProfileGeneric, profileObisInt, 2);
+                    if (nType != 0)
+                        WrapperObj.ReadProfileGenericBuffer(profileObisInt, _startIndex, _endIndex, nType, _startDT, _endDT);
+                    else
+                        WrapperObj.ReadCOSEMObject(ObjectType.ProfileGeneric, profileObisInt, 2);
                     _recData = WrapperComm.recData.Trim();
                     if (_recData.Length > 14)
                     {
@@ -822,7 +920,7 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
         }
         #endregion
 
-        private static void SetProfileStatus(string profileObis, bool status)
+        public static void SetProfileStatus(string profileObis, bool status)
         {
             switch (profileObis)
             {
@@ -845,7 +943,6 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                     DLMSProfileGenericHelper.IsNonRolloverAvailable = status;
                     break;
                 case "0000636206FF":
-                    ;
                     DLMSProfileGenericHelper.IsControlAvailable = status;
                     break;
                 case "0100620100FF":
@@ -859,6 +956,9 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                     break;
                 case "0100630200FF":
                     DLMSProfileGenericHelper.IsDEAvailable = status;
+                    break;
+                case "00005E5B0AFF":
+                    DLMSProfileGenericHelper.IsNameplateAvailable = status;
                     break;
             }
         }
@@ -919,6 +1019,19 @@ namespace MeterReader.DLMSInterfaceClasses.ProfileGeneric
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public static void IsProfilesColumnsAvailable(ref WrapperComm WrapperObj)
+        {
+            if (!IsScalerandColumnsAvailable)
+            {
+                if (WrapperObj.GetAssociationView(null))
+                {
+                    WrapperObj.GetScalersAndUnits();
+                    WrapperObj.GetProfileGenericColumns();
+                    IsScalerandColumnsAvailable = true;
                 }
             }
         }

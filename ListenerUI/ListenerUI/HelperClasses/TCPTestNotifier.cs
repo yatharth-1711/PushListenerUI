@@ -1,37 +1,30 @@
-﻿using Gurux.Common;
+﻿using AutoTest.FrameWork.Converts;
+using Gurux.Common;
+using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Secure;
+using Indali.Common;
+using ListenerUI.HelperClasses;
 using log4net;
-using log4net.Util;
+using MeterComm;
+using MeterComm.DLMS;
+using meterReader.AesGcmParameter;
 using MeterReader.TestHelperClasses;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Net;
-using System.Data;
-using Gurux.DLMS;
-using Gurux.DLMS.Objects.Enums;
-using System.Xml;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using MeterComm;
-using AutoTest.FrameWork;
-using MeterComm.DLMS;
-using System.Globalization;
-using AutoTest.FrameWork.Converts;
-using MeterReader.DLMSNetSerialCommunication;
-using meterReader.AesGcmParameter;
-using Indali.Common;
-using System.Runtime.InteropServices.ComTypes;
-using System.IO;
-using ListenerUI.HelperClasses;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
 
 
 namespace MeterReader.DLMSNetSerialCommunication
@@ -40,26 +33,29 @@ namespace MeterReader.DLMSNetSerialCommunication
     {
         #region Event Handlers
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly TestLogService _logService;
         public delegate void LineTrafficControl(string updatedText, string status);
         public static event LineTrafficControl LineTrafficControlEventHandler = delegate { };
         public delegate void LogControl(string updatedText, Color color);
         public static event LogControl LogControlEventHandler = delegate { };
+        public delegate void AppendColoredTextControlWithBox(string message, Color color, bool isBold);
+        public static event AppendColoredTextControlWithBox AppendColoredTextControlNotifier = delegate { };
         public delegate void LineTrafficSave();
         public static event LineTrafficSave LineTrafficSaveEventHandler = delegate { };
         DLMSParser parse = new DLMSParser();
         #endregion
 
         #region Objects and Global Variables
-        //TestConfiguration _testConfiguration;
         TcpListener server;
         private Thread listenerThread;
         GXDLMSSecureClient dlmsClient;
         public static bool isListening = false;
+        public static bool isUIHandler = false;
+        public static bool showXMLData = false;
+        public static bool showCipheredHexData = false;
+        public static bool showDecryptedHexData = false;
         public string responseString = string.Empty;
         RichTextBox _logBox = new RichTextBox();
         #endregion
-
 
         #region PUSH PROCESSING GLOBAL VARIABLE
         public GXDLMSSecureClient client = new GXDLMSSecureClient();
@@ -73,6 +69,14 @@ namespace MeterReader.DLMSNetSerialCommunication
         public byte[] cipherText;
         public uint IC = 0;
         #endregion
+
+        #region Separate Notification Global variables
+        public static string notify_EK = string.Empty;
+        public static string notify_AK = string.Empty;
+        public static string notify_SysT = string.Empty;
+        public static bool useSeparateCredentials = false;
+        #endregion
+
         public static DataTable ListenerDataTable { get; set; } = new DataTable()
         {
             Columns =
@@ -100,10 +104,19 @@ namespace MeterReader.DLMSNetSerialCommunication
                 Gurux.DLMS.Enums.InterfaceType.WRAPPER // TCP/IP wrapper mode
             );
             // Configure Ciphering
-            dlmsClient.Ciphering.SystemTitle = GXCommon.GetAsByteArray(DLMSInfo.TxtSysT);
             dlmsClient.Ciphering.Security = Gurux.DLMS.Enums.Security.AuthenticationEncryption;
-            dlmsClient.Ciphering.BlockCipherKey = GXCommon.GetAsByteArray(DLMSInfo.TxtEK);
-            dlmsClient.Ciphering.AuthenticationKey = GXCommon.GetAsByteArray(DLMSInfo.TxtAK);
+            if (useSeparateCredentials)
+            {
+                dlmsClient.Ciphering.SystemTitle = GXCommon.GetAsByteArray(notify_SysT);
+                dlmsClient.Ciphering.BlockCipherKey = GXCommon.GetAsByteArray(notify_EK);
+                dlmsClient.Ciphering.AuthenticationKey = GXCommon.GetAsByteArray(notify_AK);
+            }
+            else
+            {
+                dlmsClient.Ciphering.SystemTitle = GXCommon.GetAsByteArray(DLMSInfo.TxtSysT);
+                dlmsClient.Ciphering.BlockCipherKey = GXCommon.GetAsByteArray(DLMSInfo.TxtEK); ;
+                dlmsClient.Ciphering.AuthenticationKey = GXCommon.GetAsByteArray(DLMSInfo.TxtAK);
+            }
             listenerThread = new Thread(StartServer);
             listenerThread.IsBackground = true;
             listenerThread.Start();
@@ -113,13 +126,39 @@ namespace MeterReader.DLMSNetSerialCommunication
             isListening = true;
             try
             {
+                if (useSeparateCredentials)
+                {
+                    this.EK = Encoding.ASCII.GetBytes(notify_EK);
+                    this.AK = Encoding.ASCII.GetBytes(notify_AK);
+                    this.ST = Encoding.ASCII.GetBytes(notify_SysT);
+                }
+                else
+                {
+                    this.EK = Encoding.ASCII.GetBytes(DLMSInfo.TxtEK);
+                    this.AK = Encoding.ASCII.GetBytes(DLMSInfo.TxtAK);
+                    this.ST = Encoding.ASCII.GetBytes(DLMSInfo.TxtSysT);
+                }
                 IPAddress ipv6Address = new IPAddress(IPAddress.Parse(NetworkHelper.GetIPv6Address()).GetAddressBytes());
                 server = new TcpListener(ipv6Address, WrapperInfo.port);
                 server.Start();
 
                 while (isListening)
                 {
-                    using (TcpClient client = server.AcceptTcpClient())
+                    #region AAC
+                    TcpClient client = null;
+                    try
+                    {
+                        client = server.AcceptTcpClient(); // Blocking call
+                    }
+                    catch (SocketException)
+                    {
+                        break; // Triggered by server.Stop()
+                    }
+                    if (!isListening)
+                        break;
+                    using (client)
+                    #endregion
+                    //using (TcpClient client = server.AcceptTcpClient())
                     using (NetworkStream stream = client.GetStream())
                     {
                         List<byte> receivedBytes = new List<byte>();
@@ -158,14 +197,13 @@ namespace MeterReader.DLMSNetSerialCommunication
                         string typeOfData = string.Empty;
                         if (receivedBytes.Count > 0)
                         {
-                            string timeStamp = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss:fff tt");
-                            string recEncryptedHex = BitConverter.ToString(receivedBytes.ToArray()).Replace("-", " ");
                             // Decryption Logic
-                            this.EK = Encoding.ASCII.GetBytes(DLMSInfo.TxtEK);
-                            this.AK = Encoding.ASCII.GetBytes(DLMSInfo.TxtAK);
-                            this.ST = Encoding.ASCII.GetBytes(DLMSInfo.TxtSysT);
                             this.GXSecurity = Security.AuthenticationEncryption;
-                            string DecryptedData = null;
+                            DateTime timeStamp = DateTime.Now;
+                            DateTime packetSendingTime = DateTime.Now; DateTime packetGenerateTime = DateTime.Now;
+                            string DecryptedData = null; string DeviceID = string.Empty; string decodedHex = string.Empty;
+
+                            string recEncryptedHex = BitConverter.ToString(receivedBytes.ToArray()).Replace("-", " ");
                             input_packet = recEncryptedHex.Replace(" ", "").ToUpper();
                             Enc_packets = input_packet.Split(new string[1] { "00010001" }, StringSplitOptions.None);
                             for (int index = 1; index < Enc_packets.Length; ++index)
@@ -175,51 +213,63 @@ namespace MeterReader.DLMSNetSerialCommunication
                                 DecryptedData += DecryptData(true, EK, AK, ST, GXSecurity, IC, cipherText) + "\n";
                                 //Console.WriteLine($"Decrypted value ==> {DecryptedData}");
                             }
-                            // Push Type Identification
-                            string decodedHex = DecodePushData(receivedBytes.ToArray(), receivedBytes.Count);
-                            if (DecryptedData.Contains("00 00 19 09 00 FF")) typeOfData = "Instant Push";
-                            else if (DecryptedData.Contains("00 04 19 09 00 FF")) typeOfData = "Alert Push";
-                            else if (DecryptedData.Contains("00 05 19 09 00 FF")) typeOfData = "Load Survey Push";
-                            else if (DecryptedData.Contains("00 06 19 09 00 FF")) typeOfData = "Daily Energy Push";
-                            else if (DecryptedData.Contains("00 82 19 09 00 FF")) typeOfData = "Self Registration Push";
-                            else if (DecryptedData.Contains("00 84 19 09 00 FF")) typeOfData = "Billing Push";
-                            else if (DecryptedData.Contains("00 86 19 09 00 FF")) typeOfData = "Tamper Push";
-                            else if (DecryptedData.Contains("00 00 19 09 81 FF")) typeOfData = "Current Bill Push";
-                            else typeOfData = "Unknown Push Type";
-                            string sData = DecryptedData.Replace(" ", "");
-                            int counter = 10;
-                            DateTime packetSendingTime = DateTime.ParseExact(parse.Getdate(sData.Substring(12, 24), 0, false), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                            counter = 36;
-                            while (sData.Substring(counter, 2) != "02")
+                            string decodedXml = DecodePushDataToXML(receivedBytes.ToArray(), receivedBytes.Count);
+                            decodedHex = DecodePushData(receivedBytes.ToArray(), receivedBytes.Count);
+                            if (!showCipheredHexData && !showDecryptedHexData && !showXMLData)
                             {
-                                counter += 4;
-                            }
-                            counter += 4;//40
-                            int lengthOfSerialNumber = Convert.ToInt32(sData.Substring(counter + 2, 2).ToString().Trim(), 16) * 2;
-                            string DeviceID = parse.GetProfileValueString(sData.Substring(counter, lengthOfSerialNumber + 4).ToString()).ToString();
-                            counter += lengthOfSerialNumber + 4;//66
-                            int OBISLength = Convert.ToInt32(sData.Substring(counter + 2, 2).ToString().Trim(), 16) * 2;
-                            counter += OBISLength + 4;
-                            DateTime packetGenerateTime = DateTime.ParseExact(parse.Getdate(sData.Substring(counter + 4, 24), 0, false), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                            LogControlEventHandler($"------------------------------------------------------------------------------------------------------------------", Color.Green);
-                            if (PushPacketManager.DeviceID == DeviceID)
-                            {
-                                // Logging
-                                LogControlEventHandler($"     Device ID: {DeviceID}\t\t{timeStamp}: {typeOfData} Received", Color.Green);
-                                LogControlEventHandler($"     Packet Generated in meter: {packetGenerateTime.ToString("dd/MM/yyyy hh:mm:ss tt")}\t\tPacket Sent by meter: {packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}", Color.Blue);
+                                // Push Type Identification
+                                if (DecryptedData.Contains("00 00 19 09 00 FF")) typeOfData = "Instant Push";
+                                else if (DecryptedData.Contains("00 04 19 09 00 FF")) typeOfData = "Alert Push";
+                                else if (DecryptedData.Contains("00 05 19 09 00 FF")) typeOfData = "Load Survey Push";
+                                else if (DecryptedData.Contains("00 06 19 09 00 FF")) typeOfData = "Daily Energy Push";
+                                else if (DecryptedData.Contains("00 82 19 09 00 FF")) typeOfData = "Self Registration Push";
+                                else if (DecryptedData.Contains("00 84 19 09 00 FF")) typeOfData = "Billing Push";
+                                else if (DecryptedData.Contains("00 86 19 09 00 FF")) typeOfData = "Tamper Push";
+                                else if (DecryptedData.Contains("00 00 19 09 81 FF")) typeOfData = "Current Bill Push";
+                                else typeOfData = "Unknown Push Type";
+                                string sData = DecryptedData.Replace(" ", "");
+                                int counter = 10;
+                                packetSendingTime = DateTime.ParseExact(parse.Getdate(sData.Substring(12, 24), 0, false), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                                counter = 36;
+                                while (sData.Substring(counter, 2) != "02")
+                                {
+                                    counter += 4;
+                                }
+                                counter += 4;//40  
+                                int lengthOfSerialNumber = Convert.ToInt32(sData.Substring(counter + 2, 2).ToString().Trim(), 16) * 2;
+                                DeviceID = parse.GetProfileValueString(sData.Substring(counter, lengthOfSerialNumber + 4).ToString()).ToString();
+                                counter += lengthOfSerialNumber + 4;//66
+                                int OBISLength = Convert.ToInt32(sData.Substring(counter + 2, 2).ToString().Trim(), 16) * 2;
+                                counter += OBISLength + 4;
+                                packetGenerateTime = DateTime.ParseExact(parse.Getdate(sData.Substring(counter + 4, 24), 0, false), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                                PrintPushHeader(DeviceID, typeOfData, packetGenerateTime, packetSendingTime, timeStamp.ToString("dd/MM/yyyy hh:mm:ss tt"), isUIHandler);
                             }
                             else
                             {
-                                LogControlEventHandler($"     Device ID: {DeviceID}\t\t{timeStamp}: {typeOfData} Received", Color.Red);
-                                LogControlEventHandler($"     Packet Generated in meter: {packetGenerateTime.ToString("dd/MM/yyyy hh:mm:ss tt")}\t\tPacket Sent by meter: {packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}", Color.Red);
+                                PrintMessage(isUIHandler, $"-----------------------------------------------------------------------------------------------------------", Color.Black, true);
+                                PrintMessage(isUIHandler, $"Client Connected: {timeStamp.ToString(Constants.timeStamp12Hours)}", Color.Black, true);
+                                if (showCipheredHexData)
+                                {
+                                    PrintMessage(isUIHandler, $"Encrypted Packet:", Color.Blue, true);
+                                    PrintMessage(isUIHandler, $"{recEncryptedHex}" + Environment.NewLine, Color.Blue);
+                                }
+                                if (showDecryptedHexData)
+                                {
+                                    PrintMessage(isUIHandler, $"Decrypted Packet:", Color.Green, true);
+                                    PrintMessage(isUIHandler, $"{DecryptedData}", Color.Green);
+                                }
+                                if (showXMLData)
+                                {
+                                    PrintMessage(isUIHandler, $"Decoded XML:", Color.Black, true);
+                                    PrintMessage(isUIHandler, $"{decodedXml}" + Environment.NewLine, Color.Black);
+                                }
                             }
-                            //Line Traffic
-                            //LineTrafficControlEventHandler($"\n     Push Packet Received:  {typeOfData} {timeStamp}", "Send");
-                            //LineTrafficControlEventHandler($"     CIPHERED DATA", "Send");
-                            //LineTrafficControlEventHandler($"     {recEncryptedHex} {timeStamp}", "Receive");
-                            string decodedXml = DecodePushDataToXML(receivedBytes.ToArray(), receivedBytes.Count);
-                            ListenerDataTable.Rows.Add($"{timeStamp}-{typeOfData}-{DeviceID}", packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt"), recEncryptedHex, decodedHex, DecryptedData, decodedXml);
+                            ListenerDataTable.Rows.Add($"{timeStamp.ToString("dd/MM/yyyy hh:mm:ss tt")}-{typeOfData}-{DeviceID}", packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt"), recEncryptedHex, decodedHex, DecryptedData, decodedXml);
                             ListenerDataTable.AcceptChanges();
+                            //Line Traffic
+                            LineTrafficControlEventHandler($"\n     Push Packet Received:  {typeOfData} {timeStamp}", "Send");
+                            LineTrafficControlEventHandler($"     CIPHERED DATA", "Send");
+                            LineTrafficControlEventHandler($"     {recEncryptedHex} {timeStamp}", "Receive");
                         }
                     }
                 }
@@ -230,15 +280,87 @@ namespace MeterReader.DLMSNetSerialCommunication
                 log.Error(ex.StackTrace.ToString());
             }
         }
+        private void PrintMessage(bool isUIHandler, string message, Color color, bool isBold = false)
+        {
+            if (isUIHandler)
+                AppendColoredTextControlNotifier(message, color, isBold);
+            else
+                LogControlEventHandler(message, color);
+        }
+        public void PrintPushHeader(string DeviceID, string typeOfData, DateTime packetGenerateTime, DateTime packetSendingTime, string timeStamp, bool isUIHandler)
+        {
+            bool isMatched = PushPacketManager.DeviceID == DeviceID;
+            Color headerColor = Color.Green;
+            Color detailColor = isMatched ? Color.Green : Color.Red;
+            PrintMessage(isUIHandler, "------------------------------------------------------------------------------------------------------------------", headerColor);
+            PrintMessage(isUIHandler, $"\t{string.Format("{0,-28}{1,-27}{2,-60}", $"Device ID: {DeviceID}", $"{timeStamp}", $"{typeOfData} Received")}", detailColor, true);
+            string formattedMessage = $"\t{string.Format("{0,-28}{1,-27}{2,-23}{3,-37}", $"Packet Generated in meter:", $"{packetGenerateTime.ToString(Constants.timeStamp12Hours)}", $"Packet Sent by meter:", $"{packetGenerateTime.ToString(Constants.timeStamp12Hours)}")}";
+            PrintMessage(isUIHandler, formattedMessage, isMatched ? Color.Blue : Color.Red, true);
+        }
         public void StopServer()
         {
+            try
+            {
+                isListening = false;
+
+                if (server != null)
+                {
+                    server.Stop();  // This will force AcceptTcpClient() to return
+                }
+
+                if (listenerThread != null && listenerThread.IsAlive)
+                {
+                    listenerThread.Join(1000); // wait for thread to exit
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error during shutdown: " + ex.Message);
+            }
+
+            /*
             if (server != null)
             {
                 isListening = false;
                 server.Stop();
                 listenerThread?.Abort();
                 //_logService.LogMessage(_logBox, $"Server stopped.", Color.Black);
+            }*/
+        }
+        private string GetDecryptData(string XmlData)
+        {
+            string decryptData = "";
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml("<root>" + $@"{XmlData}" + "</root>"); // Wrapping in a root node for valid XML
+
+            XmlNode blockDataNode = xmlDoc.SelectSingleNode("//BlockData[@Value]");
+            if (blockDataNode != null)
+            {
+                decryptData = blockDataNode.Attributes["Value"].Value.Trim();
+                return decryptData;
             }
+            foreach (XmlNode node in xmlDoc.DocumentElement.SelectNodes("//comment()"))
+            {
+                if (node.NodeType == XmlNodeType.Comment)
+                {
+                    string commentText = node.Value;
+                    Match match = null;
+                    if (XmlData.Contains("<GeneralBlockTransfer>"))
+                    {
+                        match = Regex.Match(commentText, @"BlockData Value=\""([^\""]+)\""", RegexOptions.IgnoreCase | RegexOptions.IgnoreCase);
+                    }
+                    else
+                        match = Regex.Match(commentText, @"Decrypt data:\s*([\dA-F ]+)", RegexOptions.IgnoreCase | RegexOptions.IgnoreCase);
+                    if (match.Success)
+                    {
+                        decryptData = match.Groups[1].Value.Trim();
+                        break;
+                    }
+                }
+            }
+            return decryptData;
+
         }
         //BY YS
         /// <summary>
@@ -325,7 +447,6 @@ namespace MeterReader.DLMSNetSerialCommunication
             }
             return dataXML;
         }
-
         /// <summary>
         /// Decode push data to get type of data
         /// </summary>
@@ -338,10 +459,8 @@ namespace MeterReader.DLMSNetSerialCommunication
             try
             {
                 GXReplyData reply = new GXReplyData();
-
                 // Decrypt and parse push message
-                dlmsClient.GetData(data, reply);
-
+                //dlmsClient.GetData(data, reply);
                 if (reply.Data is GXByteBuffer bufferData)
                 {
                     byte[] dataFinal = bufferData.Data;
@@ -381,6 +500,5 @@ namespace MeterReader.DLMSNetSerialCommunication
             listenerThread?.Abort();
         }
         #endregion
-
     }
 }

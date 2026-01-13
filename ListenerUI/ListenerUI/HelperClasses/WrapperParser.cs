@@ -1,15 +1,15 @@
 ﻿using AutoTest.FrameWork.Converts;
 using Gurux.Common;
+using Gurux.DLMS;
+using Gurux.DLMS.Objects;
 using MeterReader.NicConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -1115,6 +1115,8 @@ namespace MeterReader.Converter
 
         public static int GetNetworkMode(string LoadData)
         {
+            if (parse is null)
+                parse = new DLMSParser();
             int nValue = 0;
             if (LoadData.Length < 4 || LoadData.Substring(2, 2) == "00")
             {
@@ -1491,6 +1493,262 @@ namespace MeterReader.Converter
             Array.Reverse((Array)bytes);
             return bytes;
         }
+        /// <summary>
+        /// This method is used to convert hex string to ascii text
+        /// </summary>
+        /// <param name="hexString"></param>
+        /// <returns></returns>
+        public string HexString2Ascii(string hexString)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= hexString.Length - 2; i += 2)
+            {
+                sb.Append(Convert.ToString(Convert.ToChar(Int32.Parse(hexString.Substring(i, 2), System.Globalization.NumberStyles.HexNumber))));
+            }
+            return sb.ToString();
+        }
         #endregion
+
+        public static GXDateTime[] ParseSingleActionScheduleExecutionTimeHex(string hex)
+        {
+            byte[] data = GXCommon.HexToBytes(hex);
+            List<GXDateTime> list = new List<GXDateTime>();
+
+            if (data.Length < 2) // minimal DLMS array = 2 bytes: 01 00
+                return list.ToArray();
+
+            int pos = 0;
+            byte arrayTag = data[pos++]; // should be 0x01 (array)
+            byte count = data[pos++];    // number of elements
+
+            if (count == 0)
+                return list.ToArray(); // empty array, return empty GXDateTime[]
+
+            for (int i = 0; i < count; i++)
+            {
+                if (pos + 9 > data.Length)
+                    break; // not enough bytes for a full element
+
+                // Each element: structure tag (skip) + 2 octet strings
+                byte structTag = data[pos++]; // structure tag, usually 0x02
+                if (structTag != 0x02)
+                    throw new Exception("Invalid structure tag in execution_time");
+
+                // Time (4 bytes)
+                byte[] timeBytes = new byte[4];
+                pos = pos + 3;
+                Array.Copy(data, pos, timeBytes, 0, 4);
+                pos += 4;
+
+                // Date (5 bytes)
+                byte[] dateBytes = new byte[5];
+                pos = pos + 2;
+                Array.Copy(data, pos, dateBytes, 0, 5);
+                pos += 5;
+
+                int year = (dateBytes[0] == 0xFF) ? 65535 : 2000 + dateBytes[0];
+                int month = (dateBytes[2] == 0xFF) ? 0 : dateBytes[2];
+                int day = (dateBytes[3] == 0xFF) ? 0 : dateBytes[3];
+
+                int hour = (timeBytes[0] == 0xFF) ? -1 : timeBytes[0];
+                int minute = (timeBytes[1] == 0xFF) ? -1 : timeBytes[1];
+                int second = (timeBytes[2] == 0xFF) ? -1 : timeBytes[2];
+                int hundredths = (timeBytes[3] == 0xFF) ? -1 : timeBytes[3];
+                GXDateTime dt = new GXDateTime(year, month, day, hour, minute, second, hundredths * 10);
+                list.Add(new GXDateTime(dt));
+            }
+
+            return list.ToArray();
+        }
+        /// <summary>
+        /// This Converts the user provided Season profile DLMS hex string to array of type GXDLMSSeasonProfile
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public GXDLMSSeasonProfile[] ParseSeasonProfile(string hex)
+        {
+            byte[] data = GXCommon.HexToBytes(hex);
+            List<GXDLMSSeasonProfile> seasons = new List<GXDLMSSeasonProfile>();
+            int offset = 0;
+            if (data.Length == 0)
+                return seasons.ToArray(); // Zero seasons
+
+            if (data[offset++] != 0x01) throw new Exception("Expected array tag");
+            int arrayLength = data[offset++]; // Could be 0 for zero seasons
+            if (arrayLength == 0)
+                return seasons.ToArray(); // Zero seasons
+            //offset++;
+            if (data[offset++] != 0x02) throw new Exception("Expected array start");
+
+            while (offset < data.Length)
+            {
+                if (data[offset++] != 0x03) break;
+
+                // Season Name
+                if (data[offset++] != 0x09) throw new Exception("Expected Octet String for Season Name");
+                int nameLength = data[offset++];
+                string seasonName = Encoding.ASCII.GetString(data, offset, nameLength);
+                offset += nameLength;
+                offset++;
+                // Start Time (GXDateTime)
+                if (data[offset++] != 0x0C) throw new Exception("Expected DateTime for Start Time");
+                byte[] dtBytes = new byte[12];
+                Array.Copy(data, offset, dtBytes, 0, 12);
+
+                int year = (dtBytes[0] == 0xFF) ? 65535 : 2000 + dtBytes[0];
+                int month = (dtBytes[2] == 0xFF) ? 0 : dtBytes[2];
+                int day = (dtBytes[3] == 0xFF) ? 0 : dtBytes[3];
+                int hour = (dtBytes[4] == 0xFF) ? -1 : dtBytes[4];
+                int minute = (dtBytes[5] == 0xFF) ? -1 : dtBytes[5];
+                int second = (dtBytes[6] == 0xFF) ? -1 : dtBytes[6];
+                int hundredths = (dtBytes[7] == 0xFF) ? -1 : dtBytes[7];
+
+                GXDateTime startTime = new GXDateTime(year, month, day, hour, minute, second, hundredths * 10);
+                offset += 12;
+
+                // Week Name
+                if (data[offset++] != 0x09) throw new Exception("Expected Octet String for Week Name");
+                int weekLength = data[offset++];
+                string weekName = Encoding.ASCII.GetString(data, offset, weekLength);
+                offset += weekLength;
+
+                seasons.Add(new GXDLMSSeasonProfile(seasonName, startTime, weekName));
+                offset++;
+            }
+
+            return seasons.ToArray();
+        }
+        /// <summary>
+        /// This Converts the user provided Week profile DLMS hex string to array of type GXDLMSWeekProfile
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public GXDLMSWeekProfile[] ParseWeekProfile(string hex)
+        {
+            byte[] data = GXCommon.HexToBytes(hex);
+            List<GXDLMSWeekProfile> weeks = new List<GXDLMSWeekProfile>();
+            int offset = 0;
+
+            if (data.Length == 0)
+                return weeks.ToArray(); // zero weeks
+
+            if (data[offset++] != 0x01) throw new Exception("Expected array tag");
+            offset++; // skip array count
+            if (data[offset++] != 0x02) throw new Exception("Expected array start");
+
+            while (offset < data.Length)
+            {
+                if (data[offset++] != 0x08) break; // structure start
+
+                // Week Name
+                if (data[offset++] != 0x09) throw new Exception("Expected Octet String for Week Name");
+                int nameLength = data[offset++];
+                string weekNameStr = Encoding.ASCII.GetString(data, offset, nameLength);
+                offset += nameLength;
+
+                // Day IDs array
+                if (data[offset++] != 0x11) throw new Exception("Expected Array for Day IDs");
+                int monday = data[offset++];
+                offset++;
+                int tuesday = data[offset++];
+                offset++;
+                int wednesday = data[offset++];
+                offset++;
+                int thursday = data[offset++];
+                offset++;
+                int friday = data[offset++];
+                offset++;
+                int saturday = data[offset++];
+                offset++;
+                int sunday = data[offset++];
+                GXDLMSWeekProfile weekProfile = new GXDLMSWeekProfile(weekNameStr, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
+                weeks.Add(weekProfile);
+                offset++;
+                if (offset >= data.Length) break;
+            }
+
+            return weeks.ToArray();
+        }
+        /// <summary>
+        /// This Converts the user provided Day profile DLMS hex string to array of type GXDLMSDayProfile
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public GXDLMSDayProfile[] ParseDayProfile(string hex)
+        {
+            byte[] data = GXCommon.HexToBytes(hex);
+            List<GXDLMSDayProfile> dayProfiles = new List<GXDLMSDayProfile>();
+            int offset = 0;
+
+            if (data.Length == 0)
+                return dayProfiles.ToArray(); // zero day profiles
+
+            // Array tag
+            if (data[offset++] != 0x01) throw new Exception("Expected array tag");
+
+            // Array count (number of day_profiles)
+            int dayProfileCount = data[offset++];
+
+            for (int i = 0; i < dayProfileCount; i++)
+            {
+                // Structure tag for each day_profile
+                if (data[offset++] != 0x02) throw new Exception("Expected structure tag for day_profile");
+
+                int structureCount = data[offset++]; // should be 2: day_id + day_schedule
+                if (structureCount != 2) throw new Exception("Expected structure count 2 for day_profile");
+
+                // First element: day_id (unsigned)
+                if (data[offset++] != 0x11) throw new Exception("Expected unsigned tag for day_id");
+                int dayId = data[offset++];
+
+                // Second element: day_schedule array
+                if (data[offset++] != 0x01) throw new Exception("Expected array tag for day_schedule");
+                int actionCount = data[offset++]; // number of day_profile_actions
+                List<GXDLMSDayProfileAction> actions = new List<GXDLMSDayProfileAction>();
+
+                for (int j = 0; j < actionCount; j++)
+                {
+                    // Each day_profile_action is a structure
+                    if (data[offset++] != 0x02) throw new Exception("Expected structure tag for day_profile_action");
+                    int actionStructureCount = data[offset++]; // should be 3: start_time, script_ln, script_selector
+                    if (actionStructureCount != 3) throw new Exception("Expected structure count 3 for day_profile_action");
+
+                    // Start Time: 4-byte octet-string
+                    if (data[offset++] != 0x09 && data[offset - 1] != 0x0C) throw new Exception("Expected octet-string tag for start_time");
+                    byte[] timeBytes = new byte[4];
+                    offset++;
+                    Array.Copy(data, offset, timeBytes, 0, 4);
+                    offset += 4;
+
+                    int hour = timeBytes[0] == 0xFF ? -1 : timeBytes[0];
+                    int minute = timeBytes[1] == 0xFF ? -1 : timeBytes[1];
+                    int second = timeBytes[2] == 0xFF ? -1 : timeBytes[2];
+                    int hundredths = timeBytes[3] == 0xFF ? -1 : timeBytes[3];
+                    GXDateTime gXDateTime = new GXDateTime(0, 0, 0, hour, minute, second, hundredths * 10);
+                    GXTime startTime = new GXTime(gXDateTime);
+
+                    // Script Logical Name: octet-string
+                    if (data[offset++] != 0x09) throw new Exception("Expected octet-string tag for script_logical_name");
+                    int lnLength = data[offset++];
+                    byte[] scriptLogicalName = new byte[lnLength];
+                    Array.Copy(data, offset, scriptLogicalName, 0, lnLength);
+                    string scriptName = $"{scriptLogicalName[0]}.{scriptLogicalName[1]}.{scriptLogicalName[2]}.{scriptLogicalName[3]}.{scriptLogicalName[4]}.{scriptLogicalName[5]}";
+                    offset += lnLength;
+                    // Script Selector: long-unsigned
+                    if (data[offset++] != 0x12) throw new Exception("Expected long-unsigned tag for script_selector");
+                    int scriptSelector = (data[offset++] << 8) + data[offset++];
+                    actions.Add(new GXDLMSDayProfileAction(startTime, scriptName, Convert.ToUInt16(scriptSelector)));
+                }
+
+                GXDLMSDayProfile dayProfile = new GXDLMSDayProfile(dayId, actions.ToArray());
+                dayProfiles.Add(dayProfile);
+            }
+
+            return dayProfiles.ToArray();
+        }
+
     }
 }

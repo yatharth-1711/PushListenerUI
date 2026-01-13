@@ -1,10 +1,5 @@
-﻿using MeterReader.TestHelperClasses;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MeterReader.DLMSNetSerialCommunication
@@ -12,6 +7,7 @@ namespace MeterReader.DLMSNetSerialCommunication
     public static class WrapperInfo
     {
         public static bool IsCommDelayRequired { get; set; } = false;
+        public static bool IsLogXML { get; set; } = true;
         public static DataTable RefDataTable { get; } = new DataTable()
         {
             Columns =

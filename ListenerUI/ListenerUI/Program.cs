@@ -16,8 +16,8 @@ namespace ListenerUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
-            //Application.Run(new PushPacketDecrypter());
+            //Application.Run(new MainForm());
+            Application.Run(new PushPacketDecrypter());
         }
     }
 }

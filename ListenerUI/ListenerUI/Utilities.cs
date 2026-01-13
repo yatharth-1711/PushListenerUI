@@ -1,25 +1,15 @@
-﻿using AutoTest.FrameWork;
+﻿//using AutoTest.Data;
+using AutoTest.FrameWork;
 using AutoTest.FrameWork.Converts;
+//using AutoTestDesktopWFA.UserControlTree;
 using MeterComm;
-using Microsoft.CSharp;
-using Org.BouncyCastle.Utilities.Collections;
 using System;
-using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.IO.Ports;
 using System.Linq;
-using System.Reflection;
-using System.Security.Principal;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoTestDesktopWFA
@@ -823,18 +813,21 @@ namespace AutoTestDesktopWFA
         }
         #endregion
 
-        public static void ShowNotFoundElementsDialog(string dialogText, List<string> notFoundElements)
+        public static void ShowNotFoundElementsDialog(string dialogText, List<string> notFoundElements, int dialogheight = 400)
         {
             using (var dialog = new Form())
             {
                 dialog.ShowIcon = false; // Hide the icon of the dialog form
                 dialog.ControlBox = false; // Disable the control box of the dialog form
-                dialog.Size = new System.Drawing.Size(600, 400); // Set width to 400 and height to 300
+                dialog.Size = new System.Drawing.Size(600, dialogheight); // Set width to 400 and height to 300
                 dialog.Text = dialogText;
+                dialog.Font = new System.Drawing.Font("Courier New", 11f, FontStyle.Bold); // Set font size to 12
                 dialog.StartPosition = FormStartPosition.CenterScreen;
 
                 var textBox = new TextBox();
-                textBox.Font = new System.Drawing.Font(textBox.Font.FontFamily, 12); // Set font size to 12
+                textBox.BackColor = System.Drawing.Color.White;
+                //textBox.Font = new System.Drawing.Font(textBox.Font.FontFamily, 11); // Set font size to 12
+                textBox.Font = new System.Drawing.Font("Courier New", 11f, FontStyle.Regular); // Set font size to 12
                 textBox.Multiline = true;
                 textBox.ReadOnly = true;
                 textBox.ScrollBars = ScrollBars.Vertical;
@@ -850,7 +843,7 @@ namespace AutoTestDesktopWFA
                 var closeButton = new Button();
                 closeButton.Text = "Close";
                 closeButton.Height = 30; // Set the height to 50 pixels
-                closeButton.Font = new System.Drawing.Font(closeButton.Font.FontFamily, 12, System.Drawing.FontStyle.Bold); // Set font size to 12 and make it bold
+                closeButton.Font = new System.Drawing.Font(closeButton.Font.FontFamily, 11, System.Drawing.FontStyle.Bold); // Set font size to 12 and make it bold
                 closeButton.Dock = DockStyle.Bottom;
                 closeButton.Click += (sender, e) => dialog.Close();
 
@@ -932,7 +925,7 @@ namespace AutoTestDesktopWFA
                 MinimizeBox = false,
                 MaximizeBox = false,
                 Width = 500,
-                Height = 140
+                Height = 180
             };
             Label label1 = new Label
             {
@@ -971,18 +964,41 @@ namespace AutoTestDesktopWFA
             cmb2.SelectedIndex = 0;
             // Variable to hold the selected category
             string Vref_Imax = null;
-
+            if (formText.Contains("Select Occurrence and Restoration Time"))
+            {
+                //Initialize Checkbox
+                CheckBox checkBox = new CheckBox
+                {
+                    Location = new System.Drawing.Point(25, 70),
+                    Text = "Set Default"
+                };
+                checkBox.CheckedChanged += (sender, e) =>
+                {
+                    if (checkBox.Checked)
+                    {
+                        cmb1.Enabled = cmb2.Enabled = false;
+                    }
+                    else
+                    {
+                        cmb1.Enabled = cmb2.Enabled = true;
+                    }
+                };
+                dialog.Controls.Add(checkBox);
+            }
             // Initialize OK button
             Button btnOK = new Button
             {
                 Text = "OK",
                 Width = 100,
-                Location = new System.Drawing.Point(80, 70),
+                Location = new System.Drawing.Point(80, 110),
                 DialogResult = DialogResult.OK
             };
             btnOK.Click += (sender, e) =>
             {
-                Vref_Imax = cmb1.SelectedItem?.ToString() + "|" + cmb2.SelectedItem?.ToString();
+                if (cmb1.Enabled)
+                    Vref_Imax = cmb1.SelectedItem?.ToString() + "|" + cmb2.SelectedItem?.ToString() + "| 0";
+                else
+                    Vref_Imax = cmb1.SelectedItem?.ToString() + "|" + cmb2.SelectedItem?.ToString() + "| 1";
                 dialog.DialogResult = DialogResult.OK;
                 dialog.Close();
             };
@@ -993,7 +1009,7 @@ namespace AutoTestDesktopWFA
             {
                 Text = "Cancel",
                 Width = 100,
-                Location = new System.Drawing.Point(310, 70),
+                Location = new System.Drawing.Point(310, 110),
                 DialogResult = DialogResult.Cancel
             };
             btnCancel.Click += (sender, e) =>

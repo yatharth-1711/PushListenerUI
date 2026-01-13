@@ -233,6 +233,7 @@
     <Compile Include="DLMS\DLMSInfo.cs" />
     <Compile Include="DLMS\MeterSerialCommunication.cs" />
     <Compile Include="HelperClasses\CloneableDictionary.cs" />
+    <Compile Include="HelperClasses\DataGridViewOperations.cs" />
     <Compile Include="HelperClasses\DataTableOperations.cs" />
     <Compile Include="HelperClasses\DLMSParser.cs" />
     <Compile Include="HelperClasses\MeterIdentity.cs" />

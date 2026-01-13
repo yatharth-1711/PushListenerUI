@@ -1,20 +1,19 @@
-﻿using AutoTest.FrameWork.Converts;
+﻿using AutoTest.FrameWork;
+using AutoTest.FrameWork.Converts;
+using Gurux.DLMS.Enums;
+using ListenerUI.HelperClasses;
 using log4net;
-using MeterComm.DLMS;
 using MeterComm;
+using MeterComm.DLMS;
+using MeterReader.DLMSNetSerialCommunication;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Util;
-using AutoTest.FrameWork;
-using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using MeterReader.DLMSNetSerialCommunication;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MeterReader.TestHelperClasses
 {
@@ -31,6 +30,7 @@ namespace MeterReader.TestHelperClasses
         public static bool IsSelfRegPushAvailable = false;
         public static bool IsBillAvailable = false;
         public static bool IsTamperPushAvailable = false;
+        public static bool IsCurrentBillPushAvailable = false;
         public static bool IsPushWriteRequired = true;
 
         public static DataTable InstantDT { get; set; } = new DataTable();
@@ -40,8 +40,10 @@ namespace MeterReader.TestHelperClasses
         public static DataTable SelfRegDT { get; set; } = new DataTable();
         public static DataTable BillDT { get; set; } = new DataTable();
         public static DataTable TamperDT { get; set; } = new DataTable();
+
+        public static DataTable CurrentBillDT { get; set; } = new DataTable();
         public static string[] columnArray { get; } = { "SN", "DESCRIPTION", "CLASS", "OBIS", "ATTRIBUTE INDEX", "DATA INDEX", "DATA ANNOTATION INDIVIDUAL", "SCALER MUTIPLIER", "UNIT", "DATA", "VALUE", "REMARK" };
-        public static DataTable[] PushSetupDTArray { get; set; } = { InstantDT, AlertDT, LSDT, DEDT, SelfRegDT, BillDT, TamperDT };
+        public static DataTable[] PushSetupDTArray { get; set; } = { InstantDT, AlertDT, LSDT, DEDT, SelfRegDT, BillDT, TamperDT, CurrentBillDT };
         public static List<string> pushSetupList = new List<string>() {
                                                     "0.0.25.9.0.255",
                                                     "0.4.25.9.0.255",
@@ -49,12 +51,26 @@ namespace MeterReader.TestHelperClasses
                                                     "0.6.25.9.0.255",
                                                     "0.130.25.9.0.255",
                                                     "0.132.25.9.0.255",
-                                                    "0.134.25.9.0.255"};
+                                                    "0.134.25.9.0.255",
+                                                    "0.0.25.9.129.255"};
         #endregion
 
         /// <summary>
         /// This will initialize all Push Setup DataTable
         /// </summary>
+        public static void IniAllPushSetupTableColumns()
+        {
+            try
+            {
+                foreach (var dt in PushSetupDTArray)
+                    InitializePushTable(dt);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+            }
+        }
+        /*
         public static void IniAllPushSetupTableColumns()
         {
             try
@@ -68,7 +84,7 @@ namespace MeterReader.TestHelperClasses
                         PushSetupDTArray[i].Columns.Add(colName, typeof(string));
                     }
                     PushSetupDTArray[i].AcceptChanges();
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -76,7 +92,15 @@ namespace MeterReader.TestHelperClasses
             }
 
         }
+        */
+        private static void InitializePushTable(DataTable dt)
+        {
+            dt.Clear();
+            dt.Columns.Clear();
 
+            foreach (string col in columnArray)
+                dt.Columns.Add(col, typeof(string));
+        }
         /// <summary>
         /// It reads all available Push Setup objects and update the status of available Push Setup object and corresponding data table. It takes test configuration as input.
         /// </summary>
@@ -107,6 +131,7 @@ namespace MeterReader.TestHelperClasses
                     readStatus = false;
                     return readStatus;
                 }
+                PushPacketManager.DeviceID = parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSObj, 1, "0.0.96.1.2.255", 2));//Device ID
                 foreach (string selectedOBIS in pushSetupList)
                 {
                     obisData = "";
@@ -153,6 +178,11 @@ namespace MeterReader.TestHelperClasses
                             IsTamperPushAvailable = true;
                             FillTable(ref DLMSObj, ref parse, TamperDT, objectData);
                             break;
+                        ///Current Bill
+                        case "0.0.25.9.129.255":
+                            IsCurrentBillPushAvailable = true;
+                            FillTable(ref DLMSObj, ref parse, CurrentBillDT, objectData);
+                            break;
                     }
                 }
                 DLMSObj.SetDISCMode();
@@ -160,6 +190,7 @@ namespace MeterReader.TestHelperClasses
             catch (Exception ex)
             {
                 log.Error(ex.Message.ToString());
+                readStatus = false;
             }
             finally
             {
@@ -167,10 +198,96 @@ namespace MeterReader.TestHelperClasses
                 DLMSObj.Dispose();
                 previousConfig.ApplyTestConfiguration();
                 _testConfig = previousConfig.Clone();
-                SetGetFromMeter.Wait(_testConfig.DISCToNDMTimeout);
+                //SetGetFromMeter.Wait(_testConfig.DISCToNDMTimeout);
             }
             return readStatus;
         }
+        /// <summary>
+        /// It reads all available Push Setup objects and update the status of available Push Setup object and corresponding data table. It takes test configuration as input.
+        /// </summary>
+        /// <param name="_testConfig"></param>
+        public static bool ReadPushSetup(ref WrapperComm WrapperObj)
+        {
+            bool readStatus = true;
+            IniAllPushSetupTableColumns();
+            DLMSParser parse = new DLMSParser();
+            bool SignOnDLMSStatus = false;
+            string obisData = "";
+            string objectData = "";
+            try
+            {
+                if (SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, (ObjectType)1, "0.0.96.1.2.255", 2, out objectData))
+                    PushPacketManager.DeviceID = parse.GetProfileValueString(objectData.Trim());//Device ID
+                foreach (string selectedOBIS in pushSetupList)
+                {
+                    obisData = "";
+                    if (!SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, (ObjectType)40, selectedOBIS, 1, out obisData))
+                    {
+                        readStatus = false;
+                        return readStatus;
+                    }
+                    obisData = parse.GetProfileValueString(obisData);
+                    if (!SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, (ObjectType)40, selectedOBIS, 2, out objectData))
+                    {
+                        readStatus = false;
+                        return readStatus;
+                    }
+                    switch (obisData)
+                    {
+                        ///Instant
+                        case "0.0.25.9.0.255":
+                            IsInstantPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, InstantDT, objectData);
+                            break;
+                        ///Alert
+                        case "0.4.25.9.0.255":
+                            IsAlertPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, AlertDT, objectData);
+                            break;
+                        ///LS
+                        case "0.5.25.9.0.255":
+                            IsLSPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, LSDT, objectData);
+                            break;
+                        ///DE
+                        case "0.6.25.9.0.255":
+                            IsDEPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, DEDT, objectData);
+                            break;
+                        ///Self
+                        case "0.130.25.9.0.255":
+                            IsSelfRegPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, SelfRegDT, objectData);
+                            break;
+                        ///Bill
+                        case "0.132.25.9.0.255":
+                            IsBillAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, BillDT, objectData);
+                            break;
+                        ///Tamper
+                        case "0.134.25.9.0.255":
+                            IsTamperPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, TamperDT, objectData);
+                            break;
+                        ///Current Bill
+                        case "0.0.25.9.129.255":
+                            IsCurrentBillPushAvailable = true;
+                            FillTable(ref WrapperObj, ref parse, CurrentBillDT, objectData);
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+            }
+            finally
+            {
+                WrapperInfo.IsCommDelayRequired = false;
+            }
+            return readStatus;
+        }
+
 
         /// <summary>
         /// Write the Push Setup objects destination address according to object available status. It takes test configuration as input.
@@ -261,7 +378,7 @@ namespace MeterReader.TestHelperClasses
         /// <param name="recData"></param>
         private static void FillTable(ref DLMSComm dLMSComm, ref DLMSParser parse, DataTable dt, string recData)
         {
-            if (recData == "0100")
+            if (string.IsNullOrEmpty(recData) || recData == "0100")
                 return;
             if (dt.Rows.Count > 0)
                 dt.Rows.Clear();
@@ -304,6 +421,77 @@ namespace MeterReader.TestHelperClasses
         }
 
         /// <summary>
+        /// Ii takes DLMSComm ref object, DLMSParser ref object, DataTable in which data need to be fill and Array data in hex form.
+        /// </summary>
+        /// <param name="dLMSComm"></param>
+        /// <param name="parse"></param>
+        /// <param name="dt"></param>
+        /// <param name="recData"></param>
+        private static void FillTable(ref WrapperComm WrapperObj, ref DLMSParser parse, DataTable dt, string recData)
+        {
+            if (string.IsNullOrEmpty(recData) || recData == "0100")
+                return;
+            if (dt.Rows.Count > 0)
+                dt.Rows.Clear();
+            int classID = 0, attIndex = 0, dataIndex = 0;
+            string name = "", OBIS = "", dataAnnot = "", scalerData = "", scaler = "", unit = "";
+            List<string> ObjectList = new List<string>();
+            string[] splittedArray = Regex.Split(recData, "020412");
+            int objectCount = Convert.ToInt32(splittedArray[0].Trim().Substring(2), 16);
+            for (int i = 1; i < splittedArray.Length; i++)
+            {
+                classID = Convert.ToInt32(splittedArray[i].Trim().Substring(0, 4), 16);
+                OBIS = parse.GetProfileValueString(splittedArray[i].Trim().Substring(4, 16));
+                attIndex = Convert.ToInt32(splittedArray[i].Trim().Substring(22, 2), 16);
+                dataIndex = Convert.ToInt32(splittedArray[i].Trim().Substring(26, 4), 16);
+                name = parse.GetParameterName(classID.ToString(), OBIS);
+                if (classID == 3 || classID == 4 || classID == 5)
+                {
+                    if (SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, (ObjectType)classID, OBIS, 3, out scalerData))
+                    {
+                        if (scalerData.Length > 10)
+                        {
+                            scaler = ProfileSheetConfiguration.standardScalerList.FirstOrDefault(s => s.Contains($"{scalerData.Substring(6, 2)}"));
+                            unit = ProfileSheetConfiguration.standardUnitList.FirstOrDefault(s => s.Contains($"{scalerData.Substring(10, 2)}"));
+                        }
+                        else
+                        {
+                            scaler = "";
+                            unit = "";
+                        }
+                    }
+                    else
+                    {
+                        scaler = "";
+                        unit = "";
+                    }
+                }
+                else
+                {
+                    scaler = "";
+                    unit = "";
+                }
+                if (classID == 7 && attIndex == 2)
+                    dataAnnot = "01:array";
+                else
+                {
+                    if (SetGetFromMeter.GetDataFromWrapperObject(ref WrapperObj, (ObjectType)classID, OBIS, attIndex, out dataAnnot))
+                    {
+                        if (dataAnnot.Length > 2)
+                        {
+                            dataAnnot = dataAnnot.Substring(0, 2);
+                            dataAnnot = ProfileSheetConfiguration.commonDataTypesList.FirstOrDefault(s => s.Contains($"{dataAnnot}"));
+                        }
+                    }
+
+                }
+                //"SN", "DESCRIPTION", "CLASS", "OBIS", "ATTRIBUTE INDEX", "DATA INDEX", "DATA ANNOTATION INDIVIDUAL", "SCALER MUTIPLIER", "UNIT", "DATA", "VALUE", "REMARK"
+                dt.Rows.Add(i, name, classID, OBIS, attIndex, dataIndex, dataAnnot, scaler, unit, "", "", "");
+            }
+            dt.AcceptChanges();
+        }
+
+        /// <summary>
         /// Clear All the status of the Push Setup objects and clear all the objects data table to blank data table without schema.
         /// </summary>
         public static void ClearPushSetup()
@@ -315,10 +503,19 @@ namespace MeterReader.TestHelperClasses
             IsSelfRegPushAvailable = false;
             IsBillAvailable = false;
             IsTamperPushAvailable = false;
+            IsCurrentBillPushAvailable = false;
+            foreach (DataTable dt in PushSetupDTArray)
+            {
+                dt.Clear();          // Remove rows
+                dt.Columns.Clear();  // Remove columns
+                dt.AcceptChanges();
+            }
+            /*
             for (int i = 0; i < PushSetupDTArray.Length; i++)
             {
                 PushSetupDTArray[i] = new DataTable();
             }
+            */
         }
 
         /// <summary>
