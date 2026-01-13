@@ -245,50 +245,6 @@ namespace ListenerUI
                 cbXML.Checked = true; cbHexDecrypted.Checked = true; cbHexCiphered.Checked = true;
             }
         }
-        /*private void btnNotifyDecryptSettings_Click(object sender, EventArgs e)
-        {
-            // Create popup form
-            Form popup = new Form();
-            popup.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            popup.StartPosition = FormStartPosition.Manual;
-            popup.Size = new Size(300, 170);
-            popup.ShowInTaskbar = false;
-
-            // Position just below the button (convert to screen coordinates)
-            var screenPoint = btnNotifyDecryptSettings.PointToScreen(new Point(0, btnNotifyDecryptSettings.Height));
-            popup.Location = screenPoint;
-
-            // Labels + Textboxes
-            Label lblEk = new Label { Text = "Ek", Location = new Point(10, 15), AutoSize = true };
-            TextBox txtEk = new TextBox { Location = new Point(110, 12), Width = 160 };
-
-            Label lblAk = new Label { Text = "Ak", Location = new Point(10, 50), AutoSize = true };
-            TextBox txtAk = new TextBox { Location = new Point(110, 47), Width = 160 };
-
-            Label lblSystem = new Label { Text = "System Title", Location = new Point(10, 85), AutoSize = true };
-            TextBox txtSystem = new TextBox { Location = new Point(110, 82), Width = 160 };
-
-            Button btnOk = new Button { Text = "OK", Location = new Point(195, 115), Width = 75 };
-
-            btnOk.Click += (s, ev) =>
-            {
-                TCPTestNotifier.notify_EK = txtEk.Text.Trim();
-                TCPTestNotifier.notify_AK = txtAk.Text.Trim();
-                TCPTestNotifier.notify_SysT = txtSystem.Text.Trim();
-                TCPTestNotifier.useSeparateCredentials = true;
-                popup.Close();
-            };
-
-            popup.Controls.AddRange(new Control[]
-            {
-                lblEk, txtEk,
-                lblAk, txtAk,
-                lblSystem, txtSystem,
-                btnOk
-            });
-
-            popup.Show();
-        }*/
         private void btnNotifyDecryptSettings_Click(object sender, EventArgs e)
         {
             var screenPoint = btnNotifyDecryptSettings.PointToScreen(

@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PushPacketDecrypter));
             this.tablelayout_Header = new System.Windows.Forms.TableLayoutPanel();
             this.headerTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
@@ -73,12 +74,12 @@
             this.pnlFileHeader = new System.Windows.Forms.Panel();
             this.lblFilePath = new System.Windows.Forms.Label();
             this.tabResults = new System.Windows.Forms.TabControl();
+            this.tabMP = new System.Windows.Forms.TabPage();
+            this.dgPacketsDetail = new System.Windows.Forms.DataGridView();
             this.tabPlain = new System.Windows.Forms.TabPage();
             this.txtPlainResult = new System.Windows.Forms.RichTextBox();
             this.tabXML = new System.Windows.Forms.TabPage();
             this.txtXmlResult = new System.Windows.Forms.RichTextBox();
-            this.tabMP = new System.Windows.Forms.TabPage();
-            this.dgPacketsDetail = new System.Windows.Forms.DataGridView();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -102,10 +103,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgPacketsSummary)).BeginInit();
             this.pnlFileHeader.SuspendLayout();
             this.tabResults.SuspendLayout();
-            this.tabPlain.SuspendLayout();
-            this.tabXML.SuspendLayout();
             this.tabMP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPacketsDetail)).BeginInit();
+            this.tabPlain.SuspendLayout();
+            this.tabXML.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -252,6 +253,7 @@
             this.btnExport.Text = "💾 Export Data";
             this.toolTip1.SetToolTip(this.btnExport, "Export decrypted packets to file");
             this.btnExport.UseVisualStyleBackColor = false;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnClear
             // 
@@ -500,7 +502,7 @@
             this.btnTotalCount.Name = "btnTotalCount";
             this.btnTotalCount.Size = new System.Drawing.Size(142, 55);
             this.btnTotalCount.TabIndex = 27;
-            this.btnTotalCount.Text = "📊 Total\r\n0 Packets";
+            this.btnTotalCount.Text = "Total\r\n0 Packets";
             this.toolTip1.SetToolTip(this.btnTotalCount, "Show all packets");
             this.btnTotalCount.UseVisualStyleBackColor = false;
             this.btnTotalCount.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -520,7 +522,7 @@
             this.btnTamper.Name = "btnTamper";
             this.btnTamper.Size = new System.Drawing.Size(142, 55);
             this.btnTamper.TabIndex = 26;
-            this.btnTamper.Text = "🔴 Tamper\r\n0";
+            this.btnTamper.Text = "Tamper\r\n0";
             this.toolTip1.SetToolTip(this.btnTamper, "Filter by Tamper packets");
             this.btnTamper.UseVisualStyleBackColor = false;
             this.btnTamper.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -540,7 +542,7 @@
             this.btnAlert.Name = "btnAlert";
             this.btnAlert.Size = new System.Drawing.Size(142, 55);
             this.btnAlert.TabIndex = 25;
-            this.btnAlert.Text = "⚠️ Alert\r\n0";
+            this.btnAlert.Text = "Alert\r\n0";
             this.toolTip1.SetToolTip(this.btnAlert, "Filter by Alert packets");
             this.btnAlert.UseVisualStyleBackColor = false;
             this.btnAlert.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -560,7 +562,7 @@
             this.btnCB.Name = "btnCB";
             this.btnCB.Size = new System.Drawing.Size(142, 55);
             this.btnCB.TabIndex = 24;
-            this.btnCB.Text = "💵 Current Bill\r\n0";
+            this.btnCB.Text = "Current Bill\r\n0";
             this.toolTip1.SetToolTip(this.btnCB, "Filter by Current Bill packets");
             this.btnCB.UseVisualStyleBackColor = false;
             this.btnCB.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -580,7 +582,7 @@
             this.btnSR.Name = "btnSR";
             this.btnSR.Size = new System.Drawing.Size(142, 55);
             this.btnSR.TabIndex = 23;
-            this.btnSR.Text = "📝 Self Reg\r\n0";
+            this.btnSR.Text = "Self Reg.\r\n0";
             this.toolTip1.SetToolTip(this.btnSR, "Filter by Self Registration packets");
             this.btnSR.UseVisualStyleBackColor = false;
             this.btnSR.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -600,7 +602,7 @@
             this.btnBill.Name = "btnBill";
             this.btnBill.Size = new System.Drawing.Size(142, 55);
             this.btnBill.TabIndex = 22;
-            this.btnBill.Text = "💳 Billing\r\n0";
+            this.btnBill.Text = "Billing\r\n0";
             this.toolTip1.SetToolTip(this.btnBill, "Filter by Billing packets");
             this.btnBill.UseVisualStyleBackColor = false;
             this.btnBill.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -620,7 +622,7 @@
             this.btnDE.Name = "btnDE";
             this.btnDE.Size = new System.Drawing.Size(142, 55);
             this.btnDE.TabIndex = 21;
-            this.btnDE.Text = "📅 Daily Energy\r\n0";
+            this.btnDE.Text = "Daily Energy\r\n0";
             this.toolTip1.SetToolTip(this.btnDE, "Filter by Daily Energy packets");
             this.btnDE.UseVisualStyleBackColor = false;
             this.btnDE.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -640,7 +642,7 @@
             this.btnLS.Name = "btnLS";
             this.btnLS.Size = new System.Drawing.Size(142, 55);
             this.btnLS.TabIndex = 20;
-            this.btnLS.Text = "📈 Load Survey\r\n0";
+            this.btnLS.Text = "Load Survey\r\n0";
             this.toolTip1.SetToolTip(this.btnLS, "Filter by Load Survey packets");
             this.btnLS.UseVisualStyleBackColor = false;
             this.btnLS.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -660,7 +662,7 @@
             this.btnInstant.Name = "btnInstant";
             this.btnInstant.Size = new System.Drawing.Size(142, 55);
             this.btnInstant.TabIndex = 19;
-            this.btnInstant.Text = "⚡ Instant\r\n0";
+            this.btnInstant.Text = "Instant\r\n0";
             this.toolTip1.SetToolTip(this.btnInstant, "Filter by Instant packets");
             this.btnInstant.UseVisualStyleBackColor = false;
             this.btnInstant.Click += new System.EventHandler(this.BtnFilterbyType_Click);
@@ -699,26 +701,26 @@
             this.dgPacketsSummary.BackgroundColor = System.Drawing.Color.White;
             this.dgPacketsSummary.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgPacketsSummary.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle16.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgPacketsSummary.ColumnHeadersHeight = 40;
             this.dgPacketsSummary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            dataGridViewCellStyle17.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgPacketsSummary.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPacketsSummary.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgPacketsSummary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgPacketsSummary.EnableHeadersVisualStyles = false;
             this.dgPacketsSummary.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
@@ -727,14 +729,14 @@
             this.dgPacketsSummary.MultiSelect = false;
             this.dgPacketsSummary.Name = "dgPacketsSummary";
             this.dgPacketsSummary.ReadOnly = true;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgPacketsSummary.RowHeadersVisible = false;
             this.dgPacketsSummary.RowHeadersWidth = 51;
             this.dgPacketsSummary.RowTemplate.Height = 32;
@@ -765,7 +767,7 @@
             this.lblFilePath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFilePath.MinimumSize = new System.Drawing.Size(100, 23);
             this.lblFilePath.Name = "lblFilePath";
-            this.lblFilePath.Size = new System.Drawing.Size(1079, 31);
+            this.lblFilePath.Size = new System.Drawing.Size(863, 25);
             this.lblFilePath.TabIndex = 10;
             this.lblFilePath.Text = "📄 File: No file loaded";
             this.lblFilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -786,60 +788,6 @@
             this.tabResults.Size = new System.Drawing.Size(457, 308);
             this.tabResults.TabIndex = 14;
             // 
-            // tabPlain
-            // 
-            this.tabPlain.BackColor = System.Drawing.Color.White;
-            this.tabPlain.Controls.Add(this.txtPlainResult);
-            this.tabPlain.Location = new System.Drawing.Point(4, 36);
-            this.tabPlain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPlain.Name = "tabPlain";
-            this.tabPlain.Padding = new System.Windows.Forms.Padding(8);
-            this.tabPlain.Size = new System.Drawing.Size(449, 264);
-            this.tabPlain.TabIndex = 0;
-            this.tabPlain.Text = "📄 Decrypted Packets";
-            // 
-            // txtPlainResult
-            // 
-            this.txtPlainResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
-            this.txtPlainResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPlainResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPlainResult.Font = new System.Drawing.Font("Consolas", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPlainResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtPlainResult.Location = new System.Drawing.Point(8, 8);
-            this.txtPlainResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtPlainResult.Name = "txtPlainResult";
-            this.txtPlainResult.ReadOnly = true;
-            this.txtPlainResult.Size = new System.Drawing.Size(433, 248);
-            this.txtPlainResult.TabIndex = 0;
-            this.txtPlainResult.Text = "";
-            // 
-            // tabXML
-            // 
-            this.tabXML.BackColor = System.Drawing.Color.White;
-            this.tabXML.Controls.Add(this.txtXmlResult);
-            this.tabXML.Location = new System.Drawing.Point(4, 36);
-            this.tabXML.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabXML.Name = "tabXML";
-            this.tabXML.Padding = new System.Windows.Forms.Padding(8);
-            this.tabXML.Size = new System.Drawing.Size(449, 264);
-            this.tabXML.TabIndex = 1;
-            this.tabXML.Text = "📋 XML View";
-            // 
-            // txtXmlResult
-            // 
-            this.txtXmlResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
-            this.txtXmlResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtXmlResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXmlResult.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtXmlResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtXmlResult.Location = new System.Drawing.Point(8, 8);
-            this.txtXmlResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtXmlResult.Name = "txtXmlResult";
-            this.txtXmlResult.ReadOnly = true;
-            this.txtXmlResult.Size = new System.Drawing.Size(433, 248);
-            this.txtXmlResult.TabIndex = 0;
-            this.txtXmlResult.Text = "";
-            // 
             // tabMP
             // 
             this.tabMP.BackColor = System.Drawing.Color.White;
@@ -847,7 +795,7 @@
             this.tabMP.Location = new System.Drawing.Point(4, 36);
             this.tabMP.Margin = new System.Windows.Forms.Padding(0);
             this.tabMP.Name = "tabMP";
-            this.tabMP.Padding = new System.Windows.Forms.Padding(8);
+            this.tabMP.Padding = new System.Windows.Forms.Padding(4);
             this.tabMP.Size = new System.Drawing.Size(449, 268);
             this.tabMP.TabIndex = 2;
             this.tabMP.Text = "📦 Packet Detail";
@@ -863,30 +811,30 @@
             this.dgPacketsDetail.BackgroundColor = System.Drawing.Color.White;
             this.dgPacketsDetail.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgPacketsDetail.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle19.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsDetail.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsDetail.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgPacketsDetail.ColumnHeadersHeight = 38;
             this.dgPacketsDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle20.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            dataGridViewCellStyle20.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
-            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsDetail.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsDetail.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgPacketsDetail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgPacketsDetail.EnableHeadersVisualStyles = false;
             this.dgPacketsDetail.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.dgPacketsDetail.Location = new System.Drawing.Point(8, 8);
+            this.dgPacketsDetail.Location = new System.Drawing.Point(4, 4);
             this.dgPacketsDetail.Margin = new System.Windows.Forms.Padding(0);
             this.dgPacketsDetail.Name = "dgPacketsDetail";
             this.dgPacketsDetail.ReadOnly = true;
@@ -894,8 +842,62 @@
             this.dgPacketsDetail.RowHeadersWidth = 50;
             this.dgPacketsDetail.RowTemplate.Height = 28;
             this.dgPacketsDetail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgPacketsDetail.Size = new System.Drawing.Size(433, 252);
+            this.dgPacketsDetail.Size = new System.Drawing.Size(441, 260);
             this.dgPacketsDetail.TabIndex = 7;
+            // 
+            // tabPlain
+            // 
+            this.tabPlain.BackColor = System.Drawing.Color.White;
+            this.tabPlain.Controls.Add(this.txtPlainResult);
+            this.tabPlain.Location = new System.Drawing.Point(4, 36);
+            this.tabPlain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPlain.Name = "tabPlain";
+            this.tabPlain.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPlain.Size = new System.Drawing.Size(449, 268);
+            this.tabPlain.TabIndex = 0;
+            this.tabPlain.Text = "📄 Decrypted Packets";
+            // 
+            // txtPlainResult
+            // 
+            this.txtPlainResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
+            this.txtPlainResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPlainResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPlainResult.Font = new System.Drawing.Font("Consolas", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPlainResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.txtPlainResult.Location = new System.Drawing.Point(4, 4);
+            this.txtPlainResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtPlainResult.Name = "txtPlainResult";
+            this.txtPlainResult.ReadOnly = true;
+            this.txtPlainResult.Size = new System.Drawing.Size(441, 260);
+            this.txtPlainResult.TabIndex = 0;
+            this.txtPlainResult.Text = "";
+            // 
+            // tabXML
+            // 
+            this.tabXML.BackColor = System.Drawing.Color.White;
+            this.tabXML.Controls.Add(this.txtXmlResult);
+            this.tabXML.Location = new System.Drawing.Point(4, 36);
+            this.tabXML.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabXML.Name = "tabXML";
+            this.tabXML.Padding = new System.Windows.Forms.Padding(4);
+            this.tabXML.Size = new System.Drawing.Size(449, 268);
+            this.tabXML.TabIndex = 1;
+            this.tabXML.Text = "📋 XML View";
+            // 
+            // txtXmlResult
+            // 
+            this.txtXmlResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
+            this.txtXmlResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtXmlResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtXmlResult.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtXmlResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.txtXmlResult.Location = new System.Drawing.Point(4, 4);
+            this.txtXmlResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtXmlResult.Name = "txtXmlResult";
+            this.txtXmlResult.ReadOnly = true;
+            this.txtXmlResult.Size = new System.Drawing.Size(441, 260);
+            this.txtXmlResult.TabIndex = 0;
+            this.txtXmlResult.Text = "";
             // 
             // splitter2
             // 
@@ -973,10 +975,11 @@
             this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.tablelayout_Header);
             this.Controls.Add(this.statusStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1200, 700);
             this.Name = "PushPacketDecrypter";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Push Packet Decrypter - Professional Edition v1.0";
+            this.Text = "Push Packet Decrypter v1.0";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.PushPacketDecrypter_Load);
             this.tablelayout_Header.ResumeLayout(false);
@@ -996,10 +999,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgPacketsSummary)).EndInit();
             this.pnlFileHeader.ResumeLayout(false);
             this.tabResults.ResumeLayout(false);
-            this.tabPlain.ResumeLayout(false);
-            this.tabXML.ResumeLayout(false);
             this.tabMP.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgPacketsDetail)).EndInit();
+            this.tabPlain.ResumeLayout(false);
+            this.tabXML.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);

@@ -57,6 +57,7 @@ namespace ListenerUI
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.splitConMain = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -475,7 +476,7 @@ namespace ListenerUI
             this.tbpLS.Location = new System.Drawing.Point(4, 39);
             this.tbpLS.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpLS.Name = "tbpLS";
-            this.tbpLS.Size = new System.Drawing.Size(1098, 523);
+            this.tbpLS.Size = new System.Drawing.Size(1110, 523);
             this.tbpLS.TabIndex = 1;
             this.tbpLS.Text = "Load Survey";
             this.tbpLS.UseVisualStyleBackColor = true;
@@ -495,7 +496,7 @@ namespace ListenerUI
             // splitCon_LS.Panel2
             // 
             this.splitCon_LS.Panel2.Controls.Add(this.chart_LS);
-            this.splitCon_LS.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_LS.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_LS.SplitterDistance = 230;
             this.splitCon_LS.TabIndex = 6;
             // 
@@ -524,7 +525,7 @@ namespace ListenerUI
             this.dgLS.RowHeadersWidth = 51;
             this.dgLS.RowTemplate.Height = 24;
             this.dgLS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgLS.Size = new System.Drawing.Size(1098, 230);
+            this.dgLS.Size = new System.Drawing.Size(1110, 230);
             this.dgLS.TabIndex = 2;
             // 
             // chart_LS
@@ -541,7 +542,7 @@ namespace ListenerUI
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart_LS.Series.Add(series2);
-            this.chart_LS.Size = new System.Drawing.Size(1098, 289);
+            this.chart_LS.Size = new System.Drawing.Size(1110, 289);
             this.chart_LS.TabIndex = 3;
             this.chart_LS.Text = "chart1";
             // 
@@ -552,7 +553,7 @@ namespace ListenerUI
             this.tbpDE.Location = new System.Drawing.Point(4, 39);
             this.tbpDE.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpDE.Name = "tbpDE";
-            this.tbpDE.Size = new System.Drawing.Size(1098, 523);
+            this.tbpDE.Size = new System.Drawing.Size(1110, 523);
             this.tbpDE.TabIndex = 2;
             this.tbpDE.Text = "Daily Energy";
             this.tbpDE.UseVisualStyleBackColor = true;
@@ -572,7 +573,7 @@ namespace ListenerUI
             // splitCon_DE.Panel2
             // 
             this.splitCon_DE.Panel2.Controls.Add(this.chart_DE);
-            this.splitCon_DE.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_DE.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_DE.SplitterDistance = 231;
             this.splitCon_DE.TabIndex = 7;
             // 
@@ -600,7 +601,7 @@ namespace ListenerUI
             this.dgDE.RowHeadersWidth = 51;
             this.dgDE.RowTemplate.Height = 24;
             this.dgDE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgDE.Size = new System.Drawing.Size(1098, 231);
+            this.dgDE.Size = new System.Drawing.Size(1110, 231);
             this.dgDE.TabIndex = 2;
             // 
             // chart_DE
@@ -617,7 +618,7 @@ namespace ListenerUI
             series3.Legend = "Legend1";
             series3.Name = "Series1";
             this.chart_DE.Series.Add(series3);
-            this.chart_DE.Size = new System.Drawing.Size(1098, 288);
+            this.chart_DE.Size = new System.Drawing.Size(1110, 288);
             this.chart_DE.TabIndex = 3;
             this.chart_DE.Text = "chart1";
             // 
@@ -628,7 +629,7 @@ namespace ListenerUI
             this.tbpSR.Location = new System.Drawing.Point(4, 39);
             this.tbpSR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpSR.Name = "tbpSR";
-            this.tbpSR.Size = new System.Drawing.Size(1098, 523);
+            this.tbpSR.Size = new System.Drawing.Size(1110, 523);
             this.tbpSR.TabIndex = 3;
             this.tbpSR.Text = "Self Registration";
             this.tbpSR.UseVisualStyleBackColor = true;
@@ -648,7 +649,7 @@ namespace ListenerUI
             // splitCon_SR.Panel2
             // 
             this.splitCon_SR.Panel2.Controls.Add(this.chart_SR);
-            this.splitCon_SR.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_SR.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_SR.SplitterDistance = 231;
             this.splitCon_SR.TabIndex = 7;
             // 
@@ -676,7 +677,7 @@ namespace ListenerUI
             this.dgSR.RowHeadersWidth = 51;
             this.dgSR.RowTemplate.Height = 24;
             this.dgSR.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgSR.Size = new System.Drawing.Size(1098, 231);
+            this.dgSR.Size = new System.Drawing.Size(1110, 231);
             this.dgSR.TabIndex = 2;
             // 
             // chart_SR
@@ -693,7 +694,7 @@ namespace ListenerUI
             series4.Legend = "Legend1";
             series4.Name = "Series1";
             this.chart_SR.Series.Add(series4);
-            this.chart_SR.Size = new System.Drawing.Size(1098, 288);
+            this.chart_SR.Size = new System.Drawing.Size(1110, 288);
             this.chart_SR.TabIndex = 3;
             this.chart_SR.Text = "chart1";
             // 
@@ -704,7 +705,7 @@ namespace ListenerUI
             this.tbpBill.Location = new System.Drawing.Point(4, 39);
             this.tbpBill.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpBill.Name = "tbpBill";
-            this.tbpBill.Size = new System.Drawing.Size(1098, 523);
+            this.tbpBill.Size = new System.Drawing.Size(1110, 523);
             this.tbpBill.TabIndex = 4;
             this.tbpBill.Text = "Billing";
             this.tbpBill.UseVisualStyleBackColor = true;
@@ -724,7 +725,7 @@ namespace ListenerUI
             // splitCon_Bill.Panel2
             // 
             this.splitCon_Bill.Panel2.Controls.Add(this.chart_Bill);
-            this.splitCon_Bill.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_Bill.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_Bill.SplitterDistance = 231;
             this.splitCon_Bill.TabIndex = 7;
             // 
@@ -752,7 +753,7 @@ namespace ListenerUI
             this.dgBill.RowHeadersWidth = 51;
             this.dgBill.RowTemplate.Height = 24;
             this.dgBill.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgBill.Size = new System.Drawing.Size(1098, 231);
+            this.dgBill.Size = new System.Drawing.Size(1110, 231);
             this.dgBill.TabIndex = 2;
             // 
             // chart_Bill
@@ -769,7 +770,7 @@ namespace ListenerUI
             series5.Legend = "Legend1";
             series5.Name = "Series1";
             this.chart_Bill.Series.Add(series5);
-            this.chart_Bill.Size = new System.Drawing.Size(1098, 288);
+            this.chart_Bill.Size = new System.Drawing.Size(1110, 288);
             this.chart_Bill.TabIndex = 3;
             this.chart_Bill.Text = "chart1";
             // 
@@ -780,7 +781,7 @@ namespace ListenerUI
             this.tbpCB.Location = new System.Drawing.Point(4, 39);
             this.tbpCB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpCB.Name = "tbpCB";
-            this.tbpCB.Size = new System.Drawing.Size(1098, 523);
+            this.tbpCB.Size = new System.Drawing.Size(1110, 523);
             this.tbpCB.TabIndex = 5;
             this.tbpCB.Text = "Current Bill";
             this.tbpCB.UseVisualStyleBackColor = true;
@@ -800,7 +801,7 @@ namespace ListenerUI
             // splitCon_CB.Panel2
             // 
             this.splitCon_CB.Panel2.Controls.Add(this.chart_CB);
-            this.splitCon_CB.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_CB.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_CB.SplitterDistance = 231;
             this.splitCon_CB.TabIndex = 7;
             // 
@@ -828,7 +829,7 @@ namespace ListenerUI
             this.dgCB.RowHeadersWidth = 51;
             this.dgCB.RowTemplate.Height = 24;
             this.dgCB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgCB.Size = new System.Drawing.Size(1098, 231);
+            this.dgCB.Size = new System.Drawing.Size(1110, 231);
             this.dgCB.TabIndex = 2;
             // 
             // chart_CB
@@ -845,7 +846,7 @@ namespace ListenerUI
             series6.Legend = "Legend1";
             series6.Name = "Series1";
             this.chart_CB.Series.Add(series6);
-            this.chart_CB.Size = new System.Drawing.Size(1098, 288);
+            this.chart_CB.Size = new System.Drawing.Size(1110, 288);
             this.chart_CB.TabIndex = 3;
             this.chart_CB.Text = "chart1";
             // 
@@ -856,7 +857,7 @@ namespace ListenerUI
             this.tbpAlert.Location = new System.Drawing.Point(4, 39);
             this.tbpAlert.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpAlert.Name = "tbpAlert";
-            this.tbpAlert.Size = new System.Drawing.Size(1098, 523);
+            this.tbpAlert.Size = new System.Drawing.Size(1110, 523);
             this.tbpAlert.TabIndex = 6;
             this.tbpAlert.Text = "Alert";
             this.tbpAlert.UseVisualStyleBackColor = true;
@@ -876,7 +877,7 @@ namespace ListenerUI
             // splitCon_Alert.Panel2
             // 
             this.splitCon_Alert.Panel2.Controls.Add(this.chart_Alert);
-            this.splitCon_Alert.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_Alert.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_Alert.SplitterDistance = 231;
             this.splitCon_Alert.TabIndex = 7;
             // 
@@ -904,7 +905,7 @@ namespace ListenerUI
             this.dgAlert.RowHeadersWidth = 51;
             this.dgAlert.RowTemplate.Height = 24;
             this.dgAlert.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgAlert.Size = new System.Drawing.Size(1098, 231);
+            this.dgAlert.Size = new System.Drawing.Size(1110, 231);
             this.dgAlert.TabIndex = 2;
             // 
             // chart_Alert
@@ -921,7 +922,7 @@ namespace ListenerUI
             series7.Legend = "Legend1";
             series7.Name = "Series1";
             this.chart_Alert.Series.Add(series7);
-            this.chart_Alert.Size = new System.Drawing.Size(1098, 288);
+            this.chart_Alert.Size = new System.Drawing.Size(1110, 288);
             this.chart_Alert.TabIndex = 3;
             this.chart_Alert.Text = "chart1";
             // 
@@ -932,7 +933,7 @@ namespace ListenerUI
             this.tbpTamper.Location = new System.Drawing.Point(4, 39);
             this.tbpTamper.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbpTamper.Name = "tbpTamper";
-            this.tbpTamper.Size = new System.Drawing.Size(1098, 523);
+            this.tbpTamper.Size = new System.Drawing.Size(1110, 523);
             this.tbpTamper.TabIndex = 7;
             this.tbpTamper.Text = "Tamper";
             this.tbpTamper.UseVisualStyleBackColor = true;
@@ -952,7 +953,7 @@ namespace ListenerUI
             // splitCon_Tamper.Panel2
             // 
             this.splitCon_Tamper.Panel2.Controls.Add(this.chart_tamper);
-            this.splitCon_Tamper.Size = new System.Drawing.Size(1098, 523);
+            this.splitCon_Tamper.Size = new System.Drawing.Size(1110, 523);
             this.splitCon_Tamper.SplitterDistance = 231;
             this.splitCon_Tamper.TabIndex = 7;
             // 
@@ -980,7 +981,7 @@ namespace ListenerUI
             this.dgTamper.RowHeadersWidth = 51;
             this.dgTamper.RowTemplate.Height = 24;
             this.dgTamper.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgTamper.Size = new System.Drawing.Size(1098, 231);
+            this.dgTamper.Size = new System.Drawing.Size(1110, 231);
             this.dgTamper.TabIndex = 2;
             // 
             // chart_tamper
@@ -997,7 +998,7 @@ namespace ListenerUI
             series8.Legend = "Legend1";
             series8.Name = "Series1";
             this.chart_tamper.Series.Add(series8);
-            this.chart_tamper.Size = new System.Drawing.Size(1098, 288);
+            this.chart_tamper.Size = new System.Drawing.Size(1110, 288);
             this.chart_tamper.TabIndex = 3;
             this.chart_tamper.Text = "chart1";
             // 
@@ -1019,20 +1020,28 @@ namespace ListenerUI
             dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgRawData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dgRawData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgRawData.DefaultCellStyle = dataGridViewCellStyle12;
             this.dgRawData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgRawData.GridColor = System.Drawing.SystemColors.Window;
             this.dgRawData.Location = new System.Drawing.Point(0, 0);
             this.dgRawData.Margin = new System.Windows.Forms.Padding(0);
             this.dgRawData.Name = "dgRawData";
             this.dgRawData.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(134)))), ((int)(((byte)(52)))));
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgRawData.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgRawData.RowHeadersVisible = false;
             this.dgRawData.RowHeadersWidth = 50;
             this.dgRawData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White;
@@ -1343,14 +1352,14 @@ namespace ListenerUI
             this.DGPushProfile.AllowUserToDeleteRows = false;
             this.DGPushProfile.BackgroundColor = System.Drawing.Color.White;
             this.DGPushProfile.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DGPushProfile.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DGPushProfile.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.DGPushProfile.ColumnHeadersHeight = 35;
             this.DGPushProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DGPushProfile.Location = new System.Drawing.Point(495, 2);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeterReader.HelperForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace ListenerUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new MainForm());
-            Application.Run(new PushPacketDecrypter());
+            //Application.Run(new PushPacketDecrypter());
+            Application.Run(new PushPacketDecrypterFrm());
         }
     }
 }

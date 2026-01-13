@@ -1,10 +1,15 @@
 ﻿using AutoTest.FrameWork.Converts;
 using Gurux.DLMS.Enums;
 using Indali.Common;
+using ListenerUI.HelperClasses;
+using log4net;
 using MeterComm.DLMS;
+using MeterReader.CommonClasses;
 using MeterReader.DLMSNetSerialCommunication;
 using OpenTK;
+using Org.BouncyCastle.Bcpg;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +17,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +26,12 @@ namespace ListenerUI
 {
     public partial class PushPacketDecrypter : Form
     {
+        #region Global Variables and Handlers
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public string LOG_DIRECTORY { get; set; } = @"C:\IndaliDlmsTestLogs";
+        public delegate void AppendColoredTextControlWithBox(string message, Color color, bool isBold = false);
+        public event AppendColoredTextControlWithBox AppendColoredTextControlNotifier = delegate { }; // add empty delegate!;
+        private readonly ConcurrentQueue<(string Message, Color Color, bool IsBold)> _logBuffer2 = new ConcurrentQueue<(string, Color, bool)>();
         public byte[] EK;
         public byte[] AK;
         public byte[] ST;
@@ -41,14 +53,16 @@ namespace ListenerUI
         bool _packetsLoaded = false;
         DataTable dtDecryptedPacketDetail = new DataTable();
         DataTable dtDecryptedSummary = new DataTable();
-
+        #endregion
         public PushPacketDecrypter()
         {
             InitializeComponent();
+            this.AppendColoredTextControlNotifier += TestLogService_AppendColoredTextControlNotifier;
         }
         private void PushPacketDecrypter_Load(object sender, EventArgs e)
         {
             UIStyler.StyleControl(dgPacketsSummary);
+            UIStyler.StyleControl(dgPacketsDetail);
             txtSystemTitle.Text = DLMSInfo.TxtSysT;
             txtBlockCipherKey.Text = DLMSInfo.TxtEK;
             txtAuthenticationKey.Text = DLMSInfo.TxtAK;
@@ -100,9 +114,9 @@ namespace ListenerUI
         }
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            ResetLBLPacketCount();
             try
             {
+                ResetLBLPacketCount();
                 string rawText = txtCipherPacket.Text;
                 bool indaliFile = rawText.Contains("CIPHERED DATA");
                 if (string.IsNullOrWhiteSpace(rawText))
@@ -119,85 +133,91 @@ namespace ListenerUI
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
                 EK = Encoding.ASCII.GetBytes(txtBlockCipherKey.Text.Trim());
                 AK = Encoding.ASCII.GetBytes(txtAuthenticationKey.Text.Trim());
                 ST = Encoding.ASCII.GetBytes(txtSystemTitle.Text.Trim());
                 GXSecurity = Security.AuthenticationEncryption;
-
-                txtPlainResult.Clear();
-                txtXmlResult.Clear();
-                dtDecryptedSummary.Rows.Clear();
                 List<string> packets = new List<string>();
-
                 string[] lines = rawText
                     .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
                 int blockCount = 0;
                 StringBuilder multiBlock = new StringBuilder();
-
+                //Creating Packets in datatable
                 foreach (string line in lines)
                 {
-                    string trimmed = line.Trim();
-                    string normalized = trimmed.Replace(" ", "").ToUpper();
-
-                    // strip timestamp at end if present
-                    if (normalized.StartsWith("00010001") &&
-                        normalized.Length > 24 &&
-                        (normalized.EndsWith("AM") || normalized.EndsWith("PM")))
+                    try
                     {
-                        normalized = normalized.Substring(0, normalized.Length - 20);
-                        trimmed = trimmed.Substring(0, trimmed.Length - 22).Trim();
-                    }
+                        string trimmed = line.Trim();
+                        string normalized = trimmed.Replace(" ", "").ToUpper();
 
-                    if (!normalized.StartsWith("00010001"))
-                        continue;
-
-                    if (blockCount == 0 &&
-                        normalized.Length >= 20 &&
-                        normalized.Substring(16, 2) == "E0" &&
-                        normalized.Substring(18, 1) != "8" && !indaliFile)
-                    {
-                        blockCount = Convert.ToInt32(normalized.Substring(18, 2), 16);
-
-                        multiBlock.Clear();
-                        multiBlock.Append(trimmed);
-                        blockCount--;
-
-                        if (blockCount == 0)
-                            packets.Add(multiBlock.ToString());
-                    }
-                    else if (blockCount > 0 && !indaliFile)
-                    {
-                        multiBlock.Append(" ").Append(trimmed);
-                        blockCount--;
-
-                        if (blockCount == 0)
+                        // strip timestamp at end if present
+                        if (normalized.StartsWith("00010001") &&
+                            normalized.Length > 24 &&
+                            (normalized.EndsWith("AM") || normalized.EndsWith("PM")))
                         {
-                            packets.Add(multiBlock.ToString());
+                            normalized = normalized.Substring(0, normalized.Length - 20);
+                            trimmed = trimmed.Substring(0, trimmed.Length - 22).Trim();
+                        }
+
+                        if (!normalized.StartsWith("00010001"))
+                            continue;
+
+                        if (blockCount == 0 &&
+                            normalized.Length >= 20 &&
+                            normalized.Substring(16, 2) == "E0" &&
+                            normalized.Substring(18, 1) != "8" && !indaliFile)
+                        {
+                            blockCount = Convert.ToInt32(normalized.Substring(18, 2), 16);
+
                             multiBlock.Clear();
+                            multiBlock.Append(trimmed);
+                            blockCount--;
+
+                            if (blockCount == 0)
+                                packets.Add(multiBlock.ToString());
+                        }
+                        else if (blockCount > 0 && !indaliFile)
+                        {
+                            multiBlock.Append(" ").Append(trimmed);
+                            blockCount--;
+
+                            if (blockCount == 0)
+                            {
+                                packets.Add(multiBlock.ToString());
+                                multiBlock.Clear();
+                            }
+                        }
+                        else
+                        {
+                            packets.Add(trimmed);
                         }
                     }
-                    else
+                    catch
                     {
-                        packets.Add(trimmed);
+
+                    }
+                    finally
+                    {
+
                     }
                 }
                 if (packets.Count == 0)
                 {
                     packets.Add(rawText.Trim());
                 }
+                //Decrypting Packets
                 foreach (var packet in packets)
                 {
-                    string DecryptedData = null;
-                    string decodedXml = null;
-                    string typeOfData = string.Empty;
-
-                    TCPTestNotifier tcp = new TCPTestNotifier();
-                    List<byte> receivedBytes = new List<byte>();
-
                     try
                     {
+                        string DecryptedData = null;
+                        string decodedXml = null;
+                        string typeOfData = string.Empty;
+
+                        TCPTestNotifier tcp = new TCPTestNotifier();
+                        List<byte> receivedBytes = new List<byte>();
+
                         string normalized = packet.Replace(" ", "").ToUpper();
 
                         string[] EncPackets =
@@ -258,8 +278,13 @@ namespace ListenerUI
 
                         GetPacketCounter(typeOfData);
 
-                        txtPlainResult.AppendText($"\n{packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}-{typeOfData}:\n{DecryptedData}");
-                        txtXmlResult.AppendText($"\n{packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}-{typeOfData}:\n{decodedXml}");
+                        //txtPlainResult.AppendText($"\n{packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}-{typeOfData}:\n{DecryptedData}");
+                        //txtXmlResult.AppendText($"\n{packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt")}-{typeOfData}:\n{decodedXml}");
+                        Color pushColor = GetPushColor(typeOfData);
+                        AppendColoredText(txtPlainResult, $"\n{packetSendingTime:dd/MM/yyyy hh:mm:ss tt} - {typeOfData}\n", pushColor, true);
+                        AppendColoredText(txtPlainResult, DecryptedData + "\n", pushColor, false);
+                        AppendColoredText(txtXmlResult, $"\n{packetSendingTime:dd/MM/yyyy hh:mm:ss tt} - {typeOfData}\n", pushColor, true);
+                        AppendColoredText(txtXmlResult, decodedXml + "\n", pushColor, false);
 
                         dtDecryptedSummary.Rows.Add(
                             packetSendingTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
@@ -269,26 +294,35 @@ namespace ListenerUI
                             "Success",
                             DecryptedData);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        dtDecryptedSummary.Rows.Add("", "Unknown", packet.Length, "", "Failed", "");
-                        MessageBox.Show("Could Not Decrypt Packet", "Decrypt Failed",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        dtDecryptedSummary.Rows.Add(DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), "Unknown", packet.Length, "", "Failed", ex.Message);
+                        AppendColoredText(txtPlainResult, "\n[DECRYPT FAILED] Corrupted or invalid packet detected\n", Color.Red, true);
+                        continue;
                     }
                 }
-
                 dgPacketsSummary.DataSource = dtDecryptedSummary;
+                //Decrypted Packets Detail
                 for (int i = 0; i < dtDecryptedSummary.Rows.Count; i++)
                 {
-                    DataTable rawPushPacketTable = new DataTable();
-                    rawPushPacketTable.Columns.Add($"Push Data", typeof(string));
-                    List<string> details = new List<string>();
-                    int totalProfileParameters = 0;
-                    string input = dtDecryptedSummary.Rows[i]["Decrypted Data"].ToString().Replace(" ", "");
-                    int pointer = 0;
                     try
                     {
+                        DataTable rawPushPacketTable = new DataTable();
+                        rawPushPacketTable.Columns.Add($"Push Data", typeof(string));
+                        if (dtDecryptedSummary.Rows[i]["Status"].ToString() != "Success")
+                        {
+                            rawPushPacketTable.Rows.Add("Corrupted Packet Data");
+                            while (dtDecryptedPacketDetail.Rows.Count <= i)
+                            {
+                                dtDecryptedPacketDetail.Rows.Add();
+                            }
+                            dtDecryptedPacketDetail.Rows[i][0] = "Corrupted Packet Data";
+                            continue;
+                        }
+                        List<string> details = new List<string>();
+                        int totalProfileParameters = 0;
+                        string input = dtDecryptedSummary.Rows[i]["Decrypted Data"].ToString().Replace(" ", "");
+                        int pointer = 0;
                         input_Break_Initial.Clear();
                         input_Break_Profile.Clear();
                         input_Break_Initial.Add(input.Substring(pointer, 2));
@@ -394,8 +428,13 @@ namespace ListenerUI
                         }
                         string columnNameData = $"Push Data-{dtDecryptedSummary.Rows[i]["Timestamp"]}";
                         string columnNameValue = $"Push Value-{dtDecryptedSummary.Rows[i]["Timestamp"]}";
-                        dtDecryptedPacketDetail.Columns.Add(columnNameData, typeof(string));
-                        dtDecryptedPacketDetail.Columns.Add(columnNameValue, typeof(string));
+                        //dtDecryptedPacketDetail.Columns.Add(columnNameData, typeof(string));
+                        //dtDecryptedPacketDetail.Columns.Add(columnNameValue, typeof(string));
+                        if (!dtDecryptedPacketDetail.Columns.Contains(columnNameData))
+                            dtDecryptedPacketDetail.Columns.Add(columnNameData, typeof(string));
+                        if (!dtDecryptedPacketDetail.Columns.Contains(columnNameValue))
+                            dtDecryptedPacketDetail.Columns.Add(columnNameValue, typeof(string));
+
                         string[] data = new string[2] { "Data Notification", "Long Invoke Id and Priority" };
                         for (int k = 0; k < 2; k++)
                         {
@@ -418,132 +457,76 @@ namespace ListenerUI
                             dgPacketsSummary.Rows[0].Selected = false;
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        AppendColoredText(txtPlainResult, $"\n[ERROR] Packet {i + 1}: {ex.Message}\n", Color.Red, true);
+                    }
+
+                    finally
+                    {
+
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"Decryption failed.\n\nDetails: {ex.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                MessageBox.Show($"Decryption failed: {ex.Message}", "Decryption Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        /*public void GetPacketCounter(string typeOfData)
-        {
-            if (typeOfData == "Instant Push")
+            finally
             {
-                instantCount++;
-                lblInstantCount.Text = instantCount.ToString();
-            }
-            else if (typeOfData == "Alert Push")
-            {
-                alertCount++;
-                lblAlertCount.Text = alertCount.ToString();
+                for (int i = 0; i < dgPacketsSummary.Columns.Count; i++)
+                {
+                    dgPacketsSummary.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+                for (int i = 0; i < dgPacketsDetail.Columns.Count; i++)
+                {
+                    dgPacketsDetail.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
             }
 
-            else if (typeOfData == "Load Survey Push")
-            {
-                lsCount++;
-                lblLSCount.Text = lsCount.ToString();
-            }
-            else if (typeOfData == "Daily Energy Push")
-            {
-                deCount++;
-                lblDECount.Text = deCount.ToString();
-            }
-            else if (typeOfData == "Self Registration Push")
-            {
-                srCount++;
-                lblSRCount.Text = srCount.ToString();
-            }
-            else if (typeOfData == "Billing Push")
-            {
-                billCount++;
-                lblBillCount.Text = billCount.ToString();
-            }
-            else if (typeOfData == "Current Bill Push")
-            {
-                cbCount++;
-                lblCBCount.Text = cbCount.ToString();
-            }
-            else if (typeOfData == "Tamper Push")
-            {
-                tamperCount++;
-                lblTamperCount.Text = tamperCount.ToString();
-            }
-            int totalCount = instantCount + alertCount + lsCount + deCount + srCount + billCount + cbCount + tamperCount;
-            lblTotalCount.Text = totalCount.ToString();
-        }*/
-        public void GetPacketCounter(string typeOfData)
-        {
-            if (typeOfData == "Instant Push")
-            {
-                instantCount++;
-                UpdateButtonCount(btnInstant, instantCount);
-            }
-            else if (typeOfData == "Alert Push")
-            {
-                alertCount++;
-                UpdateButtonCount(btnAlert, alertCount);
-            }
-            else if (typeOfData == "Load Survey Push")
-            {
-                lsCount++;
-                UpdateButtonCount(btnLS, lsCount);
-            }
-            else if (typeOfData == "Daily Energy Push")
-            {
-                deCount++;
-                UpdateButtonCount(btnDE, deCount);
-            }
-            else if (typeOfData == "Self Registration Push")
-            {
-                srCount++;
-                UpdateButtonCount(btnSR, srCount);
-            }
-            else if (typeOfData == "Billing Push")
-            {
-                billCount++;
-                UpdateButtonCount(btnBill, billCount);
-            }
-            else if (typeOfData == "Current Bill Push")
-            {
-                cbCount++;
-                UpdateButtonCount(btnCB, cbCount);
-            }
-            else if (typeOfData == "Tamper Push")
-            {
-                tamperCount++;
-                UpdateButtonCount(btnTamper, tamperCount);
-            }
-
-            int totalCount =
-                instantCount + alertCount + lsCount + deCount +
-                srCount + billCount + cbCount + tamperCount;
-            UpdateButtonCount(btnTotalCount, totalCount);
         }
-        private void UpdateButtonCount(Button btn, int count)
-        {
-            btn.Text = $"{btn.Tag}{Environment.NewLine}{count}";
-        }
-
         private void btnClear_Click(object sender, EventArgs e)
         {
             try
             {
                 txtCipherPacket.Clear();
-                txtPlainResult.Clear();
-                txtXmlResult.Clear();
-                dgPacketsSummary.DataSource = null;
-                dgPacketsDetail.DataSource = null;
+                lblFilePath.Text = "📄 File: No file loaded";
                 ResetLBLPacketCount();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error in clearing data: {ex.Message}");
+            }
+        }
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            string reportFolder = "";
+            try
+            {
+                //string folderName = AskFolderName($"Push Report {DateTime.Now.ToString("ddMMyyyyHHmmss")}");
+                string folderName = $"Push Report {DateTime.Now.ToString("ddMMyyyyHHmmss")}";
+                if (string.IsNullOrWhiteSpace(folderName))
+                {
+                    MessageBox.Show("Invalid folder name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                string baseFolder = Path.Combine(LOG_DIRECTORY, $"Push Packet Decrypted Files");
+                Directory.CreateDirectory(baseFolder);
+                reportFolder = Path.Combine(baseFolder, folderName);
+                Directory.CreateDirectory(reportFolder);
+
+                string excelPath = Path.Combine(reportFolder, $"Reports_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.xlsx");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtDecryptedSummary, excelPath, "Summary");
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtDecryptedPacketDetail, excelPath, "Datailed Packet");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting reports: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                MessageBox.Show($"Reports saved at:{reportFolder}", "Report Info");
             }
         }
         private void dgvPackets_SelectionChanged(object sender, EventArgs e)
@@ -559,6 +542,32 @@ namespace ListenerUI
 
             ShowPacketDetailsByTimestamp(timestamp);
         }
+        private void BtnFilterbyType_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Button btn = sender as Button;
+                if (btn == null) return;
+                if (btn.Text.Contains("Total"))
+                {
+                    dgPacketsSummary.DataSource = null;
+                    dgPacketsSummary.DataSource = dtDecryptedSummary;
+                    return;
+                }
+                DataTable filteredDatatble = FilterPacketsByType(btn.Tag.ToString());
+                if (filteredDatatble.Rows.Count > 0)
+                {
+                    dgPacketsSummary.DataSource = null;
+                    dgPacketsSummary.DataSource = filteredDatatble;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in clearing data: {ex.Message}");
+            }
+        }
+
+        #region Helper Methods
         private void ShowPacketDetailsByTimestamp(string timestamp)
         {
             if (dtDecryptedPacketDetail == null || dtDecryptedPacketDetail.Columns.Count == 0)
@@ -605,40 +614,131 @@ namespace ListenerUI
 
             return filteredTable;
         }
-        private void BtnFilterbyType_Click(object sender, EventArgs e)
+        private void UpdateButtonCount(Button btn, int count)
         {
-            try
+            btn.Text = $"{btn.Tag}{Environment.NewLine}{count}";
+        }
+        public void GetPacketCounter(string typeOfData)
+        {
+            if (typeOfData == "Instant Push")
             {
-                Button btn = sender as Button;
-                if (btn == null) return;
-                if (btn.Text.Contains("Total"))
-                {
-                    dgPacketsSummary.DataSource = null;
-                    dgPacketsSummary.DataSource = dtDecryptedSummary;
-                    return;
-                }
-                DataTable filteredDatatble = FilterPacketsByType(btn.Tag.ToString());
-                if (filteredDatatble.Rows.Count > 0)
-                {
-                    dgPacketsSummary.DataSource = null;
-                    dgPacketsSummary.DataSource = filteredDatatble;
-                }
+                instantCount++;
+                UpdateButtonCount(btnInstant, instantCount);
             }
-            catch (Exception ex)
+            else if (typeOfData == "Alert Push")
             {
-                MessageBox.Show($"Error in clearing data: {ex.Message}");
+                alertCount++;
+                UpdateButtonCount(btnAlert, alertCount);
             }
+            else if (typeOfData == "Load Survey Push")
+            {
+                lsCount++;
+                UpdateButtonCount(btnLS, lsCount);
+            }
+            else if (typeOfData == "Daily Energy Push")
+            {
+                deCount++;
+                UpdateButtonCount(btnDE, deCount);
+            }
+            else if (typeOfData == "Self Registration Push")
+            {
+                srCount++;
+                UpdateButtonCount(btnSR, srCount);
+            }
+            else if (typeOfData == "Billing Push")
+            {
+                billCount++;
+                UpdateButtonCount(btnBill, billCount);
+            }
+            else if (typeOfData == "Current Bill Push")
+            {
+                cbCount++;
+                UpdateButtonCount(btnCB, cbCount);
+            }
+            else if (typeOfData == "Tamper Push")
+            {
+                tamperCount++;
+                UpdateButtonCount(btnTamper, tamperCount);
+            }
+            if (typeOfData == "Clear All")
+            {
+                UpdateButtonCount(btnInstant, instantCount);
+                UpdateButtonCount(btnAlert, alertCount);
+                UpdateButtonCount(btnLS, lsCount);
+                UpdateButtonCount(btnDE, deCount);
+                UpdateButtonCount(btnSR, srCount);
+                UpdateButtonCount(btnBill, billCount);
+                UpdateButtonCount(btnCB, cbCount);
+                UpdateButtonCount(btnTamper, tamperCount);
+            }
+            int totalCount =
+                instantCount + alertCount + lsCount + deCount +
+                srCount + billCount + cbCount + tamperCount;
+            UpdateButtonCount(btnTotalCount, totalCount);
+        }
+        private void AppendColoredText(RichTextBox rtb, string text, Color color, bool bold = false)
+        {
+            rtb.SelectionStart = rtb.TextLength;
+            rtb.SelectionLength = 0;
+
+            rtb.SelectionColor = color;
+            rtb.SelectionFont = bold
+                ? new Font(rtb.Font, FontStyle.Bold)
+                : new Font(rtb.Font, FontStyle.Regular);
+
+            rtb.AppendText(text);
+
+            rtb.SelectionColor = rtb.ForeColor;
+            rtb.SelectionFont = rtb.Font;
+        }
+        private Color GetPushColor(string typeOfData)
+        {
+            switch (typeOfData)
+            {
+                case "Instant Push":
+                    return Color.DodgerBlue;
+
+                case "Alert Push":
+                    return Color.OrangeRed;
+
+                case "Load Survey Push":
+                    return Color.MediumPurple;
+
+                case "Daily Energy Push":
+                    return Color.SeaGreen;
+
+                case "Self Registration Push":
+                    return Color.DarkCyan;
+
+                case "Billing Push":
+                    return Color.SaddleBrown;
+
+                case "Tamper Push":
+                    return Color.DarkRed;
+
+                case "Current Bill Push":
+                    return Color.DarkGreen;
+
+                default:
+                    return Color.Gray;
+            }
+        }
+        private void TestLogService_AppendColoredTextControlNotifier(string message, Color color, bool isBold = false)
+        {
+            _logBuffer2.Enqueue((message + Environment.NewLine, color, isBold));
         }
         public void ResetLBLPacketCount()
         {
+            txtPlainResult.Clear();
+            txtXmlResult.Clear();
+            dgPacketsSummary.DataSource = null;
+            dgPacketsDetail.DataSource = null;
             dtDecryptedSummary.Rows.Clear(); dtDecryptedPacketDetail.Reset();
-            tableLayoutPnl_PacketCounts.Controls.OfType<Label>().Where(l => l.Name.StartsWith("lbl")).ToList().ForEach(l => l.Text = "-");
+            dtDecryptedSummary.Rows.Clear(); dtDecryptedPacketDetail.Reset();
+            //tableLayoutPnl_PacketCounts.Controls.OfType<Label>().Where(l => l.Name.StartsWith("lbl")).ToList().ForEach(l => l.Text = "-");
             instantCount = 0; lsCount = 0; deCount = 0; billCount = 0; srCount = 0; cbCount = 0; alertCount = 0; tamperCount = 0;
+            GetPacketCounter("Clear All");
         }
-
-        private void btnExport_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Export Functionality is under Development", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        #endregion
     }
 }
