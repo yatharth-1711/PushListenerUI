@@ -405,38 +405,37 @@ namespace ListenerUI
         }
         private void btnPushprofileSettings_Click(object sender, EventArgs e)
         {
-            if (pnlProfileSettings.Visible == true && gb_PSO.Visible)
-            {
-                gb_PSO.Visible = false;
-                grpProfileConfig.Visible = true;
-                btnPSO.Text = "▼ Show Push Setup Objects";
-                btnPSO.ForeColor = Color.Black;
-                btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
-                btnPushprofileSettings.ForeColor = Color.Blue;
-            }
-            else
-            {
-                pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
-                gb_PSO.Visible = false;
-                grpProfileConfig.Visible = true;
-                if (pnlProfileSettings.Visible)
-                {
-                    btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
-                    btnPushprofileSettings.ForeColor = Color.Blue;
-                }
-                else
-                {
-                    btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
-                    btnPushprofileSettings.ForeColor = Color.Black;
-                }
-            }
+            //if (pnlProfileSettings.Visible == true && gb_PSO.Visible)
+            //{
+            //    gb_PSO.Visible = false;
+            //    grpProfileConfig.Visible = true;
+            //    btnPSO.Text = "▼ Show Push Setup Objects";
+            //    btnPSO.ForeColor = Color.Black;
+            //    btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
+            //    btnPushprofileSettings.ForeColor = Color.Blue;
+            //}
+            //else
+            //{
+            //    pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
+            //    gb_PSO.Visible = false;
+            //    grpProfileConfig.Visible = true;
+            //    if (pnlProfileSettings.Visible)
+            //    {
+            //        btnPushprofileSettings.Text = "▲ Hide Push Profile Settings";
+            //        btnPushprofileSettings.ForeColor = Color.Blue;
+            //    }
+            //    else
+            //    {
+            //        btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
+            //        btnPushprofileSettings.ForeColor = Color.Black;
+            //    }
+            //}
         }
         private void btnPSO_Click(object sender, EventArgs e)
         {
             if (pnlProfileSettings.Visible == true && grpProfileConfig.Visible)
             {
                 grpProfileConfig.Visible = false;
-                gb_PSO.Visible = true;
                 btnPushprofileSettings.Text = "▼ Show Push Profile Settings";
                 btnPushprofileSettings.ForeColor = Color.Black;
                 btnPSO.Text = "▲ Hide Push Setup Objects";
@@ -446,7 +445,6 @@ namespace ListenerUI
             {
                 pnlProfileSettings.Visible = !pnlProfileSettings.Visible;
                 grpProfileConfig.Visible = false;
-                gb_PSO.Visible = true;
                 if (pnlProfileSettings.Visible)
                 {
                     btnPSO.Text = "▲ Hide Push Setup Objects";

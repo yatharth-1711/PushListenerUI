@@ -79,6 +79,7 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label15 = new System.Windows.Forms.Label();
             this.tabPageWirelessComm = new System.Windows.Forms.TabPage();
+            this.tabPageDecrypter = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPageCommSettings.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -93,6 +94,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPageCommSettings);
             this.tabControl1.Controls.Add(this.tabPageWirelessComm);
+            this.tabControl1.Controls.Add(this.tabPageDecrypter);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -324,7 +326,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.181329F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.77743F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.799373F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(586, 638);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(586, 596);
             this.tableLayoutPanel2.TabIndex = 78;
             // 
             // label28
@@ -334,10 +336,10 @@
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label28.ForeColor = System.Drawing.Color.Black;
-            this.label28.Location = new System.Drawing.Point(5, 600);
+            this.label28.Location = new System.Drawing.Point(5, 548);
             this.label28.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(283, 38);
+            this.label28.Size = new System.Drawing.Size(283, 48);
             this.label28.TabIndex = 103;
             this.label28.Text = "Block Hex:";
             this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -346,7 +348,7 @@
             // 
             this.txtConfBlock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtConfBlock.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtConfBlock.Location = new System.Drawing.Point(296, 602);
+            this.txtConfBlock.Location = new System.Drawing.Point(296, 550);
             this.txtConfBlock.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtConfBlock.Name = "txtConfBlock";
             this.txtConfBlock.Size = new System.Drawing.Size(287, 24);
@@ -356,11 +358,11 @@
             // 
             this.checkBox_InvocationCounter.AutoSize = true;
             this.checkBox_InvocationCounter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox_InvocationCounter.Location = new System.Drawing.Point(296, 464);
+            this.checkBox_InvocationCounter.Location = new System.Drawing.Point(296, 422);
             this.checkBox_InvocationCounter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_InvocationCounter.Name = "checkBox_InvocationCounter";
             this.checkBox_InvocationCounter.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.checkBox_InvocationCounter.Size = new System.Drawing.Size(287, 34);
+            this.checkBox_InvocationCounter.Size = new System.Drawing.Size(287, 31);
             this.checkBox_InvocationCounter.TabIndex = 102;
             this.checkBox_InvocationCounter.Text = "With Invocation Counter";
             this.checkBox_InvocationCounter.UseVisualStyleBackColor = true;
@@ -369,11 +371,11 @@
             // 
             this.checkBox_GMAC.AutoSize = true;
             this.checkBox_GMAC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox_GMAC.Location = new System.Drawing.Point(3, 502);
+            this.checkBox_GMAC.Location = new System.Drawing.Point(3, 457);
             this.checkBox_GMAC.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_GMAC.Name = "checkBox_GMAC";
             this.checkBox_GMAC.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.checkBox_GMAC.Size = new System.Drawing.Size(287, 41);
+            this.checkBox_GMAC.Size = new System.Drawing.Size(287, 38);
             this.checkBox_GMAC.TabIndex = 100;
             this.checkBox_GMAC.Text = "With GMAC";
             this.checkBox_GMAC.UseVisualStyleBackColor = true;
@@ -382,11 +384,11 @@
             // 
             this.checkBox_Dedicated.AutoSize = true;
             this.checkBox_Dedicated.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox_Dedicated.Location = new System.Drawing.Point(296, 502);
+            this.checkBox_Dedicated.Location = new System.Drawing.Point(296, 457);
             this.checkBox_Dedicated.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_Dedicated.Name = "checkBox_Dedicated";
             this.checkBox_Dedicated.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.checkBox_Dedicated.Size = new System.Drawing.Size(287, 41);
+            this.checkBox_Dedicated.Size = new System.Drawing.Size(287, 38);
             this.checkBox_Dedicated.TabIndex = 101;
             this.checkBox_Dedicated.Text = "LN with Cipher Dedicated Key";
             this.checkBox_Dedicated.UseVisualStyleBackColor = true;
@@ -395,11 +397,11 @@
             // 
             this.checkBox_LN.AutoSize = true;
             this.checkBox_LN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBox_LN.Location = new System.Drawing.Point(3, 547);
+            this.checkBox_LN.Location = new System.Drawing.Point(3, 499);
             this.checkBox_LN.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox_LN.Name = "checkBox_LN";
             this.checkBox_LN.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.checkBox_LN.Size = new System.Drawing.Size(287, 51);
+            this.checkBox_LN.Size = new System.Drawing.Size(287, 47);
             this.checkBox_LN.TabIndex = 98;
             this.checkBox_LN.Text = "LN with Cipher";
             this.checkBox_LN.UseVisualStyleBackColor = true;
@@ -408,11 +410,11 @@
             // 
             this.chkConformanceBlock.AutoSize = true;
             this.chkConformanceBlock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkConformanceBlock.Location = new System.Drawing.Point(296, 547);
+            this.chkConformanceBlock.Location = new System.Drawing.Point(296, 499);
             this.chkConformanceBlock.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chkConformanceBlock.Name = "chkConformanceBlock";
             this.chkConformanceBlock.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
-            this.chkConformanceBlock.Size = new System.Drawing.Size(287, 51);
+            this.chkConformanceBlock.Size = new System.Drawing.Size(287, 47);
             this.chkConformanceBlock.TabIndex = 99;
             this.chkConformanceBlock.Text = "Conformance Block Negotiated";
             this.chkConformanceBlock.UseVisualStyleBackColor = true;
@@ -422,9 +424,9 @@
             this.btnSaveData.BackColor = System.Drawing.Color.Transparent;
             this.btnSaveData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveData.Location = new System.Drawing.Point(3, 465);
+            this.btnSaveData.Location = new System.Drawing.Point(3, 423);
             this.btnSaveData.Name = "btnSaveData";
-            this.btnSaveData.Size = new System.Drawing.Size(287, 32);
+            this.btnSaveData.Size = new System.Drawing.Size(287, 29);
             this.btnSaveData.TabIndex = 97;
             this.btnSaveData.Text = "💾 Save Settings";
             this.btnSaveData.UseVisualStyleBackColor = false;
@@ -434,7 +436,7 @@
             // 
             this.txtDISCToNDMTimeout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDISCToNDMTimeout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDISCToNDMTimeout.Location = new System.Drawing.Point(298, 434);
+            this.txtDISCToNDMTimeout.Location = new System.Drawing.Point(298, 395);
             this.txtDISCToNDMTimeout.Margin = new System.Windows.Forms.Padding(5);
             this.txtDISCToNDMTimeout.Name = "txtDISCToNDMTimeout";
             this.txtDISCToNDMTimeout.Size = new System.Drawing.Size(283, 24);
@@ -448,10 +450,10 @@
             this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label33.ForeColor = System.Drawing.Color.Black;
-            this.label33.Location = new System.Drawing.Point(5, 429);
+            this.label33.Location = new System.Drawing.Point(5, 390);
             this.label33.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(283, 33);
+            this.label33.Size = new System.Drawing.Size(283, 30);
             this.label33.TabIndex = 95;
             this.label33.Text = "DISC To NDM Timeout (ms)";
             this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -460,7 +462,7 @@
             // 
             this.txtResponseTimeout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtResponseTimeout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtResponseTimeout.Location = new System.Drawing.Point(298, 401);
+            this.txtResponseTimeout.Location = new System.Drawing.Point(298, 365);
             this.txtResponseTimeout.Margin = new System.Windows.Forms.Padding(5);
             this.txtResponseTimeout.Name = "txtResponseTimeout";
             this.txtResponseTimeout.Size = new System.Drawing.Size(283, 24);
@@ -474,10 +476,10 @@
             this.label32.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label32.ForeColor = System.Drawing.Color.Black;
-            this.label32.Location = new System.Drawing.Point(5, 396);
+            this.label32.Location = new System.Drawing.Point(5, 360);
             this.label32.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(283, 33);
+            this.label32.Size = new System.Drawing.Size(283, 30);
             this.label32.TabIndex = 93;
             this.label32.Text = "Response Timeout (ms)";
             this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -486,7 +488,7 @@
             // 
             this.txtInterFrameTimeout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtInterFrameTimeout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtInterFrameTimeout.Location = new System.Drawing.Point(298, 368);
+            this.txtInterFrameTimeout.Location = new System.Drawing.Point(298, 335);
             this.txtInterFrameTimeout.Margin = new System.Windows.Forms.Padding(5);
             this.txtInterFrameTimeout.Name = "txtInterFrameTimeout";
             this.txtInterFrameTimeout.Size = new System.Drawing.Size(283, 24);
@@ -500,10 +502,10 @@
             this.label31.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label31.ForeColor = System.Drawing.Color.Black;
-            this.label31.Location = new System.Drawing.Point(5, 363);
+            this.label31.Location = new System.Drawing.Point(5, 330);
             this.label31.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(283, 33);
+            this.label31.Size = new System.Drawing.Size(283, 30);
             this.label31.TabIndex = 91;
             this.label31.Text = "Inter Frame Timeout (ms)";
             this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -512,7 +514,7 @@
             // 
             this.txtInactivityTimeout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtInactivityTimeout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtInactivityTimeout.Location = new System.Drawing.Point(298, 335);
+            this.txtInactivityTimeout.Location = new System.Drawing.Point(298, 305);
             this.txtInactivityTimeout.Margin = new System.Windows.Forms.Padding(5);
             this.txtInactivityTimeout.Name = "txtInactivityTimeout";
             this.txtInactivityTimeout.Size = new System.Drawing.Size(283, 24);
@@ -526,10 +528,10 @@
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label30.ForeColor = System.Drawing.Color.Black;
-            this.label30.Location = new System.Drawing.Point(5, 330);
+            this.label30.Location = new System.Drawing.Point(5, 300);
             this.label30.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(283, 33);
+            this.label30.Size = new System.Drawing.Size(283, 30);
             this.label30.TabIndex = 89;
             this.label30.Text = "Inactivity Timeout (ms)";
             this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -540,10 +542,10 @@
             this.label100.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label100.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label100.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label100.Location = new System.Drawing.Point(0, 198);
+            this.label100.Location = new System.Drawing.Point(0, 180);
             this.label100.Margin = new System.Windows.Forms.Padding(0);
             this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(293, 33);
+            this.label100.Size = new System.Drawing.Size(293, 30);
             this.label100.TabIndex = 88;
             this.label100.Text = "EK";
             this.label100.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -553,7 +555,7 @@
             this.txtMasterKey.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtMasterKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMasterKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMasterKey.Location = new System.Drawing.Point(298, 302);
+            this.txtMasterKey.Location = new System.Drawing.Point(298, 275);
             this.txtMasterKey.Margin = new System.Windows.Forms.Padding(5);
             this.txtMasterKey.Name = "txtMasterKey";
             this.txtMasterKey.Size = new System.Drawing.Size(283, 24);
@@ -567,10 +569,10 @@
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(5, 297);
+            this.label18.Location = new System.Drawing.Point(5, 270);
             this.label18.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(283, 33);
+            this.label18.Size = new System.Drawing.Size(283, 30);
             this.label18.TabIndex = 86;
             this.label18.Text = "Master Key";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -580,7 +582,7 @@
             this.txtSysT.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtSysT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSysT.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSysT.Location = new System.Drawing.Point(298, 269);
+            this.txtSysT.Location = new System.Drawing.Point(298, 245);
             this.txtSysT.Margin = new System.Windows.Forms.Padding(5);
             this.txtSysT.Name = "txtSysT";
             this.txtSysT.Size = new System.Drawing.Size(283, 24);
@@ -593,10 +595,10 @@
             this.label102.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label102.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label102.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label102.Location = new System.Drawing.Point(0, 264);
+            this.label102.Location = new System.Drawing.Point(0, 240);
             this.label102.Margin = new System.Windows.Forms.Padding(0);
             this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(293, 33);
+            this.label102.Size = new System.Drawing.Size(293, 30);
             this.label102.TabIndex = 84;
             this.label102.Text = "Sys-T";
             this.label102.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -606,7 +608,7 @@
             this.txtAK.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtAK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAK.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAK.Location = new System.Drawing.Point(298, 236);
+            this.txtAK.Location = new System.Drawing.Point(298, 215);
             this.txtAK.Margin = new System.Windows.Forms.Padding(5);
             this.txtAK.Name = "txtAK";
             this.txtAK.Size = new System.Drawing.Size(283, 24);
@@ -619,10 +621,10 @@
             this.label101.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label101.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label101.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label101.Location = new System.Drawing.Point(0, 231);
+            this.label101.Location = new System.Drawing.Point(0, 210);
             this.label101.Margin = new System.Windows.Forms.Padding(0);
             this.label101.Name = "label101";
-            this.label101.Size = new System.Drawing.Size(293, 33);
+            this.label101.Size = new System.Drawing.Size(293, 30);
             this.label101.TabIndex = 82;
             this.label101.Text = "AK";
             this.label101.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -632,7 +634,7 @@
             this.txtEK.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtEK.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtEK.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtEK.Location = new System.Drawing.Point(298, 203);
+            this.txtEK.Location = new System.Drawing.Point(298, 185);
             this.txtEK.Margin = new System.Windows.Forms.Padding(5);
             this.txtEK.Name = "txtEK";
             this.txtEK.Size = new System.Drawing.Size(283, 24);
@@ -643,7 +645,7 @@
             // 
             this.txtAuthPasswordFW.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAuthPasswordFW.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAuthPasswordFW.Location = new System.Drawing.Point(298, 137);
+            this.txtAuthPasswordFW.Location = new System.Drawing.Point(298, 125);
             this.txtAuthPasswordFW.Margin = new System.Windows.Forms.Padding(5);
             this.txtAuthPasswordFW.Name = "txtAuthPasswordFW";
             this.txtAuthPasswordFW.Size = new System.Drawing.Size(283, 24);
@@ -657,10 +659,10 @@
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.ForeColor = System.Drawing.Color.Black;
-            this.label27.Location = new System.Drawing.Point(5, 132);
+            this.label27.Location = new System.Drawing.Point(5, 120);
             this.label27.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(283, 33);
+            this.label27.Size = new System.Drawing.Size(283, 30);
             this.label27.TabIndex = 79;
             this.label27.Text = "HLS Auth Pass (FW)";
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -675,7 +677,7 @@
             this.label1.Location = new System.Drawing.Point(4, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(285, 33);
+            this.label1.Size = new System.Drawing.Size(285, 30);
             this.label1.TabIndex = 1;
             this.label1.Text = "COM Port";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -687,10 +689,10 @@
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(5, 33);
+            this.label6.Location = new System.Drawing.Point(5, 30);
             this.label6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(283, 33);
+            this.label6.Size = new System.Drawing.Size(283, 30);
             this.label6.TabIndex = 52;
             this.label6.Text = "Baud Rate";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -719,7 +721,7 @@
             this.cbMeterBaudRate.Items.AddRange(new object[] {
             "9600",
             "57600"});
-            this.cbMeterBaudRate.Location = new System.Drawing.Point(298, 38);
+            this.cbMeterBaudRate.Location = new System.Drawing.Point(298, 35);
             this.cbMeterBaudRate.Margin = new System.Windows.Forms.Padding(5);
             this.cbMeterBaudRate.Name = "cbMeterBaudRate";
             this.cbMeterBaudRate.Size = new System.Drawing.Size(283, 26);
@@ -732,10 +734,10 @@
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.Black;
-            this.label8.Location = new System.Drawing.Point(5, 66);
+            this.label8.Location = new System.Drawing.Point(5, 60);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(283, 33);
+            this.label8.Size = new System.Drawing.Size(283, 30);
             this.label8.TabIndex = 54;
             this.label8.Text = "Access Level ";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -751,7 +753,7 @@
             "Utility Settings",
             "Push",
             "Firmware Upgrade"});
-            this.cbAccessLevel.Location = new System.Drawing.Point(298, 71);
+            this.cbAccessLevel.Location = new System.Drawing.Point(298, 65);
             this.cbAccessLevel.Margin = new System.Windows.Forms.Padding(5);
             this.cbAccessLevel.Name = "cbAccessLevel";
             this.cbAccessLevel.Size = new System.Drawing.Size(283, 26);
@@ -764,10 +766,10 @@
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.Black;
-            this.label7.Location = new System.Drawing.Point(5, 99);
+            this.label7.Location = new System.Drawing.Point(5, 90);
             this.label7.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(283, 33);
+            this.label7.Size = new System.Drawing.Size(283, 30);
             this.label7.TabIndex = 56;
             this.label7.Text = "HLS Auth Pass (US)";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -776,7 +778,7 @@
             // 
             this.txtAuthPasswordWrite.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAuthPasswordWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAuthPasswordWrite.Location = new System.Drawing.Point(298, 104);
+            this.txtAuthPasswordWrite.Location = new System.Drawing.Point(298, 95);
             this.txtAuthPasswordWrite.Margin = new System.Windows.Forms.Padding(5);
             this.txtAuthPasswordWrite.Name = "txtAuthPasswordWrite";
             this.txtAuthPasswordWrite.Size = new System.Drawing.Size(283, 24);
@@ -790,10 +792,10 @@
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.Black;
-            this.label10.Location = new System.Drawing.Point(5, 165);
+            this.label10.Location = new System.Drawing.Point(5, 150);
             this.label10.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(283, 33);
+            this.label10.Size = new System.Drawing.Size(283, 30);
             this.label10.TabIndex = 57;
             this.label10.Text = "LLS Auth Pass (MR)";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -802,7 +804,7 @@
             // 
             this.txtAuthPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtAuthPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAuthPassword.Location = new System.Drawing.Point(298, 170);
+            this.txtAuthPassword.Location = new System.Drawing.Point(298, 155);
             this.txtAuthPassword.Margin = new System.Windows.Forms.Padding(5);
             this.txtAuthPassword.Name = "txtAuthPassword";
             this.txtAuthPassword.Size = new System.Drawing.Size(283, 24);
@@ -847,6 +849,16 @@
             this.tabPageWirelessComm.Size = new System.Drawing.Size(1556, 869);
             this.tabPageWirelessComm.TabIndex = 0;
             this.tabPageWirelessComm.Text = "Push Notification";
+            // 
+            // tabPageDecrypter
+            // 
+            this.tabPageDecrypter.Location = new System.Drawing.Point(4, 25);
+            this.tabPageDecrypter.Name = "tabPageDecrypter";
+            this.tabPageDecrypter.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageDecrypter.Size = new System.Drawing.Size(1556, 869);
+            this.tabPageDecrypter.TabIndex = 2;
+            this.tabPageDecrypter.Text = "Decrypter";
+            this.tabPageDecrypter.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -926,5 +938,6 @@
         private System.Windows.Forms.CheckBox checkBox_InvocationCounter;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.TextBox txtConfBlock;
+        private System.Windows.Forms.TabPage tabPageDecrypter;
     }
 }

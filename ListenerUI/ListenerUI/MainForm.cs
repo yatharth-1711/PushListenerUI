@@ -1,6 +1,7 @@
 ﻿using AutoTestDesktopWFA;
 using MeterComm.DLMS;
 using MeterReader.DLMSNetSerialCommunication;
+using MeterReader.HelperForms;
 using MeterReader.TestHelperClasses;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace ListenerUI
                 MessageBox.Show("tabPageLCDConfig not found in tabControl2.");
             }
         }
+
         private void btnSaveData_Click(object sender, EventArgs e)
         {
             TestConfiguration config = new TestConfiguration();
@@ -112,6 +114,14 @@ namespace ListenerUI
             string[] ports = SerialPort.GetPortNames();
             cbMeterComPort.Items.Clear();
             cbMeterComPort.Items.AddRange(ports);
+        }
+
+        private void btnDecrypterForm_Click(object sender, EventArgs e)
+        {
+            //PushPacketDecrypterFrm p = new PushPacketDecrypterFrm();
+            PushPacketDecrypter p = new PushPacketDecrypter();
+            p.Show();
+            p.BringToFront();
         }
     }
 }

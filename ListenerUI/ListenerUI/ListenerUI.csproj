@@ -280,9 +280,22 @@
     <Compile Include="nicconfiguration\FOTAHelper.cs" />
     <Compile Include="nicconfiguration\FOTAInfo.cs" />
     <Compile Include="nicconfiguration\NicConfigIDs.cs" />
+    <Compile Include="PushPacketDecrypter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PushPacketDecrypter.Designer.cs">
+      <DependentUpon>PushPacketDecrypter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PushPacketDecrypterFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PushPacketDecrypterFrm.Designer.cs">
+      <DependentUpon>PushPacketDecrypterFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolboxUI.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIStyler.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ListenerForm.cs">
       <SubType>Form</SubType>
@@ -327,6 +340,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="PushPacketDecrypter.resx">
+      <DependentUpon>PushPacketDecrypter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PushPacketDecrypterFrm.resx">
+      <DependentUpon>PushPacketDecrypterFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="manufacturerconfigurableparameters\.svn\entries" />
     <None Include="manufacturerconfigurableparameters\.svn\format" />
     <None Include="manufacturerconfigurableparameters\.svn\pristine\2e\2ed5fee8ca44f5cd5fbd39a4e96de0c023d72d7c.svn-base" />

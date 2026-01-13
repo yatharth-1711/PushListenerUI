@@ -289,14 +289,14 @@ namespace MeterReader.DLMSNetSerialCommunication
         /// <param name="data"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private string DecodePushDataToXML(byte[] data, int length)
+        public string DecodePushDataToXML(byte[] data, int length)
         {
             string dataXML = "";
             try
             {
                 Gurux.DLMS.GXReplyData reply = new Gurux.DLMS.GXReplyData();
                 // Decrypt and parse push message
-                dlmsClient.GetData(data, reply);
+                //dlmsClient.GetData(data, reply);
                 Gurux.DLMS.GXDLMSTranslator translator = new Gurux.DLMS.GXDLMSTranslator(TranslatorOutputType.SimpleXml);
                 translator.Comments = true;
                 translator.Security = Gurux.DLMS.Enums.Security.AuthenticationEncryption;
