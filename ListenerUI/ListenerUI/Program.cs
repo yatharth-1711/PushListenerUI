@@ -1,4 +1,6 @@
-﻿using MeterReader.HelperForms;
+﻿using MeterReader.DLMSInterfaceClasses;
+using MeterReader.HelperForms;
+using MeterReader.HelperForms.FGConfigurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +20,12 @@ namespace ListenerUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new MainForm());
-            //Application.Run(new PushPacketDecrypter());
+            //Application.Run(new ListenerForm());
+            //Application.Run(new FGComparisonForm());
+            ////Application.Run(new PushPacketDecrypter());
             Application.Run(new PushPacketDecrypterFrm());
+            //Application.Run(new FGConfigurationsFrm());
+            //Application.Run(new PushSetupandActionScheduleConfig());
         }
     }
 }

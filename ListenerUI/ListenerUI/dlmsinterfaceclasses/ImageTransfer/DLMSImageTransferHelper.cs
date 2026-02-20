@@ -1,0 +1,929 @@
+﻿using AutoTest.FrameWork.Converts;
+using AutoTestDesktopWFA;
+using Gurux.Common;
+using Gurux.DLMS;
+using Gurux.DLMS.Enums;
+using Gurux.DLMS.Objects;
+using log4net;
+using MeterComm;
+using MeterComm.DLMS;
+using MeterReader.DLMSInterfaceClasses.ProfileGeneric;
+using MeterReader.DLMSNetSerialCommunication;
+using MeterReader.TestHelperClasses;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Bcpg;
+using Org.BouncyCastle.Crypto.Tls;
+using Org.BouncyCastle.Ocsp;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace MeterReader.DLMSInterfaceClasses.ImageTransfer
+{
+    public class DLMSImageTransferHelper
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public static string ImageFilePath = "";
+        public static string ImageIdentifier = "";
+        public static UInt32 ImageBlockSize = 0;
+        public static void SaveToXml(DLMSImageTransferCollection collection)
+        {
+            string filePath = System.IO.Path.Combine(Utilities.DLMSClasesXMLFilePath, "ImageTransfer.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(DLMSImageTransferCollection));
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                serializer.Serialize(writer, collection);
+            }
+        }
+
+        public static DLMSImageTransferCollection LoadFromXml()
+        {
+            string filePath = System.IO.Path.Combine(Utilities.DLMSClasesXMLFilePath, "ImageTransfer.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(DLMSImageTransferCollection));
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                return (DLMSImageTransferCollection)serializer.Deserialize(reader);
+            }
+        }
+
+        public static DLMSImageTransfer GetImageByLogicalName(string logicalName)
+        {
+            var collection = LoadFromXml();
+            return collection.Images.FirstOrDefault(p => p.logical_name == logicalName);
+        }
+        public static bool UpdateImageXML(string logicalName, Action<DLMSImageTransfer> updateAction)
+        {
+            var collection = LoadFromXml();
+            var image = collection.Images.FirstOrDefault(p => p.logical_name == logicalName);
+            if (image != null)
+            {
+                updateAction(image);
+                SaveToXml(collection);
+                return true;
+            }
+            return false;
+        }
+
+        public static bool EnableImageTransfer(ref DLMSComm DLMSObj)
+        {
+            bool IsEnabled = true;
+            try
+            {
+                string readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 5);
+                if (readData.Length == 4 && readData.Substring(2, 2) != "01" &&
+                    SetGetFromMeter.SetObjectValue(ref DLMSObj, 18, "0.0.44.0.0.255", 5, "0301") == 0)
+                {
+                    if (SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 5) != "0301")
+                    {
+                        IsEnabled = false;
+                    }
+                }
+                else if (readData.Length == 4 && readData.Substring(2, 2) == "01")
+                    IsEnabled = true;
+                else
+                    IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                IsEnabled = false;
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return IsEnabled;
+
+        }
+        public static bool EnableImageTransfer(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer GXimageTransferObj)
+        {
+            bool IsEnabled = true;
+            try
+            {
+                //Check that image transfer is enabled.
+                GXReplyData reply = new GXReplyData();
+                WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(GXimageTransferObj, 5), reply);
+                WrapperObj.dlmsClient.UpdateValue(GXimageTransferObj, 5, reply.Value);
+                string readData = reply.Data.ToString().Replace(" ", "");
+
+                //WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 5);
+                //string readData = WrapperComm.recData.Trim();//Image Transfer Status
+                //string readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 5);
+                string writeResponseData = "";
+                if (!readData.Contains("0301"))
+                {
+                    WrapperObj.WriteData(ObjectType.ImageTransfer, "0.0.44.0.0.255", 5, DataType.Boolean, true);
+                    WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(GXimageTransferObj, 5), reply);
+                    WrapperObj.dlmsClient.UpdateValue(GXimageTransferObj, 5, reply.Value);
+                    writeResponseData = reply.Data.ToString().Replace(" ", "");
+                    //WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 5);
+                    //writeResponseData = WrapperComm.recData.Trim();//Image Transfer Status
+                }
+                else if (readData.Contains("0301"))
+                {
+                    writeResponseData = readData;
+                }
+
+                if (readData.Length == 4 && readData.Substring(2, 2) != "01" &&
+                writeResponseData == "0301")
+                {
+                    IsEnabled = false;
+                }
+                else if (readData.Length == 4 && readData.Substring(2, 2) == "01")
+                    IsEnabled = true;
+                else
+                    IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                IsEnabled = false;
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return IsEnabled;
+
+        }
+
+        public static UInt32 GetImageBlockSize(ref DLMSComm DLMSObj)
+        {
+            UInt32 blockSize = 0;
+            try
+            {
+                string readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 2);
+                if (readData.Length == 10 && readData.Substring(0, 2) == "06")
+                {
+                    blockSize = UInt32.Parse(readData.Substring(2), NumberStyles.HexNumber);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            finally
+            {
+                ImageBlockSize = blockSize;
+            }
+            return blockSize;
+
+        }
+        public static UInt32 GetImageBlockSize(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer GXimageTransferObj)
+        {
+            UInt32 blockSize = 0;
+            try
+            {
+                //Check that image transfer is enabled.
+                GXReplyData reply = new GXReplyData();
+                WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(GXimageTransferObj, 2), reply);
+                WrapperObj.dlmsClient.UpdateValue(GXimageTransferObj, 2, reply.Value);
+                string readData = reply.Data.ToString().Replace(" ", "");
+                //WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 2);
+                //string readData = WrapperComm.recData.Trim();
+                if (readData.Length == 10 && readData.Substring(0, 2) == "06")
+                {
+                    blockSize = UInt32.Parse(readData.Substring(2), NumberStyles.HexNumber);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            finally
+            {
+                ImageBlockSize = blockSize;
+            }
+            return blockSize;
+        }
+        public static string GetImageBlockTransferStatusData(ref DLMSComm DLMSObj)
+        {
+            string blockData = "";
+            try
+            {
+                string readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 3);
+                if (readData.Length > 4 && readData.Substring(0, 2) == "04")
+                {
+                    DLMSParser parse = new DLMSParser();
+                    blockData = parse.GetProfileValueString(readData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return blockData;
+
+        }
+        public static string GetImageBlockTransferStatusData(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer GXimageTransferObj)
+        {
+            string blockData = "";
+            try
+            {
+                GXReplyData reply = new GXReplyData();
+                WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(GXimageTransferObj, 3), reply);
+                WrapperObj.dlmsClient.UpdateValue(GXimageTransferObj, 3, reply.Value);
+                string readData = reply.Data.ToString().Replace(" ", "");
+                if (readData.Length > 4 && readData.Substring(0, 2) == "04")
+                {
+                    DLMSParser parse = new DLMSParser();
+                    blockData = parse.GetProfileValueString(readData);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return blockData;
+
+        }
+        public static void Import()
+        {
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "BIN Files (*.bin)|*.bin"
+            };
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                ImageFilePath = ofd.FileName;
+            }
+            else
+                ImageFilePath = "";
+        }
+        public static byte[] ReadImageFile()
+        {
+            if (string.IsNullOrEmpty(ImageFilePath))
+            {
+                return (byte[])null;
+            }
+            if (!File.Exists(ImageFilePath))
+            {
+                return (byte[])null;
+            }
+            string s = "";
+            byte[] fileBytes = File.ReadAllBytes(ImageFilePath);
+            return fileBytes;
+        }
+
+        public static bool ImageTransferInitiate(ref DLMSComm DLMSObj, byte[] fileBytes, string imageIdentifier, out string sMessage)
+        {
+            sMessage = "";
+            if (fileBytes is null || string.IsNullOrEmpty(imageIdentifier))
+                return false;
+            bool IsSuccess = true;
+            string imageIdentifierHex = DLMSParser.ConvertAsciiToHex(imageIdentifier);
+            string sData = $"01020209{(imageIdentifierHex.Length / 2).ToString("X2")}{imageIdentifierHex}06{fileBytes.Length.ToString("X8")}";
+            int nRetVal = DLMSObj.ActionCmd("001200002C0000FF01", (byte)0, (byte)3, (byte)3, sData);
+            if (nRetVal == 1)
+                sMessage = sMessage + "Image Transfer Initiate Error in Write Data";
+            else if (nRetVal == 2)
+                sMessage = sMessage + "Image Transfer Initiate Write Access Denied";
+            else
+                sMessage = sMessage + "Image Transfer Initiated Successfully";
+
+            string readData = "";
+            string statusMessage = "";
+            int tryCount = 0;
+            if (nRetVal != 0)
+            {
+                IsSuccess = false;
+                return IsSuccess;
+            }
+            do
+            {
+                ++tryCount;
+                readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 6);//Image Transfer Status
+                if (readData.Length == 4 && readData.Substring(0, 2) == "16" && Convert.ToInt32(readData.Substring(2), 16) == 1)
+                {
+                    statusMessage = $"{((ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16)).ToString()}";
+                    break;
+                }
+                SetGetFromMeter.Wait(2000);
+                if (tryCount > 20)
+                {
+                    IsSuccess = false;
+                    statusMessage = $"{((ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16)).ToString()}";
+                    break;
+                }
+            }
+            while (readData != "1601");
+            sMessage += $" | {statusMessage}";
+            return IsSuccess;
+        }
+
+        public static bool ImageTransferInitiate(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer imageTransfer, byte[] fileBytes, string imageIdentifier, out string sMessage)
+        {
+            sMessage = "";
+            if (fileBytes is null || string.IsNullOrEmpty(imageIdentifier))
+                return false;
+            bool IsSuccess = false;
+            try
+            {
+                string imageIdentifierHex = DLMSParser.ConvertAsciiToHex(imageIdentifier);
+                byte[] imgIdentificationBytes = GXCommon.HexToBytes(imageIdentifierHex);
+                // Step 2: Initiate the Image transfer process.
+                GXReplyData reply = new GXReplyData();
+                WrapperObj.ReadDataBlock(imageTransfer.ImageTransferInitiate(WrapperObj.dlmsClient, imgIdentificationBytes, fileBytes.Length), reply);
+                WrapperObj.dlmsClient.UpdateValue(imageTransfer, 2, reply.Value);
+                //WrapperObj.ImageUpdate(imageTransfer, imgIdentificationBytes, fileBytes);
+
+                WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 6);
+                string readData = WrapperComm.recData.Trim();
+                int nRetVal = 0;
+                if (readData.Length == 4 && readData.Substring(2, 2) == "01")
+                {
+                    nRetVal = 0;
+                    IsSuccess = true;
+                }
+                else
+                    nRetVal = 1;
+                if (nRetVal == 1)
+                    sMessage = sMessage + "Image Transfer Initiate Failed. ";
+                else
+                    sMessage = sMessage + "Image Transfer Initiated Successfully. ";
+                string statusMessage = "";
+                int tryCount = 0;
+                if (nRetVal != 0)
+                {
+                    IsSuccess = false;
+                    return IsSuccess;
+                }
+                do
+                {
+                    ++tryCount;
+                    WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 6);//Image Transfer Status
+                    readData = WrapperComm.recData.Trim();
+                    if (readData.Length == 4 && readData.Substring(0, 2) == "16" && Convert.ToInt32(readData.Substring(2), 16) == 1)
+                    {
+                        statusMessage = $"{((ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16)).ToString()}";
+                        break;
+                    }
+                    SetGetFromMeter.Wait(2000);
+                    if (tryCount > 20)
+                    {
+                        IsSuccess = false;
+                        statusMessage = $"{((ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16)).ToString()}";
+                        break;
+                    }
+                }
+                while (readData != "1601");
+                sMessage += $" | {statusMessage}";
+            }
+            catch (Exception ex)
+            {
+                sMessage += ex.Message.ToString();
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return IsSuccess;
+        }
+
+        public static List<string> GetImageBlocks(byte[] image)
+        {
+            int num = (int)(image.Length / ImageBlockSize);
+            if (image.Length % ImageBlockSize != 0L)
+            {
+                num++;
+            }
+            List<string> list = new List<string>();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i != num; i++)
+            {
+                sb.Length = 0;
+                sb.Append($"020206{i.ToString("X8")}");
+                int num2 = (int)(image.Length - (i + 1) * ImageBlockSize);
+                byte[] array;
+                if (num2 < 0)
+                {
+                    num2 = (int)(image.Length - i * ImageBlockSize);
+                    array = new byte[num2];
+                    Array.Copy(image, i * (int)ImageBlockSize, array, 0, num2);
+                }
+                else
+                {
+                    array = new byte[ImageBlockSize];
+                    Array.Copy(image, i * (int)ImageBlockSize, array, 0, (int)ImageBlockSize);
+                }
+                sb.Append($"09{((array.Length - 2) / 2).ToString("X2")}{(array.Length).ToString("X4")}{string.Concat(array.Select(b => b.ToString("X2")))}");
+                //sb.Append($"09{((array.Length - 2) / 2).ToString("X2")}{(array.Length).ToString("X4")}");
+                //foreach (byte b in array)
+                //{
+                //    sb.Append(b.ToString("X2")); // X2 for two-digit uppercase hex
+                //}
+                list.Add(sb.ToString());
+            }
+
+            return list;
+        }
+
+        public static bool TransferImageToMeter(ref DLMSComm DLMSObj, List<string> blocks)
+        {
+            int Repeat = 3;
+            for (int blockNumber = 0; blockNumber < blocks.Count; blockNumber++)
+            {
+                bool flag = false;
+                int num = 0;
+                do
+                {
+                    ++num;
+                    //SetGetFromMeter.Wait(10);
+                    int nRetVal = Convert.ToInt16(DLMSObj.ImageActionCmd((byte)18, "00002C0000FF", (byte)2, blocks[blockNumber]));
+                    if (nRetVal == 1)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                while (num < Repeat);
+                //if (blockNumber == 2)
+                //{
+                //    flag = true;
+                //    break;
+                //}
+                if (!flag)
+                    return false;
+            }
+            return true;
+        }
+        public static bool CheckCompletnessImage(ref DLMSComm DLMSObj, List<string> blocks)
+        {
+            bool IsCompleted = true;
+            try
+            {
+                DLMSParser parse = new DLMSParser();
+                //Check ImageFirstNotTransferredBlockNumber.
+                string ReadData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 4);
+                if (ReadData.Length == 0)
+                {
+                    IsCompleted = false;
+                    return IsCompleted;
+                }
+                int readDataLength = Convert.ToInt32(parse.GetProfileValueString(ReadData));
+                if (readDataLength != blocks.Count && readDataLength < blocks.Count)
+                {
+                    IsCompleted = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return IsCompleted;
+        }
+
+        public static bool CheckCompletnessImage(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer imageTransfer, byte[] image)
+        {
+            bool IsCompleted = true;
+            try
+            {
+                //Check that image transfer is enabled.
+                GXReplyData reply = new GXReplyData();
+                WrapperObj.GetReadOut();
+                int imageBlockCount;
+                byte[][] imageByteArrays = imageTransfer.ImageBlockTransfer(WrapperObj.dlmsClient, image, out imageBlockCount);
+                //Step 4: Check the completeness of the Image.
+                WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(imageTransfer, 3), reply);
+                WrapperObj.dlmsClient.UpdateValue(imageTransfer, 3, reply.Value);
+
+
+                DLMSParser parse = new DLMSParser();
+                //Check ImageFirstNotTransferredBlockNumber.
+                WrapperObj.ReadDataBlock(WrapperObj.dlmsClient.Read(imageTransfer, 4), reply);
+                WrapperObj.dlmsClient.UpdateValue(imageTransfer, 3, reply.Value);
+                string ReadData = reply.Data.ToString().Replace(" ", "");
+                //string ReadData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 4);
+                if (ReadData.Length == 0)
+                {
+                    IsCompleted = false;
+                    return IsCompleted;
+                }
+                int readDataLength = Convert.ToInt32(parse.GetProfileValueString(ReadData)) - 1;
+                if (readDataLength != imageBlockCount && readDataLength < imageBlockCount)
+                {
+                    IsCompleted = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message.ToString());
+                log.Error(ex.StackTrace.ToString());
+            }
+            return IsCompleted;
+        }
+
+        public static void CheckMissingBlocksAndTransfer(ref DLMSComm DLMSObj, List<string> blocks)
+        {
+            int num4 = 0;
+            int nRepeat = 3;
+            bool flag4 = false;
+            string imageTxBlockStatus;
+            do
+            {
+                ++num4;
+                imageTxBlockStatus = GetImageBlockTransferStatusData(ref DLMSObj);//image_transferred_blocks_status
+                if (imageTxBlockStatus.Length > 8)
+                {
+                    flag4 = true;
+                    break;
+                }
+                Thread.Sleep(10);
+            }
+            while (num4 < nRepeat);
+            if (!flag4)
+                return;
+            flag4 = false;
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                if (imageTxBlockStatus.Substring(i, 1) != "1")
+                {
+                    TransferMissingBlocks(ref DLMSObj, blocks.ToArray(), i);
+                    flag4 = true;
+                }
+            }
+            if (flag4)
+            {
+                DLMSObj.Dispose();
+                DLMSObj = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+                DLMSObj.SignOnDLMS();
+            }
+        }
+        public static void CheckMissingBlocksAndTransfer(ref DLMSComm DLMSObj)
+        {
+            byte[] array = new byte[10000];
+            string empty = string.Empty;
+            int num4 = 0;
+            int nRepeat = 3;
+            bool flag4 = false;
+            string imageTxBlockStatus;
+            do
+            {
+                ++num4;
+                imageTxBlockStatus = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 3);//image_transferred_blocks_status
+                if (imageTxBlockStatus.Length > 8)
+                {
+                    flag4 = true;
+                    break;
+                }
+                Thread.Sleep(10);
+            }
+            while (num4 < nRepeat);
+            if (!flag4)
+                return;
+            string str7 = imageTxBlockStatus.Substring(8);
+            int index = 0;
+            for (int startIndex3 = 0; startIndex3 < str7.Length; startIndex3 += 2)
+            {
+                string str9 = Convert.ToString(Convert.ToInt32(str7.Substring(startIndex3, 2), 16), 2).PadLeft(8, '0');
+                for (int startIndex4 = 7; startIndex4 >= 0; --startIndex4)
+                {
+                    array[index] = Convert.ToByte(str9.Substring(startIndex4, 1));
+                    ++index;
+                }
+            }
+            string[] strArray1 = GetImageBlocks(ReadImageFile()).ToArray();
+            Array.Resize<byte>(ref array, ReadImageFile().Length);
+            int PacketNo = 0;
+            for (; PacketNo < strArray1.Length; ++PacketNo)
+            {
+                if (array[PacketNo] != (byte)1)
+                {
+                    Thread.Sleep(10);
+
+                    TransferMissingBlocks(ref DLMSObj, strArray1, PacketNo);
+                }
+            }
+            DLMSObj.Dispose();
+            DLMSObj = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            DLMSObj.SignOnDLMS();
+        }
+        public static bool TransferMissingBlocks(ref DLMSComm DLMSObj, string[] sPacket, int PacketNo)
+        {
+            return DLMSObj.ImageActionCmd((byte)18, "00002C0000FF", (byte)2, sPacket[PacketNo]);
+        }
+
+        public static bool VerifyImage(ref DLMSComm DLMSObj)
+        {
+            ImageTransferStatus transferStatus = ImageTransferStatus.Image_transfer_not_initiated;
+            bool status = false;
+            TestStopWatch watch = new TestStopWatch();
+            watch.Start();
+            do
+            {
+                transferStatus = GetImageTransferStatus(ref DLMSObj);
+                if (transferStatus != ImageTransferStatus.Image_transfer_initiated)
+                    SetGetFromMeter.Wait(5 * 1000);
+                if (watch.GetElapsedSeconds() > 240)
+                {
+                    status = false;
+                    return status;
+                }
+            } while (transferStatus != ImageTransferStatus.Image_transfer_initiated);
+            status = DLMSObj.ImageActionCmd((byte)18, "00002C0000FF", (byte)3, "0F00");
+            watch.Start();
+            do
+            {
+                transferStatus = GetImageTransferStatus(ref DLMSObj);
+                switch (transferStatus)
+                {
+                    case ImageTransferStatus.Image_transfer_not_initiated:
+                        break;
+                    case ImageTransferStatus.Image_transfer_initiated:
+                        break;
+                    case ImageTransferStatus.Image_verification_initiated:
+                        break;
+                    case ImageTransferStatus.Image_verification_successful://3
+                        status = true;
+                        break;
+                    case ImageTransferStatus.Image_verification_failed://4
+                        status = false;
+                        return status;
+                        break;
+                    case ImageTransferStatus.Image_activation_initiated:
+                        break;
+                    case ImageTransferStatus.Image_activation_successful:
+                        break;
+                    case ImageTransferStatus.Image_activation_failed:
+                        break;
+                    default:
+                        break;
+                }
+                if (watch.GetElapsedSeconds() > 300)
+                {
+                    status = false;
+                    break;
+                }
+            } while (transferStatus != ImageTransferStatus.Image_verification_successful);
+            watch.Dispose();
+            return status;
+        }
+
+        public static bool VerifyImage(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer imageTransfer)
+        {
+            ImageTransferStatus transferStatus = ImageTransferStatus.Image_transfer_not_initiated;
+            bool status = false;
+            TestStopWatch watch = new TestStopWatch();
+            watch.Start();
+            do
+            {
+                transferStatus = GetImageTransferStatus(ref WrapperObj);
+                if (transferStatus != ImageTransferStatus.Image_transfer_initiated)
+                    SetGetFromMeter.Wait(5 * 1000);
+                if (watch.GetElapsedSeconds() > 240)
+                {
+                    status = false;
+                    return status;
+                }
+            } while (transferStatus != ImageTransferStatus.Image_transfer_initiated);
+            //Check that image transfer is enabled.
+            GXReplyData reply = new GXReplyData();
+            WrapperObj.GetReadOut();
+            //byte[][] imageVerifyArray = imageTransfer.ImageVerify(WrapperObj.dlmsClient);
+            // Step 5: The Image is verified;
+            //foreach (byte[] veryfyPkt in imageVerifyArray)
+            //{ 
+
+
+            //}
+            WrapperObj.ReadDataBlock(imageTransfer.ImageVerify(WrapperObj.dlmsClient), reply);
+            if (reply.Error == 0)
+                status = true;
+            else
+                status = false;
+            do
+            {
+                transferStatus = GetImageTransferStatus(ref WrapperObj);
+                switch (transferStatus)
+                {
+                    case ImageTransferStatus.Image_transfer_not_initiated:
+                        break;
+                    case ImageTransferStatus.Image_transfer_initiated:
+                        break;
+                    case ImageTransferStatus.Image_verification_initiated:
+                        break;
+                    case ImageTransferStatus.Image_verification_successful://3
+                        status = true;
+                        break;
+                    case ImageTransferStatus.Image_verification_failed://4
+                        status = false;
+                        return status;
+                        break;
+                    case ImageTransferStatus.Image_activation_initiated:
+                        break;
+                    case ImageTransferStatus.Image_activation_successful:
+                        break;
+                    case ImageTransferStatus.Image_activation_failed:
+                        break;
+                    default:
+                        break;
+                }
+                if (watch.GetElapsedSeconds() > 300)
+                {
+                    status = false;
+                    break;
+                }
+            } while (transferStatus != ImageTransferStatus.Image_verification_successful);
+            watch.Dispose();
+            return status;
+        }
+
+        public static ImageTransferStatus GetImageTransferStatus(ref DLMSComm DLMSObj)
+        {
+            ImageTransferStatus status = ImageTransferStatus.Image_verification_failed;
+            string readData = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 18, "0.0.44.0.0.255", 6);//Image Transfer Status
+            if (readData.Length == 4 && readData.Substring(0, 2) == "16")
+            {
+                status = (ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16);
+            }
+            return status;
+        }
+        public static ImageTransferStatus GetImageTransferStatus(ref WrapperComm WrapperObj)
+        {
+            ImageTransferStatus status = ImageTransferStatus.Image_verification_failed;
+            WrapperObj.ReadCOSEMObject(ObjectType.ImageTransfer, "0.0.44.0.0.255", 6);//Image Transfer Status
+            string readData = WrapperComm.recData.Trim();//Image Transfer Status
+            if (readData.Length == 4 && readData.Substring(0, 2) == "16")
+            {
+                status = (ImageTransferStatus)Convert.ToInt32(readData.Substring(2), 16);
+            }
+            return status;
+        }
+        public static bool ActivateImage(ref DLMSComm DLMSObj)
+        {
+            bool IsActivated = true;
+            if (!DLMSObj.ImageActionCmd((byte)18, "00002C0000FF", (byte)4, "0F00"))
+                IsActivated = false;
+            return IsActivated;
+        }
+        public static bool ActivateImage(ref WrapperComm WrapperObj, ref GXDLMSImageTransfer imageTransfer)
+        {
+            bool IsActivated = true;
+            //Check that image transfer is enabled.
+            GXReplyData reply = new GXReplyData();
+            WrapperObj.GetReadOut();
+            //Step 7: Activate image.
+            WrapperObj.ReadDataBlock(imageTransfer.ImageActivate(WrapperObj.dlmsClient), reply);
+            if (reply.Error != 0)
+                IsActivated = false;
+            return IsActivated;
+        }
+
+        public static bool VerifyActivatedImage(ref DLMSComm DLMSObj)
+        {
+            ImageTransferStatus activateStatus = ImageTransferStatus.Image_transfer_not_initiated;
+            bool IsActivationVerified = true;
+            DLMSObj.Dispose();
+            DLMSObj = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+            DLMSObj.SignOnDLMS();
+            TestStopWatch watch = new TestStopWatch();
+            watch.Start();
+            do
+            {
+                activateStatus = GetImageTransferStatus(ref DLMSObj);
+                if (activateStatus == ImageTransferStatus.Image_activation_failed)
+                {
+                    IsActivationVerified = false;
+                    break;
+                }
+                if (activateStatus != ImageTransferStatus.Image_activation_successful)
+                {
+                    SetGetFromMeter.Wait(5 * 1000);
+                }
+                if (watch.GetElapsedSeconds() > 240)
+                {
+                    IsActivationVerified = false;
+                    break;
+                }
+            } while (activateStatus != ImageTransferStatus.Image_activation_successful);
+            return IsActivationVerified;
+        }
+
+        public static bool SetActivationDate(ref DLMSComm DLMSObj)
+        {
+            DateTime dt = DateTime.Now;
+            string sData = $"010102020904{dt.Hour.ToString("X2")}{dt.Minute.ToString("X2")}{dt.Second.ToString("X2")}000905{(dt.Year / 256).ToString("X2")}{(dt.Year % 256).ToString("X2")}{dt.Month.ToString("X2")}{((Convert.ToByte(dt.DayOfWeek) == 0) ? "07" : Convert.ToByte(dt.DayOfWeek).ToString("X2"))}00";
+            return !(Convert.ToBoolean(SetGetFromMeter.SetObjectValue(ref DLMSObj, 22, "0.0.15.0.2.255", 4, sData)));
+        }
+
+        public static bool PerformFWUpgrade(ref DLMSComm DLMSObj, out string ResultMessage)
+        {
+            bool IsSuccess = true;
+            ResultMessage = "";
+            if (string.IsNullOrEmpty(ImageFilePath) || string.IsNullOrEmpty(ImageIdentifier))
+            {
+                ResultMessage += $"Either Image File Path or Image Identifier not available";
+                return false;
+            }
+            //Enable Image Transfer
+            if (!EnableImageTransfer(ref DLMSObj))
+            {
+                ResultMessage += $"Failed in Enabling Image Transfer.";
+                return false;
+            }
+            ResultMessage += $"Successfully Enabled Image Transfer.\r\n";
+
+            //Step-1: Get ImageBlockSize supported by the server(meter)
+            UInt32 blockSize = GetImageBlockSize(ref DLMSObj);
+            if (ImageBlockSize == 0)
+            {
+                ResultMessage += $"Step-1: Get ImageBlockSize supported by the server(meter) => Failed";
+                return false;
+            }
+            ResultMessage += $"Step-1: Get ImageBlockSize supported by the server(meter) => {ImageBlockSize}\r\n";
+
+            //Step-2: Initiate image transfer
+            //Read Image File
+            byte[] image = ReadImageFile();
+            string message = "";
+            if (!ImageTransferInitiate(ref DLMSObj, image, ImageIdentifier, out message))
+            {
+                ResultMessage += $"Step-2: Initiate image transfer => {message}";
+                return false;
+            }
+            ResultMessage += $"Step-2: Initiate image transfer => {message}\r\n";
+
+            //Step-3: Transfer Image Blocks individually
+            //get the blocks
+            List<string> blocksList = GetImageBlocks(image);
+            //start transfer
+            if (!TransferImageToMeter(ref DLMSObj, blocksList))
+            {
+                ResultMessage += $"Step-3: Transfer Image Blocks individually";
+                return false;
+            }
+            ResultMessage += $"Step-3: Transfer Image Blocks individually => Passed\r\n";
+            //DLMSObj.SignOnDLMS();
+
+            //Step-4: Check completeness of image and transfer missing blocks individually
+            //first check completeness
+            if (!CheckCompletnessImage(ref DLMSObj, blocksList))
+            {
+                ResultMessage += $"Step-4: Part-I Check completeness of image => Failed";
+                return false;
+            }
+            ResultMessage += $"Step-4: Part-I Check completeness of image => Passed\r\n";
+            //check missing blocks and transfer them
+            CheckMissingBlocksAndTransfer(ref DLMSObj, blocksList);
+            ResultMessage += $"Step-4: Part-II Check missing blocks and transfer missing blocks individually => Passed\r\n";
+
+            //Step-5: Verify Image
+            if (!VerifyImage(ref DLMSObj))
+            {
+                ResultMessage += $"Step-5: Verify Image => Failed";
+                return false;
+            }
+            ResultMessage += $"Step-5: Verify Image => Passed\r\n";
+
+            //Step-6 (Optional) Check image before activation
+
+            //Step-7 Activate Image
+            if (!ActivateImage(ref DLMSObj))
+            {
+                ResultMessage += $"Step-7 Activate Image => Failed";
+                return false;
+            }
+            ResultMessage += $"Step-7: Activate Image => Passed\r\n";
+
+            //Step-8 Verify Activated Image
+            if (!VerifyActivatedImage(ref DLMSObj))
+            {
+                ResultMessage += $"Step-8: Verify Activated Image => Failed";
+                return false;
+            }
+            ResultMessage += $"Step-8: Verify Activated Image => Passed";
+            return IsSuccess;
+        }
+        public enum ImageTransferStatus
+        {
+            Image_transfer_not_initiated = 0,
+            Image_transfer_initiated = 1,
+            Image_verification_initiated = 2,
+            Image_verification_successful = 3,
+            Image_verification_failed = 4,
+            Image_activation_initiated = 5,
+            Image_activation_successful = 6,
+            Image_activation_failed = 7
+        }
+        public enum ImageTransferEnabled
+        {
+            Disabled = 0,
+            Enabled = 1
+        }
+        public enum ImageTransferredBlocksStatus
+        {
+            Not_transferred = 0,
+            Transferred = 1
+        }
+    }
+}

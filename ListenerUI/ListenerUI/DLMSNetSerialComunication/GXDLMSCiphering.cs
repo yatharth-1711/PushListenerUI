@@ -20,94 +20,6 @@ namespace meterReader.AesGcmParameter
             return nonse;
         }
 
-        internal static byte[] EncryptAesGcm(AesGcmParameter param, byte[] plainText)
-        {
-            Debug.WriteLine("Encrypt settings: " + param.ToString());
-            param.CountTag = (byte[])null;
-            GXByteBuffer gxByteBuffer = new GXByteBuffer();
-            if (param.Type == CountType.Packet)
-                gxByteBuffer.SetUInt8((byte)param.Security);
-            byte[] array = ((IEnumerable<byte>)BitConverter.GetBytes((uint)param.InvocationCounter)).Reverse<byte>().ToArray<byte>();
-            byte[] authenticatedData = GXDLMSCiphering.GetAuthenticatedData(param, plainText);
-            GXDLMSCipheringStream chipperingStream = new GXDLMSCipheringStream(param.Security, true, param.BlockCipherKey, authenticatedData, GXDLMSCiphering.GetNonse((uint)param.InvocationCounter, param.SystemTitle), (byte[])null);
-            if (param.Security != Security.Authentication)
-                chipperingStream.Write(plainText);
-            byte[] numArray = chipperingStream.FlushFinalBlock();
-            if (param.Security == Security.Authentication)
-            {
-                if (param.Type == CountType.Packet)
-                    gxByteBuffer.Set(array);
-                if ((param.Type & CountType.Data) != 0)
-                    gxByteBuffer.Set(plainText);
-                if ((param.Type & CountType.Tag) != 0)
-                {
-                    param.CountTag = chipperingStream.GetTag();
-                    gxByteBuffer.Set(param.CountTag);
-                }
-            }
-            else if (param.Security == Security.Encryption)
-            {
-                if (param.Type == CountType.Packet)
-                    gxByteBuffer.Set(array);
-                gxByteBuffer.Set(numArray);
-            }
-            else
-            {
-                if (param.Security != Security.AuthenticationEncryption)
-                    throw new ArgumentOutOfRangeException("security");
-                if (param.Type == CountType.Packet)
-                    gxByteBuffer.Set(array);
-                if ((param.Type & CountType.Data) != 0)
-                    gxByteBuffer.Set(numArray);
-                if ((param.Type & CountType.Tag) != 0)
-                {
-                    param.CountTag = chipperingStream.GetTag();
-                    gxByteBuffer.Set(param.CountTag);
-                }
-            }
-            if (param.Type == CountType.Packet)
-            {
-                GXByteBuffer buff = new GXByteBuffer((ushort)(10 + gxByteBuffer.Size));
-                buff.SetUInt8(param.Tag);
-                if (param.Tag == (byte)219 || param.Tag == (byte)220 || param.Tag == (byte)15)
-                {
-                    if (!param.IgnoreSystemTitle)
-                    {
-                        TSTCommon.SetObjectCount(param.SystemTitle.Length, buff);
-                        buff.Set(param.SystemTitle);
-                    }
-                    else
-                        buff.SetUInt8((byte)0);
-                }
-                TSTCommon.SetObjectCount(gxByteBuffer.Size, buff);
-                buff.Set(gxByteBuffer.Array());
-                return buff.Array();
-            }
-            byte[] bytes = gxByteBuffer.Array();
-            Debug.WriteLine("Crypted: " + TSTCommon.ToHex(bytes, true));
-            return bytes;
-        }
-
-        private static byte[] GetAuthenticatedData(AesGcmParameter p, byte[] plainText)
-        {
-            if (p.Security == Security.Authentication)
-            {
-                GXByteBuffer gxByteBuffer = new GXByteBuffer();
-                gxByteBuffer.SetUInt8((byte)p.Security);
-                gxByteBuffer.Set(p.AuthenticationKey);
-                gxByteBuffer.Set(plainText);
-                return gxByteBuffer.Array();
-            }
-            if (p.Security == Security.Encryption)
-                return p.AuthenticationKey;
-            if (p.Security != Security.AuthenticationEncryption)
-                return (byte[])null;
-            GXByteBuffer gxByteBuffer1 = new GXByteBuffer();
-            gxByteBuffer1.SetUInt8((byte)p.Security);
-            gxByteBuffer1.Set(p.AuthenticationKey);
-            return gxByteBuffer1.Array();
-        }
-
         public static byte[] DecryptAesGcm(AesGcmParameter p, GXByteBuffer data)
         {
             Command command = data != null && data.Size >= 2 ? (Command)data.GetUInt8() : throw new ArgumentOutOfRangeException("cryptedData");
@@ -235,11 +147,11 @@ namespace meterReader.AesGcmParameter
                     }
                     byte[] authenticatedData = GXDLMSCiphering.GetAuthenticatedData(p, numArray3);
                     byte[] nonse = GXDLMSCiphering.GetNonse(uint32, p.SystemTitle);
-                    GXDLMSCipheringStream chipperingStream = new GXDLMSCipheringStream(security, true, p.BlockCipherKey, authenticatedData, nonse, numArray1);
-                    chipperingStream.Write(numArray3);
+                    GXDLMSCipheringStream cipheringStream = new GXDLMSCipheringStream(security, true, p.BlockCipherKey, authenticatedData, nonse, numArray1);
+                    cipheringStream.Write(numArray3);
                     if (num1 > 0UL)
                         p.InvocationCounter = num1;
-                    return chipperingStream.FlushFinalBlock();
+                    return cipheringStream.FlushFinalBlock();
                 case Command.GeneralGloCiphering:
                 case Command.GeneralDedCiphering:
                     int objectCount1 = TSTCommon.GetObjectCount(data);
@@ -256,6 +168,93 @@ namespace meterReader.AesGcmParameter
                 default:
                     throw new ArgumentOutOfRangeException("cryptedData");
             }
+        }
+        internal static byte[] EncryptAesGcm(AesGcmParameter param, byte[] plainText)
+        {
+            Debug.WriteLine("Encrypt settings: " + param.ToString());
+            param.CountTag = (byte[])null;
+            GXByteBuffer gxByteBuffer = new GXByteBuffer();
+            if (param.Type == CountType.Packet)
+                gxByteBuffer.SetUInt8((byte)param.Security);
+            byte[] array = ((IEnumerable<byte>)BitConverter.GetBytes((uint)param.InvocationCounter)).Reverse<byte>().ToArray<byte>();
+            byte[] authenticatedData = GXDLMSCiphering.GetAuthenticatedData(param, plainText);
+            GXDLMSCipheringStream cipheringStream = new GXDLMSCipheringStream(param.Security, true, param.BlockCipherKey, authenticatedData, GXDLMSCiphering.GetNonse((uint)param.InvocationCounter, param.SystemTitle), (byte[])null);
+            if (param.Security != Security.Authentication)
+                cipheringStream.Write(plainText);
+            byte[] numArray = cipheringStream.FlushFinalBlock();
+            if (param.Security == Security.Authentication)
+            {
+                if (param.Type == CountType.Packet)
+                    gxByteBuffer.Set(array);
+                if ((param.Type & CountType.Data) != 0)
+                    gxByteBuffer.Set(plainText);
+                if ((param.Type & CountType.Tag) != 0)
+                {
+                    param.CountTag = cipheringStream.GetTag();
+                    gxByteBuffer.Set(param.CountTag);
+                }
+            }
+            else if (param.Security == Security.Encryption)
+            {
+                if (param.Type == CountType.Packet)
+                    gxByteBuffer.Set(array);
+                gxByteBuffer.Set(numArray);
+            }
+            else
+            {
+                if (param.Security != Security.AuthenticationEncryption)
+                    throw new ArgumentOutOfRangeException("security");
+                if (param.Type == CountType.Packet)
+                    gxByteBuffer.Set(array);
+                if ((param.Type & CountType.Data) != 0)
+                    gxByteBuffer.Set(numArray);
+                if ((param.Type & CountType.Tag) != 0)
+                {
+                    param.CountTag = cipheringStream.GetTag();
+                    gxByteBuffer.Set(param.CountTag);
+                }
+            }
+            if (param.Type == CountType.Packet)
+            {
+                GXByteBuffer buff = new GXByteBuffer((ushort)(10 + gxByteBuffer.Size));
+                buff.SetUInt8(param.Tag);
+                if (param.Tag == (byte)219 || param.Tag == (byte)220 || param.Tag == (byte)15)
+                {
+                    if (!param.IgnoreSystemTitle)
+                    {
+                        TSTCommon.SetObjectCount(param.SystemTitle.Length, buff);
+                        buff.Set(param.SystemTitle);
+                    }
+                    else
+                        buff.SetUInt8((byte)0);
+                }
+                TSTCommon.SetObjectCount(gxByteBuffer.Size, buff);
+                buff.Set(gxByteBuffer.Array());
+                return buff.Array();
+            }
+            byte[] bytes = gxByteBuffer.Array();
+            Debug.WriteLine("Crypted: " + TSTCommon.ToHex(bytes, true));
+            return bytes;
+        }
+
+        private static byte[] GetAuthenticatedData(AesGcmParameter p, byte[] plainText)
+        {
+            if (p.Security == Security.Authentication)
+            {
+                GXByteBuffer gxByteBuffer = new GXByteBuffer();
+                gxByteBuffer.SetUInt8((byte)p.Security);
+                gxByteBuffer.Set(p.AuthenticationKey);
+                gxByteBuffer.Set(plainText);
+                return gxByteBuffer.Array();
+            }
+            if (p.Security == Security.Encryption)
+                return p.AuthenticationKey;
+            if (p.Security != Security.AuthenticationEncryption)
+                return (byte[])null;
+            GXByteBuffer gxByteBuffer1 = new GXByteBuffer();
+            gxByteBuffer1.SetUInt8((byte)p.Security);
+            gxByteBuffer1.Set(p.AuthenticationKey);
+            return gxByteBuffer1.Array();
         }
     }
 }

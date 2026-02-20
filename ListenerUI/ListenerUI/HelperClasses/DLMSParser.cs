@@ -5550,15 +5550,62 @@ namespace AutoTest.FrameWork.Converts
         }
 
         //BY YS
-        public string HexObisToDecObis(string hex)
+        public string HexObisToDecObis(string hexObis)
         {
-            if (string.IsNullOrWhiteSpace(hex) || hex.Length != 12)
-                throw new ArgumentException("OBIS hex must be exactly 12 characters (6 bytes).", nameof(hex));
-            var parts = Enumerable.Range(0, hex.Length / 2)
-                                  .Select(i => Convert.ToInt32(hex.Substring(i * 2, 2), 16))
+            if (string.IsNullOrWhiteSpace(hexObis) || hexObis.Length != 12)
+                throw new ArgumentException("OBIS hex must be exactly 12 characters (6 bytes).", nameof(hexObis));
+            var parts = Enumerable.Range(0, hexObis.Length / 2)
+                                  .Select(i => Convert.ToInt32(hexObis.Substring(i * 2, 2), 16))
                                   .ToArray();
 
             return string.Join(".", parts);
+        }
+        public static string ConvertDecObisToHexObis(string decimalObis)
+        {
+            if (string.IsNullOrWhiteSpace(decimalObis))
+                throw new ArgumentException("OBIS code cannot be empty");
+
+            string[] parts = decimalObis.Split('.');
+
+            if (parts.Length != 6)
+                throw new FormatException("OBIS code must have exactly 6 parts (A.B.C.D.E.F)");
+
+            StringBuilder hexBuilder = new StringBuilder();
+
+            foreach (string part in parts)
+            {
+                if (!byte.TryParse(part, out byte value))
+                    throw new FormatException($"Invalid OBIS part: {part}");
+
+                hexBuilder.Append(value.ToString("X2"));
+                hexBuilder.Append("");
+            }
+
+            return hexBuilder.ToString().Trim();
+        }
+
+        public static bool IsValidHexString(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            input = input.Trim();
+
+            // Remove 0x / 0X prefix if present
+            if (input.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                input = input.Substring(2);
+
+            // Remove spaces
+            input = input.Replace(" ", "");
+
+            // Must be even length (bytes)
+            if (input.Length % 2 != 0)
+                return false;
+
+            return input.All(c =>
+                (c >= '0' && c <= '9') ||
+                (c >= 'A' && c <= 'F') ||
+                (c >= 'a' && c <= 'f'));
         }
         #endregion
 

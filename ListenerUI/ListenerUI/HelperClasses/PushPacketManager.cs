@@ -1,44 +1,26 @@
-﻿using AutoTest.FrameWork;
-using AutoTest.FrameWork.Converts;
-using Gurux.Common;
-using Gurux.DLMS;
-using Gurux.DLMS.Enums;
-using Gurux.DLMS.Objects.Enums;
+﻿using AutoTest.FrameWork.Converts;
 using Gurux.DLMS.Secure;
-using Indali.Common;
+using ListenerUI.HelperClasses;
 using log4net;
-using log4net.Util;
 using MeterComm;
-using MeterComm.DLMS;
-using meterReader.AesGcmParameter;
 using MeterReader.CommonClasses;
+using MeterReader.Converter;
+using MeterReader.DLMSInterfaceClasses.ActionSchedule;
 using MeterReader.DLMSInterfaceClasses.ProfileGeneric;
+using MeterReader.DLMSInterfaceClasses.PushSetup;
 using MeterReader.DLMSNetSerialCommunication;
-using MeterReader.TestHelperClasses;
+using MeterReader.NicConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using System.Windows.Input;
-using System.Xml;
-using System.Xml.Linq;
 
-namespace ListenerUI.HelperClasses
+namespace MeterReader.TestHelperClasses
 {
     public class PushPacketManager
     {
@@ -60,138 +42,6 @@ namespace ListenerUI.HelperClasses
         public List<string> input_Break_Final = new List<string>();
         public List<string> input_Break_Initial = new List<string>();
         public List<string> input_Break_Profile = new List<string>();
-        //  public List<string> MHealthIndicater = new List<string>(); 
-        /*  public string[] ESWAlerts = new string[128]
-          {
-        "R Phase- Voltage Missing",
-        "Y Phase- Voltage Missing",
-        "B Phase- Voltage Missing",
-        "Over Voltage",
-        "Low Voltage",
-        "Voltage Unbalance",
-        "R Phase- current reverse/Current Reverse (1P)",
-        "Y Phase- current reverse",
-        "B Phase- current reverse",
-        "Current Unbalance",
-        "Current Bypass/Short",
-        "Over current in any phase",
-        "Very Low PF",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Earth Loading (1P)",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Module cover restoration",
-        "Neutral Miss/Single wire restoration(1P)",
-        "Unauthorised export of energy",
-        "R Phase - Voltage Low",
-        "Y Phase - Voltage Low",
-        "B Phase - Voltage Low",
-        "R Phase - Voltage High",
-        "Y Phase - Voltage High",
-        "B Phase - Voltage High",
-        "Over Frequnecy",
-        "Under Frequency",
-        "R Phase - Voltage Swell",
-        "Y Phase - Voltage Swell",
-        "B Phase - Voltage Swell",
-        "R Phase - Voltage Sag",
-        "Y Phase - Voltage Sag",
-        "B Phase - Voltage Sag",
-        "Micro Abnormal Reset",
-        "Relay Switch Weld",
-        "Reserved",
-        "Influence of permanent magnet or ac/dc electromagnet",
-        "Neutral disturbance- HF || dc or alternate method",
-        "Meter cover open",
-        "Meter load disconnected/Meter load connected",
-        "Last Gasp- Occurence",
-        "First Breath- Restoration",
-        "Increment in Billing counter (Manual/MRI reset)",
-        "Reserved",
-        "Neutral Miss/Single wire (1P)",
-        "Local relay connect functionlity availed",
-        "NIC Firmware upgraded",
-        "Module Firmware upgraded",
-        "Meter Firmware upgraded",
-        "Invalid Voltage",
-        "High input on DI1",
-        "High input on DI2",
-        "High input on DI3",
-        "High input on DI4",
-        "Password Authentication Failure",
-        "R Phase-Current without voltage",
-        "Y Phase-Current without voltage",
-        "B Phase-Current without voltage",
-        "RTC Battery Low",
-        "Invalid Phase association",
-        "Reverse Phase Sequence",
-        "ESD",
-        "R-Phase CT Open",
-        "Y-Phase CT Open",
-        "B-Phase CT Open",
-        "Module Cover Open",
-        "Over Load",
-        "Current mismatch (1P)",
-        "Current High THD",
-        "Voltage High THD",
-        "Reserved",
-        "High Temperature",
-        "Frequency Variation",
-        "Terminal Cover Open",
-        "Primary Battery Low",
-        "R-Phase Over current",
-        "Y-Phase Over current",
-        "B-Phase Over current",
-        "High Neutral Current",
-        "R-Phase relay disconnected/R-Phase relay connected",
-        "Y-Phase relay disconnected/Y-Phase relay connected",
-        "B-Phase relay disconnected/B-Phase relay connected",
-        "Neutral relay disconnected/Neutral relay connected"
-          }; */
         #endregion
 
         #region Validation and Verification Variables
@@ -205,6 +55,12 @@ namespace ListenerUI.HelperClasses
         public static List<string> priorityOrder = new List<string> { "Bill", "DE", "LS", "SR", "Instant" };
         public static string highestFreqProfile = ""; public static int highestFrequency = 0;
         public static bool isCurrentBillAvailable = true;
+
+        public static double Random_Instant = 0;
+        public static double Random_LS = 0;
+        public static double Random_DE = 0;
+        public static double Random_Bill = 0;
+        public static double Random_CB = 0;
 
         public static List<DateTime> lst_ExpectedPacketTiming_Instant = new List<DateTime>();
         public static List<DateTime> lst_ExpectedPacketTiming_LS = new List<DateTime>();
@@ -221,6 +77,7 @@ namespace ListenerUI.HelperClasses
         public static List<DateTime> lst_ReceivedPacketTiming_Alert = new List<DateTime>();
         public static List<DateTime> lst_ReceivedPacketTiming_Tamper = new List<DateTime>();
         public static List<DateTime> lst_ReceivedPacketTiming_CB = new List<DateTime>();
+
         #endregion           
 
         #region Stored Datatables Variables
@@ -259,11 +116,15 @@ namespace ListenerUI.HelperClasses
 
         // Received Optical Profile Datatable
         public static DataTable dtRec_Optical_Instant = new DataTable();
-        public static DataTable dtRec_Optical_Alert = new DataTable();
         public static DataTable dtRec_Optical_LS = new DataTable();
+        public static DataTable dtRec_AppendedOpt_LS = new DataTable();
         public static DataTable dtRec_Optical_DE = new DataTable();
+        public static DataTable dtRec_AppendedOpt_DE = new DataTable();
         public static DataTable dtRec_Optical_SR = new DataTable();
         public static DataTable dtRec_Optical_Bill = new DataTable();
+        public static DataTable dtRec_AppendedOpt_Bill = new DataTable();
+        public static DataTable dtRec_Optical_CB = new DataTable();
+        public static DataTable dtRec_AppendedOpt_CB = new DataTable();
         public static DataTable dtRec_Optical_Tamper = new DataTable();
 
         //Filtered Received Push Datatable
@@ -274,17 +135,56 @@ namespace ListenerUI.HelperClasses
         public static DataTable filteredPushSRDT = new DataTable();
         #endregion
 
-        //CODE STARTS HERE
+        public PushPacketManager()
+        {
+            UpdateProfileDetails();
+        }
+
+        public static List<(string Name, string DisplayName, string PushSetupClassObis, string ActionScheduleClassObisAtt, int Frequency, double Randomisation, List<DateTime> ExpectedList, List<DateTime> ReceivedList)> profileDetails =
+                  new List<(string Name, string DisplayName, string PushSetupClassObis, string ActionScheduleClassObisAtt, int Frequency, double Randomisation, List<DateTime> ExpectedList, List<DateTime> ReceivedList)>
+                    {
+                        ("Instant",     "Instant",              "00280000190900FF",     "001600000F0004FF04",       freq_Instant,   Random_Instant, lst_ExpectedPacketTiming_Instant,   lst_ReceivedPacketTiming_Instant),
+                        ("LS",          "Load Survey",          "00280005190900FF",     "001600040F0004FF04",       freq_LS,        Random_LS,      lst_ExpectedPacketTiming_LS,        lst_ReceivedPacketTiming_LS),
+                        ("DE",          "Daily Energy",         "00280006190900FF",     "001600050F0004FF04",       freq_DE,        Random_DE,      lst_ExpectedPacketTiming_DE,        lst_ReceivedPacketTiming_DE),
+                        ("SR",          "Self Registration",    "00280082190900FF",     "001600000F008EFF04",       freq_SR,        0,              lst_ExpectedPacketTiming_SR,        lst_ReceivedPacketTiming_SR),
+                        ("CB",          "Current Bill",         "00280000190981FF",     "001600000F0093FF04",       freq_CB,        0,              lst_ExpectedPacketTiming_CB,        lst_ReceivedPacketTiming_CB),
+                        ("Bill",        "Bill",                 "00280084190900FF",     "001600000F0000FF04",       0,              0,              lst_ExpectedPacketTiming_Bill,      lst_ReceivedPacketTiming_Bill),
+                        ("Alert",       "Alert",                "00280004190900FF",     null,                       0,              0,              null,                               lst_ReceivedPacketTiming_Alert),
+                        ("Tamper",      "Tamper",               "00280086190900FF",     "001600000F008FFF04",       0,              0,              null,                               lst_ReceivedPacketTiming_Tamper)
+                    };
+
         #region Initial Settings 
-        /*public bool GetNICandModuleDetails(ref DLMSComm DLMSReader)
+        public bool GetNICandModuleDetails(ref DLMSComm DLMSReader)
         {
             bool isSimAvailable = true;
             try
             {
-                _logService.LogMessage(logBox, $"NIC and Module Details", Color.Blue, true);
+                _logService.LogMessage(logBox, $"NIC and Module Details", Color.Black, true);
+                TestStopWatch watch = new TestStopWatch();
+                watch.Start();
+                while (watch.GetElapsedSeconds() < 16 * 60)
+                {
+                    if (string.IsNullOrEmpty(MeterIdentity.SIMHostName))
+                    {
+                        SetGetFromMeter.Wait(100 * 1000);
+                        MeterIdentity.SIMHostName = parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReader, 48, "0.0.25.7.0.255", 4).Substring(4));
+                        if (!string.IsNullOrEmpty(MeterIdentity.SIMHostName))
+                        {
+                            WrapperInfo.hostName = MeterIdentity.SIMHostName.ToString().Trim();
+                            watch.Stop();
+                            watch.Dispose();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        watch.Stop();
+                        watch.Dispose();
+                        break;
+                    }
+                }
                 _logService.LogMessage(logBox, _logService.FormatLogLineString("\tSIM HostName", string.IsNullOrEmpty(MeterIdentity.SIMHostName) ? "SIM Not Inserted" : MeterIdentity.SIMHostName), Color.Black);
                 //_logService.LogMessage(logBox, _logService.FormatLogLineString("\tSIM HostName", new[] { string.IsNullOrEmpty(MeterIdentity.SIMHostName) ? "SIM Not Inserted" : MeterIdentity.SIMHostName }), Color.Black);
-
                 if (string.IsNullOrEmpty(MeterIdentity.SIMHostName))
                 {
                     isSimAvailable = false;
@@ -298,6 +198,7 @@ namespace ListenerUI.HelperClasses
                 {
                     if (key.Key == "IMEI" || key.Key == "SIM" || key.Key == "NICFW" || key.Key == "ModuleFW")
                     {
+                        //_logService.LogMessage(logBox, _logService.FormatLogLineString($"\t{key.Key}", $"{string.Join(", ", key.Value.Select(inner => $"{parse.HexString2Ascii(inner.Value)}"))}"), Color.Black);
                         _logService.LogMessage(logBox, _logService.FormatLogLineString($"\t{key.Key}", $"{string.Join(", ", key.Value.Select(inner => $"{parse.HexString2Ascii(inner.Value)}"))}"), Color.Black);
                     }
                 }
@@ -312,7 +213,7 @@ namespace ListenerUI.HelperClasses
                 log.Error($"[{nameof(GetNICandModuleDetails)}] - {ex.Message}", ex);
             }
             return isSimAvailable;
-        }*/
+        }
         /// <summary>
         /// Calculates the best billing date string (dd/*/* HH:mm:ss) for testing a billing procedure,
         /// ensuring it falls within the given test interval whenever possible.
@@ -365,33 +266,23 @@ namespace ListenerUI.HelperClasses
             }
             return $"{selectedBillingDate.Value:dd}/*/* {billingTime:hh\\:mm\\:ss}";
         }
-        #endregion
+        #endregion 
 
-        #region Setting Destination address and Push Frequency 
+        #region Setting Destination address, Randomisation and Push Frequency   
         /// <summary>
         /// Set Push Destination Address 
         /// </summary>
         /// <param name="DLMSObj"></param>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public List<string> SetPushSetUpDestination(ref DLMSComm DLMSObj, string profile)
+        public List<string> SetPushSetUpDestination(ref DLMSComm DLMSObj, string TestProfile)
         {
             _logService.LogMessage(logBox, $"Setting Destination Address:", Color.Brown, true);
             string port = "4059";
             List<string> setResponseDestinationAdd = new List<string>();
-            Dictionary<string, string> profileClassObisAtt = new Dictionary<string, string>
-            {
-              { "Bill", "00280084190900FF03" },
-              { "DE", "00280006190900FF03" },
-              { "LS", "00280005190900FF03" },
-              { "SR", "00280082190900FF03" },
-              { "Instant", "00280000190900FF03" },
-              { "Tamper", "00280086190900FF03" },
-              { "Alert", "00280004190900FF03"},
-              { "Current Bill", "00280000190981FF03"}
-            };
             try
             {
+                UpdateProfileDetails();
                 if (!NetworkHelper.IsIPv6Configured())
                 {
                     setResponseDestinationAdd.Add("IPv6 is not configured.");
@@ -406,50 +297,117 @@ namespace ListenerUI.HelperClasses
                 string destinationAddress = $"[{ipv6Address}]:{port}";
                 destinationAddress = DLMSParser.ConvertAsciiToHex(destinationAddress.Trim());
                 string destinationAddString = $"0203160009{(destinationAddress.Length / 2).ToString("X2")}{destinationAddress}1600";
-                IEnumerable<string> targets = profile == "All" ? (IEnumerable<string>)profileClassObisAtt.Keys : (IEnumerable<string>)new[] { profile };
-                if (string.Equals(profile, "All", StringComparison.OrdinalIgnoreCase))
-                    targets = profileClassObisAtt.Keys;
-                else
-                    targets = new List<string>() { profile };
-                foreach (var key in targets)
+                var targets = string.Equals(TestProfile, "All", StringComparison.OrdinalIgnoreCase)
+                                            ? profileDetails
+                                            : profileDetails.Where(p => p.Name.Equals(TestProfile, StringComparison.OrdinalIgnoreCase))
+                                                            .Union(profileDetails.Where(p => p.Name == "Alert"));
+                foreach (var profile in targets)
                 {
-                    if (!isCurrentBillAvailable && key == "Current Bill") continue;
-                    int nRetValue = DLMSObj.SetParameter(profileClassObisAtt[key], (byte)0, (byte)3, (byte)3, destinationAddString);
-                    setResponseDestinationAdd.Add(
-                        nRetValue != 0
-                            ? $"Destination Address for {key}:\t Error In Setting [{ipv6Address}]:{port}"
-                            : $"Destination Address for {key}:\t Set Successfully to [{ipv6Address}]:{port}"
-                    );
+                    if (!isCurrentBillAvailable && profile.Name == "CB")
+                        continue;
+
+                    int nRetValue = DLMSObj.SetParameter(profile.PushSetupClassObis + "03", (byte)0, (byte)3, (byte)3, destinationAddString);
+                    setResponseDestinationAdd.Add(($"Destination Address for {profile.DisplayName} ({parse.HexObisToDecObis(profile.PushSetupClassObis.Substring(4))}):").PadRight(70) + (nRetValue != 0 ? $"Error In Setting [{ipv6Address}]:{port}" : $"Set Successfully to [{ipv6Address}]:{port}"));
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(SetPushSetUpDestination)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(SetPushSetUpDestination)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return setResponseDestinationAdd;
         }
         /// <summary>
-        /// Set push frequency in any profile. 
+        /// Method for logging of set and get response of push frequency  
+        /// </summary>
+        /// <param name="DLMSReader"></param>
+        /// <param name="logBox"></param>
+        /// <param name="TestProfiles"></param>
+        /// <returns></returns>
+        public List<string> LogPushFrequency(ref DLMSComm DLMSReader, RichTextBox logBox, bool isRandomisationApplicable = false)
+        {
+            List<string> resultPushFrequenctSet = new List<string>();
+            string randomisationSetResponse = string.Empty;
+            string pushFreqSetResponse = string.Empty;
+            _logService.LogMessage(logBox, $"\nSetting Push Frequency for profile(s)", Color.Brown, true);
+            try
+            {
+                UpdateProfileDetails();
+                if (!isRandomisationApplicable)
+                {
+                    Random_Instant = 0;
+                    Random_LS = 0;
+                    Random_DE = 0;
+                    Random_Bill = 0;
+                    Random_CB = 0;
+                }
+                foreach (var profile in profileDetails)
+                {
+                    if (!isCurrentBillAvailable && profile.Name == "CB") continue;
+                    if (profile.Name != "Alert" && profile.Name != "Tamper")    // Push Frequency Set does not applicable for both "Alert" and "Tamper"
+                    {
+                        pushFreqSetResponse = SetProfilePushFrequency(ref DLMSReader, profile.Name, profile.Frequency);
+                        _logService.LogMessage(logBox, $"\t📌 {pushFreqSetResponse}", Color.Black, true);
+                        resultPushFrequenctSet.Add(pushFreqSetResponse);
+                    }
+                    if (isRandomisationApplicable)
+                    {
+                        if (profile.Name != "Alert" && profile.Name != "Tamper" && profile.Name != "SR")    // Randomisation does not applicable for "Self Registration","Alert" and "Tamper"
+                        {
+                            randomisationSetResponse = SetRandomisation(ref DLMSReader, profile.Name, profile.Randomisation);
+                            _logService.LogMessage(logBox, $"\t{randomisationSetResponse}", randomisationSetResponse.Contains("Successfully") ? Color.Green : Color.Red);
+                        }
+                    }
+                    if (profile.Name != "Alert" && profile.Name != "Tamper")    // Push Frequency Get does not applicable for both "Alert" and "Tamper"
+                    {
+                        string actionSchedule = parse.GetPushFrequency(GetPushFrequencySchedule(ref DLMSReader, profile.Name));
+                        if (actionSchedule == "0B") actionSchedule = "Object Not Available";
+                        _logService.LogMessage(logBox, $"\tAction Schedule for {profile.DisplayName}:\n\t{actionSchedule}", actionSchedule.Contains("Object Not Available") ? Color.Red : Color.Black);
+                    }
+                }
+                #region BILL Handled Separately
+                //string billScheduleHex = $"010102020904{int.Parse(freq_Bill.Substring(7, 2)):X2}" +
+                //                         $"{int.Parse(freq_Bill.Substring(10, 2)):X2}" +
+                //                         $"{int.Parse(freq_Bill.Substring(13, 2)):X2}FF0905FFFFFF" +
+                //                         $"{int.Parse(freq_Bill.Substring(0, 2)):X2}FF";//10/*/* 00:00:00
+                /*if (freq_Bill.Substring(0, 2) == "00")
+                {
+                    billScheduleHex = "0100"; freq_Bill = "N/A";
+                }
+                string billResponse = SetProfilePushFrequency(ref DLMSReader, "Bill", 0, billScheduleHex);
+
+                string pushFreqSetResponseBill = billResponse.Contains("Successfully")
+                                                ? $"Bill Push Frequency: Set Successfully to {freq_Bill}"
+                                                : $"Bill Push Frequency: Error in Setting {freq_Bill}";
+                _logService.LogMessage(logBox, $"\t📌 {pushFreqSetResponseBill}", Color.Black, true);
+
+
+                randomisationSetResponse = SetRandomisation(ref DLMSReader, "Bill", Random_Bill);
+                _logService.LogMessage(logBox, $"\t{randomisationSetResponse}", randomisationSetResponse.Contains("Successfully") ? Color.Green : Color.Red);
+
+
+                string billActionSchedule = parse.GetPushFrequency(GetPushFrequencySchedule(ref DLMSReader, "Bill"));
+                _logService.LogMessage(logBox, $"\tAction Schedule for Billing:\n\t{billActionSchedule}", Color.Black);
+                resultPushFrequenctSet.Add(pushFreqSetResponseBill);*/
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                log.Error($"[{nameof(LogPushFrequency)}] - {ex.Message} TRACE:{ex.StackTrace}");
+            }
+            return resultPushFrequenctSet;
+        }
+        /// <summary>
+        /// NEW
         /// </summary>
         /// <param name="DLMSObj"></param>
-        /// <param name="profile">Instant, SR, LS, DE, Tamper, Bill </param>
-        /// <param name="frequency">15,30,60,240,360,480,720,1440,0 (Bill)</param>
-        /// <param name="billDateTime"></param>
-        /// <returns></returns>
-        public string SetProfilePushFrequency(ref DLMSComm DLMSObj, string profile, int frequency = 0, string billDateTime = null)
+        /// <param name="profileName"></param>
+        /// <param name="frequency"></param>
+        /// <returns></returns> 
+        public string SetProfilePushFrequency(ref DLMSComm DLMSObj, string profileName, int frequency)
         {
-            string resultMessage = string.Empty;
+            string resultMessage = string.Empty; string billDateTime = string.Empty;
             int nRetValue = 100;
-            Dictionary<string, string> profileClassObisAtt = new Dictionary<string, string>
-            {
-              { "Instant", "001600000F0004FF04" },
-              { "SR", "001600000F008EFF04" },
-              { "LS", "001600040F0004FF04" },
-              { "DE", "001600050F0004FF04" },
-              { "Tamper", "001600000F008FFF04" },
-              { "Bill", "001600000F0000FF04" },
-              { "Current Bill", "001600000F0093FF04" } //Current Bill
-            };
+            var profile = profileDetails.Find(p => p.Name == profileName);
             Dictionary<Int32, string> actionScheduleStrings = new Dictionary<Int32, string>
             {
                 { 15, "010402020904FF0000000905FFFFFFFFFF02020904FF0F00000905FFFFFFFFFF02020904FF1E00000905FFFFFFFFFF02020904FF2D00000905FFFFFFFFFF" },
@@ -460,38 +418,40 @@ namespace ListenerUI.HelperClasses
                 { 480, "010302020904000000000905FFFFFFFFFF02020904080000000905FFFFFFFFFF02020904100000000905FFFFFFFFFF" },
                 { 720, "010202020904000000000905FFFFFFFFFF020209040C0000000905FFFFFFFFFF"},
                 { 1440, "010102020904000000000905FFFFFFFFFF"},
-                { 0, billDateTime}
+                { 0, "0100"},
+                { 1, billDateTime }
             };
-            if (!profileClassObisAtt.ContainsKey(profile))
-                return "Error: Unsupported profile '" + profile + "'.";
-            if (!isCurrentBillAvailable && profile == "Current Bill")
-                return "Current Bill Profile not Available";
-            if (frequency == 0)
+            if (profileName == "Bill" && frequency == 1)
             {
-                if (profile == "Bill")
-                {
-                    if (string.IsNullOrEmpty(billDateTime))
-                        return "Error: Billing date & time cannot be null.";
-                }
-                else
-                {
-                    actionScheduleStrings[0] = "0100"; // overwriting default value of dictionary (0 -> bill to 0 -> profile)
-                }
+                actionScheduleStrings[1] = billDateTime = $"010102020904{int.Parse(freq_Bill.Substring(7, 2)):X2}" +
+                        $"{int.Parse(freq_Bill.Substring(10, 2)):X2}" +
+                        $"{int.Parse(freq_Bill.Substring(13, 2)):X2}FF0905FFFFFF" +
+                        $"{int.Parse(freq_Bill.Substring(0, 2)):X2}FF"; //10/*/* 00:00:00
             }
-            string frequencySet = frequency == 0 ? (profile == "Bill" ? billDateTime : "N/A") : (frequency / 60 == 0 ? $"{frequency} min" : $"{(frequency / 60.0)} hr");
+            if (string.IsNullOrEmpty(profileName))
+                return "Error: Unsupported profile '" + profileName + "'.";
+
+            if (!isCurrentBillAvailable && profileName == "CB")
+                return "Current Bill Profile not Available";
+
+            string frequencySet = frequency == 0 ? "N/A" : (profileName == "Bill" ? freq_Bill : (frequency / 60 == 0 ? $"{frequency} min" : $"{(frequency / 60.0)} hr"));
+
             try
             {
-                nRetValue = DLMSObj.SetParameter(profileClassObisAtt[profile], (byte)0, (byte)3, (byte)3, actionScheduleStrings[frequency]);
+                nRetValue = DLMSObj.SetParameter(profile.ActionScheduleClassObisAtt, (byte)0, (byte)3, (byte)3, actionScheduleStrings[frequency]);
                 if (nRetValue == 0)
-                    resultMessage = $"{profile} Push Frequency:\t Set Successfully to {frequencySet}.";
+                    resultMessage = string.Format("{0,-45}{1,20}", $"{profileName} Push Frequency ({parse.HexObisToDecObis(profile.ActionScheduleClassObisAtt.Substring(4, 12))}):", $"Set Successfully to {frequencySet}");
+                //resultMessage = $"{profileName} Push Frequency:\t Set Successfully to {frequencySet}.";
                 else if (nRetValue == 2)
-                    resultMessage = $"{profile} Push Frequency:\t Action Denied.";
+                    resultMessage = string.Format("{0,-45}{1,20}", $"{profileName} Push Frequency ({parse.HexObisToDecObis(profile.ActionScheduleClassObisAtt.Substring(4, 12))}):", $"Action Denied");
+                //resultMessage = $"{profileName} Push Frequency:\t Action Denied.";
                 else if (nRetValue == 1 || nRetValue == 3)
-                    resultMessage = $"{profile} Push Frequency:\t Error in Setting.";
+                    resultMessage = string.Format("{0,-450}{1,20}", $"{profileName} Push Frequency ({parse.HexObisToDecObis(profile.ActionScheduleClassObisAtt.Substring(4, 12))}):", $"Error in Setting");
+                //resultMessage = $"{profileName} Push Frequency:\t Error in Setting.";
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(SetProfilePushFrequency)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(SetProfilePushFrequency)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return resultMessage;
         }
@@ -501,90 +461,73 @@ namespace ListenerUI.HelperClasses
         /// <param name="DLMSObj"></param>
         /// <param name="profile">Instant, SR, LS, DE, Tamper, Bill</param>
         /// <returns></returns>
-        public string GetPushFrequencySchedule(ref DLMSComm DLMSObj, string profile)
+        public string GetPushFrequencySchedule(ref DLMSComm DLMSObj, string profileName)
         {
             string resultMessage = string.Empty;
-            Dictionary<string, string> profileObis = new Dictionary<string, string>
-            {
-              { "Instant", "00000F0004FF" },
-              { "SR", "00000F008EFF" },
-              { "LS", "00040F0004FF" },
-              { "DE", "00050F0004FF" },
-              { "Tamper", "00000F008FFF" },
-              { "Bill", "00000F0000FF" },
-              { "Current Bill", "00000F0093FF" }
-            };
+            var profile = profileDetails.Find(p => p.Name == profileName); //00000F0004FF
+            /* Dictionary<string, string> profileObis = new Dictionary<string, string>
+             {
+               { "Instant", "00000F0004FF" },
+               { "SR", "00000F008EFF" },
+               { "LS", "00040F0004FF" },
+               { "DE", "00050F0004FF" },
+               { "Tamper", "00000F008FFF" },
+               { "Bill", "00000F0000FF" },
+               { "CB", "00000F0093FF" }
+             };*/
             try
             {
-                resultMessage = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 22, parse.HexObisToDecObis(profileObis[profile]), 4).Trim();
+                resultMessage = SetGetFromMeter.GetDataFromObject(ref DLMSObj, 22, parse.HexObisToDecObis(profile.ActionScheduleClassObisAtt.Substring(4, 12)), 4).Trim();
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(GetPushFrequencySchedule)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(GetPushFrequencySchedule)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return resultMessage;
         }
-        /// <summary>
-        /// Method for logging of set and get response of push frequency  
-        /// </summary>
-        /// <param name="DLMSReader"></param>
-        /// <param name="logBox"></param>
-        /// <param name="TestProfiles"></param>
-        /// <returns></returns>
-        public List<string> LogPushFrequency(ref DLMSComm DLMSReader, RichTextBox logBox, string TestProfiles)
+        public string SetRandomisation(ref DLMSComm DLMSObj, string profileName, double Randomisation = 0)
         {
-            List<string> resultPushFrequenctSet = new List<string>();
-            _logService.LogMessage(logBox, $"\nSetting Push Frequency for profile(s)", Color.Brown, true);
+            string resultRandomisationSet = string.Empty;
             try
             {
-                var profiles = new List<(string Name, string DisplayName, int Frequency)>
+                if (Randomisation == 0)
+                    return string.Format("{0,-30}{1,-30}", $"Randomisation for {profileName}", ": Not Applicable");
+                //return $"Randomisation for {profileName}: Not Applicable";
+                var profile = profileDetails.Find(p => p.Name == profileName);
+                if (profile.Frequency == 0)
                 {
-                    ("Instant", "Instant", freq_Instant),
-                    ("LS", "Load Survey", freq_LS),
-                    ("DE", "Daily Energy", freq_DE),
-                    ("SR", "Self Registration", freq_SR),
-                    ("Current Bill", "Current Bill", freq_CB)
-                };
-                foreach (var profile in profiles)
-                {
-                    if (!isCurrentBillAvailable && profile.Name == "Current Bill") continue;
-                    string pushFreqSetResponse = SetProfilePushFrequency(ref DLMSReader, profile.Name, profile.Frequency);
-                    _logService.LogMessage(logBox, $"\t📌 {pushFreqSetResponse}", Color.Black, true);
-
-                    string actionSchedule = parse.GetPushFrequency(GetPushFrequencySchedule(ref DLMSReader, profile.Name));
-                    if (actionSchedule == "0B") actionSchedule = "Object Not Available";
-                    _logService.LogMessage(logBox, $"\tAction Schedule for {profile.DisplayName}:\n\t{actionSchedule}", actionSchedule.Contains("Object Not Available") ? Color.Red : Color.Black);
-
-                    resultPushFrequenctSet.Add(pushFreqSetResponse);
+                    if (profileName == "Bill" && freq_Bill.Substring(0, 2) == "00")
+                        return string.Format("{0,-30}{1,-30}", $"Randomisation for {profileName}", ": Frequency not defined");
+                    //return $"Randomisation for {profileName}: Frequency not defined";
                 }
-                string billScheduleHex = $"010102020904{int.Parse(freq_Bill.Substring(7, 2)):X2}" +
-                                         $"{int.Parse(freq_Bill.Substring(10, 2)):X2}" +
-                                         $"{int.Parse(freq_Bill.Substring(13, 2)):X2}FF0905FFFFFF" +
-                                         $"{int.Parse(freq_Bill.Substring(0, 2)):X2}FF";//10/*/* 00:00:00
-                if (freq_Bill.Substring(0, 2) == "00")
+                if (Randomisation * 60 <= (((profile.Frequency * 60) / 2) - 1) || profileName == "Bill")
                 {
-                    billScheduleHex = "0100"; freq_Bill = "N/A";
+                    string randomisationSetString = $"12{((int)(Randomisation * 60)).ToString("X4")}";
+                    if ((isCurrentBillAvailable && profileName == "CB") || profileName != "CB")
+                    {
+                        string setRandomisation = Randomisation / 60 > 1 ? Randomisation / 60 + " hr" : Randomisation + " min";
+                        int nRetValue = DLMSObj.SetParameter(profile.PushSetupClassObis + "05", (byte)0, (byte)3, (byte)3, randomisationSetString);
+                        resultRandomisationSet = nRetValue != 0 ? string.Format("{0,-30}{1,-30}{2,-10}", $"Randomisation for {profileName}", ": Error In Setting", $": {setRandomisation}")
+                                                                : string.Format("{0,-30}{1,-30}{2,-10}", $"Randomisation for {profileName}", ": Set Successfully to", $": {setRandomisation}");
+                        //resultRandomisationSet = nRetValue != 0 ? $"Randomisation for {profileName}:\t Error In Setting: {setRandomisation}"
+                        //                                        : $"Randomisation for {profileName}:\t Set Successfully to {setRandomisation}";
+                    }
                 }
-                string billResponse = SetProfilePushFrequency(ref DLMSReader, "Bill", 0, billScheduleHex);
+                else
+                {
+                    resultRandomisationSet = "Randomisation Value does not follow: Randomisation time ≤ (half of the frequency period - 1 second)";
+                }
 
-                string pushFreqSetResponseBill = billResponse.Contains("Successfully")
-                                                ? $"Bill Push Frequency: Set Successfully to {freq_Bill}"
-                                                : $"Bill Push Frequency: Error in Setting {freq_Bill}";
-
-                _logService.LogMessage(logBox, $"\t📌 {pushFreqSetResponseBill}", Color.Black, true);
-                string billActionSchedule = parse.GetPushFrequency(GetPushFrequencySchedule(ref DLMSReader, "Bill"));
-                _logService.LogMessage(logBox, $"\tAction Schedule for Billing:\n\t{billActionSchedule}", Color.Black);
-                resultPushFrequenctSet.Add(pushFreqSetResponseBill);
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(LogPushFrequency)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(SetRandomisation)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
-            return resultPushFrequenctSet;
+            return resultRandomisationSet;
         }
         #endregion
 
-        #region Packet Handling
+        #region Push Packet Data Handling
         /// <summary>
         /// Initializes Push Setup and Profile Generic DataTables for all push profiles  
         /// (Instant, Alert, LS, DE, SR, Billing, Tamper) with required filtering and formatting.
@@ -593,6 +536,7 @@ namespace ListenerUI.HelperClasses
         {
             try
             {
+                ResetRecPushDT();
                 // Instant
                 dtPushSetup_Instant = DataTableOperations.FilterPushSetUpDataTable(PushSetupInfo.InstantDT.Copy());
                 isInstantProfile = dtPushSetup_Instant.AsEnumerable().Any(row => row.Field<string>("OBIS")?.Contains("1.0.94.91.0.255") == true);
@@ -624,9 +568,8 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(InitializePushProfileTables)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(InitializePushProfileTables)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
-
         }
         /// <summary>
         /// Generates a DataTable containing the parsed push data extracted from a decrypted hex packet. Processes the decrypted hex string, and stores the extracted values in a tabular format for further use.
@@ -658,7 +601,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(GeneratePushDataTableFromHex)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(GeneratePushDataTableFromHex)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return rawPushPacketTable;
         }
@@ -681,6 +624,7 @@ namespace ListenerUI.HelperClasses
                         dtProfileGeneric = dtProfileGeneric_Instant.Copy();
                     }
                     else
+
                     {
                         dtPushSetUp = DataTableOperations.FilterPushSetUpDataTable(PushSetupInfo.InstantDT.Copy());
                         dtProfileGeneric = dtProfileGeneric_Instant;
@@ -826,7 +770,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(GetDataFromDecryptedPacket)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(GetDataFromDecryptedPacket)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
         }
         /// <summary>
@@ -956,7 +900,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(BuildTargetTableFromPushData)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(BuildTargetTableFromPushData)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return targetTable;
         }
@@ -1021,241 +965,9 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(FillRawDataIntoTargetTable)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(FillRawDataIntoTargetTable)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
         }
-        #endregion
-
-        #region Additional Methods (NOT IN USE) 
-        /// <summary>
-        /// For debug and testing purpose, Print datatble in console
-        /// </summary>
-        /// <param name="data"></param>
-        public void print_results(DataTable data)
-        {
-            Console.WriteLine();
-            Dictionary<string, int> colWidths = new Dictionary<string, int>();
-
-            foreach (DataColumn col in data.Columns)
-            {
-                Console.Write(col.ColumnName);
-                var maxLabelSize = data.Rows.OfType<DataRow>()
-                        .Select(m => (m.Field<object>(col.ColumnName)?.ToString() ?? "").Length)
-                        .OrderByDescending(m => m).FirstOrDefault();
-
-                colWidths.Add(col.ColumnName, maxLabelSize);
-                for (int i = 0; i < maxLabelSize - col.ColumnName.Length + 10; i++) Console.Write(" ");
-            }
-
-            Console.WriteLine();
-
-            foreach (DataRow dataRow in data.Rows)
-            {
-                for (int j = 0; j < dataRow.ItemArray.Length; j++)
-                {
-                    Console.Write(dataRow.ItemArray[j]);
-                    for (int i = 0; i < colWidths[data.Columns[j].ColumnName] - dataRow.ItemArray[j].ToString().Length + 10; i++) Console.Write(" ");
-                }
-                Console.WriteLine();
-            }
-        }
-        /*  public string ShowESWalerts(string ESWbits)
-           {
-               presentAlerts = (string)null;
-               if (ESWbits.Length != 128)
-                   return "not a correct format";
-               for (int index = 0; index < ESWbits.Length; ++index)
-               {
-                   if (ESWbits[index] == '1')
-                   {
-                       presentAlerts = presentAlerts + ESWAlerts[index] + ", ";
-
-                   }
-               }
-               return presentAlerts;
-           }  */
-        /*   public string GetMeterHealthGPRS(string statusbyte)
-           {
-               if (statusbyte.Length != 32)
-                   return "Error";
-               MHealthIndicater.Clear();
-               int pointer = 0;
-               int startIndex2;
-               if (statusbyte.Substring(pointer, 1) == "1")
-               {
-                   MHealthIndicater.Add("Power fail");
-                   startIndex2 = pointer + 1;
-               }
-               else
-                   startIndex2 = pointer + 1;
-               int startIndex3;
-               if (statusbyte.Substring(startIndex2, 1) == "1")
-               {
-                   MHealthIndicater.Add("Relay Disconnected");
-                   startIndex3 = startIndex2 + 1;
-               }
-               else
-                   startIndex3 = startIndex2 + 1;
-               int startIndex4;
-               if (statusbyte.Substring(startIndex3, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 18 Internal use");
-                   startIndex4 = startIndex3 + 1;
-               }
-               else
-                   startIndex4 = startIndex3 + 1;
-               int startIndex5;
-               if (statusbyte.Substring(startIndex4, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 17 Internal use");
-                   startIndex5 = startIndex4 + 1;
-               }
-               else
-                   startIndex5 = startIndex4 + 1;
-               int startIndex6;
-               if (statusbyte.Substring(startIndex5, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 16 Internal use");
-                   startIndex6 = startIndex5 + 1;
-               }
-               else
-                   startIndex6 = startIndex5 + 1;
-               int startIndex7;
-               if (statusbyte.Substring(startIndex6, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 15 Internal use");
-                   startIndex7 = startIndex6 + 1;
-               }
-               else
-                   startIndex7 = startIndex6 + 1;
-               int startIndex8;
-               if (statusbyte.Substring(startIndex7, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 14 Internal use");
-                   startIndex8 = startIndex7 + 1;
-               }
-               else
-                   startIndex8 = startIndex7 + 1;
-               int startIndex9;
-               if (statusbyte.Substring(startIndex8, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 13 Internal use");
-                   startIndex9 = startIndex8 + 1;
-               }
-               else
-                   startIndex9 = startIndex8 + 1;
-               int pointer0;
-               if (statusbyte.Substring(startIndex9, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 04- Sim Invalid");
-                   pointer0 = startIndex9 + 1;
-               }
-               else
-                   pointer0 = startIndex9 + 1;
-               int pointer1;
-               if (statusbyte.Substring(pointer0, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 05 - No GSM Network coverage");
-                   pointer1 = pointer0 + 1;
-               }
-               else
-                   pointer1 = pointer0 + 1;
-               int pointer2;
-               if (statusbyte.Substring(pointer1, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 06 - GPRS Network registration failure");
-                   pointer2 = pointer1 + 1;
-               }
-               else
-                   pointer2 = pointer1 + 1;
-               int pointer3;
-               if (statusbyte.Substring(pointer2, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 09 - GPRS connection not establish");
-                   pointer3 = pointer2 + 1;
-               }
-               else
-                   pointer3 = pointer2 + 1;
-               int pointer4;
-               if (statusbyte.Substring(pointer3, 1) == "1")
-               {
-                   MHealthIndicater.Add("Error 12 - Any Key mismatch b/w Meter and NIC");
-                   pointer4 = pointer3 + 1;
-               }
-               else
-                   pointer4 = pointer3 + 1;
-               string str1 = statusbyte.Substring(pointer4, 3);
-               int pointer5 = pointer4 + 3;
-               if (str1 == "001")
-                   MHealthIndicater.Add("Error 01 - Meter NIC communication failure");
-               else if (str1 == "010")
-                   MHealthIndicater.Add("Error 02 - Modem initialization failure");
-               else if (str1 == "011")
-                   MHealthIndicater.Add("Error 03 - SIM not detected");
-               else if (str1 == "100")
-                   MHealthIndicater.Add("Error 07 - GPRS registration denied");
-               else if (str1 == "101")
-                   MHealthIndicater.Add("Error 08 - No APN configured");
-               else if (str1 == "110")
-                   MHealthIndicater.Add("Error 10 - HES IP/Port not configured");
-               else if (str1 == "101")
-                   MHealthIndicater.Add("Error 11 - HES port not open");
-               MHealthIndicater.Add("RSSI Min-" + Convert.ToInt32(statusbyte.Substring(pointer5, 5), 2).ToString());
-               int pointer6 = pointer5 + 5;
-               MHealthIndicater.Add("RSSI Avg-" + Convert.ToInt32(statusbyte.Substring(pointer6, 5), 2).ToString());
-               int pointer7 = pointer6 + 5;
-               string str2 = statusbyte.Substring(pointer7, 2);
-               int pointer8 = pointer7 + 2;
-               switch (str2)
-               {
-                   case "00":
-                       MHealthIndicater.Add("2G");
-                       break;
-                   case "01":
-                       MHealthIndicater.Add("3G");
-                       break;
-                   case "10":
-                       MHealthIndicater.Add("4G");
-                       break;
-                   case "11":
-                       MHealthIndicater.Add("NBIOT");
-                       break;
-               }
-               int pointer9;
-               if (statusbyte.Substring(pointer8, 1) == "1")
-               {
-                   MHealthIndicater.Add("Optical Comm. happened in the LSIP");
-                   pointer9 = pointer8 + 1;
-               }
-               else
-                   pointer9 = pointer8 + 1;
-               string str3 = statusbyte.Substring(pointer9, 2);
-               int startIndex20 = pointer9 + 2;
-               switch (str3)
-               {
-                   case "00":
-                       MHealthIndicater.Add("NO RTC Sync");
-                       break;
-                   case "01":
-                       MHealthIndicater.Add("RTC Sync - Retard");
-                       break;
-                   case "10":
-                       MHealthIndicater.Add("RTC Sync - Advanced");
-                       break;
-                   case "11":
-                       MHealthIndicater.Add(" RTC difference high ");
-                       break;
-               }
-               int num;
-               if (statusbyte.Substring(startIndex20, 1) == "1")
-               {
-                   MHealthIndicater.Add("Temperature > 70'C or configured threshold");
-                   num = startIndex20 + 1;
-               }
-               else
-                   num = startIndex20 + 1;
-               return string.Join(",", (IEnumerable<string>)MHealthIndicater);
-           } */
         #endregion
 
         #region Validation & Verification Methods
@@ -1270,6 +982,7 @@ namespace ListenerUI.HelperClasses
             var ExpectedPackets = new Dictionary<string, List<DateTime>>(StringComparer.OrdinalIgnoreCase);
             //List<List<DateTime>> ExpectedPackets = new List<List<DateTime>>();
             lst_ExpectedPacketTiming_Instant.Clear(); lst_ExpectedPacketTiming_LS.Clear(); lst_ExpectedPacketTiming_DE.Clear(); lst_ExpectedPacketTiming_SR.Clear(); lst_ExpectedPacketTiming_Bill.Clear();
+            lst_ExpectedPacketTiming_CB.Clear();
             _logService.LogMessage(logBox, $"\nExpected Packets Timings:", Color.Brown, true);
             DateTime dayStart = startDate.Date;
             double minutesSinceMidnight = (startDate - dayStart).TotalMinutes;
@@ -1282,6 +995,10 @@ namespace ListenerUI.HelperClasses
                         double nextMultiple = (Math.Ceiling(minutesSinceMidnight / freq_Instant) * freq_Instant);
                         DateTime firstPacketTime = dayStart.AddMinutes(nextMultiple);
                         DateTime current = firstPacketTime;
+                        if (Random_Instant != 0)
+                        {
+                            current = current.AddMinutes(Random_Instant);
+                        }
                         while (current <= endDate)
                         {
                             lst_ExpectedPacketTiming_Instant.Add(current);
@@ -1293,13 +1010,24 @@ namespace ListenerUI.HelperClasses
                 {
                     if (freq_LS > 0)
                     {
+                        //DLMSComm dlmsReader = new DLMSComm(DLMSInfo.comPort, DLMSInfo.BaudRate);
+                        //dlmsReader.SignOnDLMS();
+                        //int currentLSIP = (Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref dlmsReader, 1, "1.0.0.8.4.255", 2))) / 60);
+                        //dlmsReader.Dispose();
                         double nextMultiple = (Math.Ceiling(minutesSinceMidnight / freq_LS) * freq_LS);
+                        //int minutes = (currentLSIP > freq_LS) ? currentLSIP : freq_LS;
+                        // double nextMultiple = (Math.Ceiling(minutesSinceMidnight / minutes) * minutes);
                         DateTime firstPacketTime = dayStart.AddMinutes(nextMultiple);
                         DateTime current = firstPacketTime;
+                        if (Random_LS != 0)
+                        {
+                            current = current.AddMinutes(Random_LS);
+                        }
                         while (current <= endDate)
                         {
                             lst_ExpectedPacketTiming_LS.Add(current);
                             current = current.AddMinutes(freq_LS);
+                            //current = current.AddMinutes(minutes);
                         }
                     }
                 }
@@ -1311,6 +1039,10 @@ namespace ListenerUI.HelperClasses
                         DateTime firstPacketTime = dayStart.AddMinutes(nextMultiple);
 
                         DateTime current = firstPacketTime;
+                        if (Random_DE != 0)
+                        {
+                            current = current.AddMinutes(Random_DE);
+                        }
                         while (current <= endDate)
                         {
                             lst_ExpectedPacketTiming_DE.Add(current);
@@ -1341,6 +1073,10 @@ namespace ListenerUI.HelperClasses
                         firstPacketTime = firstPacketTime.AddMonths(1);
                     }
                     DateTime current = firstPacketTime;
+                    if (Random_Bill != 0)
+                    {
+                        current = current.AddMinutes(Random_Bill);
+                    }
                     while (startDate <= current && current <= endDate)
                     {
                         lst_ExpectedPacketTiming_Bill.Add(current);
@@ -1354,6 +1090,10 @@ namespace ListenerUI.HelperClasses
                         double nextMultiple = (Math.Ceiling(minutesSinceMidnight / freq_CB) * freq_CB);
                         DateTime firstPacketTime = dayStart.AddMinutes(nextMultiple);
                         DateTime current = firstPacketTime;
+                        if (Random_CB != 0)
+                        {
+                            current = current.AddMinutes(Random_CB);
+                        }
                         while (current <= endDate)
                         {
                             lst_ExpectedPacketTiming_CB.Add(current);
@@ -1397,14 +1137,14 @@ namespace ListenerUI.HelperClasses
                     {
                         List<string> timings = new List<string>
                         {
-                            lst_ExpectedPacketTiming_Instant.Count > i ? lst_ExpectedPacketTiming_Instant[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ExpectedPacketTiming_LS.Count > i ? lst_ExpectedPacketTiming_LS[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ExpectedPacketTiming_DE.Count > i ? lst_ExpectedPacketTiming_DE[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ExpectedPacketTiming_SR.Count > i ? lst_ExpectedPacketTiming_SR[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ExpectedPacketTiming_Bill.Count > i ? lst_ExpectedPacketTiming_Bill[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-"
+                            lst_ExpectedPacketTiming_Instant.Count > i ? lst_ExpectedPacketTiming_Instant[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ExpectedPacketTiming_LS.Count > i ? lst_ExpectedPacketTiming_LS[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ExpectedPacketTiming_DE.Count > i ? lst_ExpectedPacketTiming_DE[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ExpectedPacketTiming_SR.Count > i ? lst_ExpectedPacketTiming_SR[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ExpectedPacketTiming_Bill.Count > i ? lst_ExpectedPacketTiming_Bill[i].ToString(Constants.timeStamp12Hours) : "-"
                         };
                         if (isCurrentBillAvailable && lst_ExpectedPacketTiming_CB.Count > 0)
-                            timings.Add(lst_ExpectedPacketTiming_CB.Count > i ? lst_ExpectedPacketTiming_CB[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-");
+                            timings.Add(lst_ExpectedPacketTiming_CB.Count > i ? lst_ExpectedPacketTiming_CB[i].ToString(Constants.timeStamp12Hours) : "-");
                         _logService.LogMessage(logBox, _logService.FormatLogLineString($"\t{i + 1}. Packet Expected Timing", timings.ToArray()), Color.Black);
                     }
                     catch (Exception ex)
@@ -1415,7 +1155,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(GetExpectedPacketCountAndTimeStamp)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(GetExpectedPacketCountAndTimeStamp)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return ExpectedPackets;
         }
@@ -1428,10 +1168,14 @@ namespace ListenerUI.HelperClasses
         {
             var ReceivedPackets = new Dictionary<string, List<DateTime>>(StringComparer.OrdinalIgnoreCase);
             //List<List<DateTime>> ReceivedPackets = new List<List<DateTime>>();
-            lst_ReceivedPacketTiming_Instant.Clear(); lst_ReceivedPacketTiming_LS.Clear(); lst_ReceivedPacketTiming_DE.Clear();
-            lst_ReceivedPacketTiming_SR.Clear(); lst_ReceivedPacketTiming_Bill.Clear(); lst_ReceivedPacketTiming_Alert.Clear();
+            lst_ReceivedPacketTiming_Instant.Clear(); lst_ReceivedPacketTiming_LS.Clear(); lst_ReceivedPacketTiming_DE.Clear(); lst_ReceivedPacketTiming_CB.Clear();
+            lst_ReceivedPacketTiming_SR.Clear(); lst_ReceivedPacketTiming_Bill.Clear(); lst_ReceivedPacketTiming_Alert.Clear(); lst_ReceivedPacketTiming_Tamper.Clear();
+            _logService.LogMessage(logBox, $"\nReceived Packets Timings:", Color.Brown, true);
             if (finalDataTable == null || finalDataTable.Rows.Count == 0)
+            {
+                _logService.LogMessage(logBox, $"\tNo push packets were received for any profile.", Color.Red, true);
                 return ReceivedPackets;
+            }
             try
             {
                 foreach (DataRow row in finalDataTable.Rows)
@@ -1443,49 +1187,49 @@ namespace ListenerUI.HelperClasses
                         continue;
 
                     DateTime timing;
-                    if (!DateTime.TryParseExact(recPacketTimeStamp, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out timing))
+                    if (!DateTime.TryParseExact(recPacketTimeStamp, Constants.timeStamp12Hours, CultureInfo.InvariantCulture, DateTimeStyles.None, out timing))
                         continue;
 
-                    if (TestProfiles == "All" || TestProfiles == "Instant")
-                    {
-                        if (profileType.IndexOf("Instant", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_Instant.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "LS")
-                    {
-                        if (profileType.IndexOf("Load Survey", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_LS.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "DE")
-                    {
-                        if (profileType.IndexOf("Daily Energy", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_DE.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "SR")
-                    {
-                        if (profileType.IndexOf("Self Registration", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_SR.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "Bill")
-                    {
-                        if (profileType.IndexOf("Billing", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_Bill.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "Alert")
-                    {
-                        if (profileType.IndexOf("Alert", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_Alert.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "Current Bill")
-                    {
-                        if (profileType.IndexOf("Current Bill", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_CB.Add(timing);
-                    }
-                    if (TestProfiles == "All" || TestProfiles == "Tamper")
-                    {
-                        if (profileType.IndexOf("Tamper", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
-                            lst_ReceivedPacketTiming_Tamper.Add(timing);
-                    }
+                    //if (TestProfiles == "All" || TestProfiles == "Instant")
+                    //{
+                    if (profileType.IndexOf("Instant", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_Instant.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "LS")
+                    //{
+                    if (profileType.IndexOf("Load Survey", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_LS.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "DE")
+                    //{
+                    if (profileType.IndexOf("Daily Energy", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_DE.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "SR")
+                    //{
+                    if (profileType.IndexOf("Self Registration", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_SR.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "Bill")
+                    //{
+                    if (profileType.IndexOf("Billing", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_Bill.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "Alert")
+                    //{
+                    if (profileType.IndexOf("Alert", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_Alert.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "Current Bill")
+                    //{
+                    if (profileType.IndexOf("Current Bill", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_CB.Add(timing);
+                    //}
+                    //if (TestProfiles == "All" || TestProfiles == "Tamper")
+                    //{
+                    if (profileType.IndexOf("Tamper", StringComparison.OrdinalIgnoreCase) >= 0 && profileType.IndexOf(DeviceID, StringComparison.OrdinalIgnoreCase) >= 0)
+                        lst_ReceivedPacketTiming_Tamper.Add(timing);
+                    //}
                 }
                 /*
                 if (lst_ReceivedPacketTiming_Instant.Count > 0) ReceivedPackets.Add(lst_ReceivedPacketTiming_Instant);
@@ -1504,7 +1248,7 @@ namespace ListenerUI.HelperClasses
                 ReceivedPackets["Billing"] = lst_ReceivedPacketTiming_Bill ?? new List<DateTime>();
                 ReceivedPackets["Current Bill"] = lst_ReceivedPacketTiming_CB ?? new List<DateTime>();
 
-                _logService.LogMessage(logBox, $"\nReceived Packets Timings:", Color.Brown, true);
+                // _logService.LogMessage(logBox, $"\nReceived Packets Timings:", Color.Brown, true);
                 List<string> expectedCounts = new List<string>
                 {
                     lst_ExpectedPacketTiming_Instant.Count.ToString(),
@@ -1555,18 +1299,18 @@ namespace ListenerUI.HelperClasses
                     {
                         List<string> timings = new List<string>
                         {
-                            lst_ReceivedPacketTiming_Instant.Count > i ? lst_ReceivedPacketTiming_Instant[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ReceivedPacketTiming_LS.Count > i ? lst_ReceivedPacketTiming_LS[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ReceivedPacketTiming_DE.Count > i ? lst_ReceivedPacketTiming_DE[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ReceivedPacketTiming_SR.Count > i ? lst_ReceivedPacketTiming_SR[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-",
-                            lst_ReceivedPacketTiming_Bill.Count > i ? lst_ReceivedPacketTiming_Bill[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-"
+                            lst_ReceivedPacketTiming_Instant.Count > i ? lst_ReceivedPacketTiming_Instant[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ReceivedPacketTiming_LS.Count > i ? lst_ReceivedPacketTiming_LS[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ReceivedPacketTiming_DE.Count > i ? lst_ReceivedPacketTiming_DE[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ReceivedPacketTiming_SR.Count > i ? lst_ReceivedPacketTiming_SR[i].ToString(Constants.timeStamp12Hours) : "-",
+                            lst_ReceivedPacketTiming_Bill.Count > i ? lst_ReceivedPacketTiming_Bill[i].ToString(Constants.timeStamp12Hours) : "-"
                         };
                         if (lst_ReceivedPacketTiming_Alert.Count > 0)
-                            timings.Add(lst_ReceivedPacketTiming_Alert.Count > i ? lst_ReceivedPacketTiming_Alert[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-");
+                            timings.Add(lst_ReceivedPacketTiming_Alert.Count > i ? lst_ReceivedPacketTiming_Alert[i].ToString(Constants.timeStamp12Hours) : "-");
                         if (lst_ReceivedPacketTiming_Tamper.Count > 0)
-                            timings.Add(lst_ReceivedPacketTiming_Tamper.Count > i ? lst_ReceivedPacketTiming_Tamper[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-");
+                            timings.Add(lst_ReceivedPacketTiming_Tamper.Count > i ? lst_ReceivedPacketTiming_Tamper[i].ToString(Constants.timeStamp12Hours) : "-");
                         if (lst_ReceivedPacketTiming_CB.Count > 0)
-                            timings.Add(lst_ReceivedPacketTiming_CB.Count > i ? lst_ReceivedPacketTiming_CB[i].ToString("dd/MM/yyyy hh:mm:ss tt") : "-");
+                            timings.Add(lst_ReceivedPacketTiming_CB.Count > i ? lst_ReceivedPacketTiming_CB[i].ToString(Constants.timeStamp12Hours) : "-");
 
                         _logService.LogMessage(logBox, _logService.FormatLogLineString($"\t{i + 1}. Packet Received Timing", timings.ToArray()), Color.Black);
 
@@ -1579,7 +1323,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(GetReceivedPacketCountAndTimeStamp)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(GetReceivedPacketCountAndTimeStamp)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return ReceivedPackets;
         }
@@ -1640,23 +1384,23 @@ namespace ListenerUI.HelperClasses
                     {
                         if (received >= expectedTime)
                         {
-                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"), received.ToString("dd/MM/yyyy hh:mm:ss tt"), "Passed");
+                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString(Constants.timeStamp12Hours), received.ToString(Constants.timeStamp12Hours), "Passed");
                             matched = true;
                         }
                         else if (!firstEarlyHandled)
                         {
-                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"), received.ToString("dd/MM/yyyy hh:mm:ss tt"), "Additional Packet");
+                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString(Constants.timeStamp12Hours), received.ToString(Constants.timeStamp12Hours), "Additional Packet");
                             firstEarlyHandled = true;
                         }
                         else
                         {
-                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"), received.ToString("dd/MM/yyyy hh:mm:ss tt"), "Extra Packet");
+                            dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString(Constants.timeStamp12Hours), received.ToString(Constants.timeStamp12Hours), "Extra Packet");
                         }
                     }
 
                     if (!matched)
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"), "-", "Missed Packet");
+                        dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString(Constants.timeStamp12Hours), "-", "Missed Packet");
                     }
 
                     return dtvalidateMissedPacket;
@@ -1675,14 +1419,14 @@ namespace ListenerUI.HelperClasses
 
                         if (currentReceived < intervalStart)
                         {
-                            dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString("dd/MM/yyyy hh:mm:ss tt"), currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"), "Additional Packet");
+                            dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString(Constants.timeStamp12Hours), currentReceived.ToString(Constants.timeStamp12Hours), "Additional Packet");
                             receivedIndex++;
                             continue;
                         }
 
                         if (currentReceived >= intervalStart && currentReceived < intervalEnd)
                         {
-                            dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString("dd/MM/yyyy hh:mm:ss tt"), currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"), "Passed");
+                            dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString(Constants.timeStamp12Hours), currentReceived.ToString(Constants.timeStamp12Hours), "Passed");
                             receivedIndex++;
                             found = true;
                             break;
@@ -1697,7 +1441,7 @@ namespace ListenerUI.HelperClasses
 
                     if (!found)
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString("dd/MM/yyyy hh:mm:ss tt"), "-", "Missed Packet");
+                        dtvalidateMissedPacket.Rows.Add(Profile, intervalStart.ToString(Constants.timeStamp12Hours), "-", "Missed Packet");
                     }
                 }
                 // 4. Final expected timestamp check
@@ -1709,25 +1453,25 @@ namespace ListenerUI.HelperClasses
 
                     if (currentReceived >= finalExpected)
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString("dd/MM/yyyy hh:mm:ss tt"), currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"), "Passed");
+                        dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString(Constants.timeStamp12Hours), currentReceived.ToString(Constants.timeStamp12Hours), "Passed");
                         receivedIndex++;
                         finalMatched = true;
                         break;
                     }
                     else
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString("dd/MM/yyyy hh:mm:ss tt"), currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"), "Additional Packet");
+                        dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString(Constants.timeStamp12Hours), currentReceived.ToString(Constants.timeStamp12Hours), "Additional Packet");
                         receivedIndex++;
                     }
                 }
                 if (!finalMatched)
                 {
-                    dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString("dd/MM/yyyy hh:mm:ss tt"), "-", "Missed Packet");
+                    dtvalidateMissedPacket.Rows.Add(Profile, finalExpected.ToString(Constants.timeStamp12Hours), "-", "Missed Packet");
                 }
                 // 5. Handle any remaining additional packets
                 while (receivedIndex < receivedCount)
                 {
-                    dtvalidateMissedPacket.Rows.Add(Profile, "-", List_ReceivedTimeStamp[receivedIndex].ToString("dd/MM/yyyy hh:mm:ss tt"), "Additional Packet");
+                    dtvalidateMissedPacket.Rows.Add(Profile, "-", List_ReceivedTimeStamp[receivedIndex].ToString(Constants.timeStamp12Hours), "Additional Packet");
                     receivedIndex++;
                 }
             }
@@ -1760,7 +1504,7 @@ namespace ListenerUI.HelperClasses
                         for (int i = 0; i < List_ReceivedTimeStamp.Count; i++)
                         {
                             string result = i == 0 ? "Additional Packet" : "Unexpected Packet";
-                            dtvalidateMissedPacket.Rows.Add(Profile, "-", List_ReceivedTimeStamp[i].ToString(), result);
+                            dtvalidateMissedPacket.Rows.Add(Profile, "-", List_ReceivedTimeStamp[i].ToString(Constants.timeStamp12Hours), result);
                         }
                         return dtvalidateMissedPacket;
                     }
@@ -1790,14 +1534,14 @@ namespace ListenerUI.HelperClasses
                 {
                     if (!firstEarlyHandled)
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, firstExpected.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                            List_ReceivedTimeStamp[receivedIndex].ToString("dd/MM/yyyy hh:mm:ss tt"), "Additional Packet");
+                        dtvalidateMissedPacket.Rows.Add(Profile, firstExpected.ToString(Constants.timeStamp12Hours),
+                            List_ReceivedTimeStamp[receivedIndex].ToString(Constants.timeStamp12Hours), "Additional Packet");
                         firstEarlyHandled = true;
                     }
                     else
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, firstExpected.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                            List_ReceivedTimeStamp[receivedIndex].ToString("dd/MM/yyyy hh:mm:ss tt"), "Unexpected Packets");
+                        dtvalidateMissedPacket.Rows.Add(Profile, firstExpected.ToString(Constants.timeStamp12Hours),
+                            List_ReceivedTimeStamp[receivedIndex].ToString(Constants.timeStamp12Hours), "Unexpected Packets");
                     }
                     receivedIndex++;
                 }
@@ -1816,7 +1560,7 @@ namespace ListenerUI.HelperClasses
 
                         if (nextExpected.HasValue && currentReceived >= nextExpected.Value)
                         {
-                            break; // move to next expected interval
+                            break;
                         }
 
                         if (currentReceived >= expectedTime && (!nextExpected.HasValue || currentReceived < nextExpected.Value))
@@ -1824,22 +1568,22 @@ namespace ListenerUI.HelperClasses
                             if (!matched)
                             {
                                 dtvalidateMissedPacket.Rows.Add(Profile,
-                                    expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                                    currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"),
+                                    expectedTime.ToString(Constants.timeStamp12Hours),
+                                    currentReceived.ToString(Constants.timeStamp12Hours),
                                     "Passed");
                                 matched = true;
                             }
                             else
                             {
                                 dtvalidateMissedPacket.Rows.Add(Profile,
-                                    expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"),
-                                    currentReceived.ToString("dd/MM/yyyy hh:mm:ss tt"),
+                                    expectedTime.ToString(Constants.timeStamp12Hours),
+                                    currentReceived.ToString(Constants.timeStamp12Hours),
                                     "Unexpected Packets");
                             }
                         }
                         else if (currentReceived < expectedTime)
                         {
-                            // Already handled early packets, so this should not happen.
+                            // Already handled early packets
                         }
 
                         receivedIndex++;
@@ -1847,22 +1591,21 @@ namespace ListenerUI.HelperClasses
 
                     if (!matched)
                     {
-                        dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString("dd/MM/yyyy hh:mm:ss tt"), "-", "Missed Packet");
+                        dtvalidateMissedPacket.Rows.Add(Profile, expectedTime.ToString(Constants.timeStamp12Hours), "-", "Missed Packet");
                     }
                 }
 
-                // 4. Handle any remaining packets after the last expected timestamp
                 while (receivedIndex < receivedCount)
                 {
                     dtvalidateMissedPacket.Rows.Add(Profile, "-",
-                        List_ReceivedTimeStamp[receivedIndex].ToString("dd/MM/yyyy hh:mm:ss tt"),
+                        List_ReceivedTimeStamp[receivedIndex].ToString(Constants.timeStamp12Hours),
                         "Unexpected Packets");
                     receivedIndex++;
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(ValidateReceivedPacketTimings)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(ValidateReceivedPacketTimings)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
 
             return dtvalidateMissedPacket;
@@ -1894,7 +1637,7 @@ namespace ListenerUI.HelperClasses
             {
                 foreach (var (profile, displayName, expected, received) in profileChecks)
                 {
-                    if (TestProfiles == "All" || TestProfiles == profile)
+                    if (TestProfiles == "All" || (TestProfiles == profile) || (received.Count > 0))
                     {
                         var dtmissedPackets = ValidateReceivedPacketTimings(displayName, expected, received);
                         foreach (DataRow row in dtmissedPackets.Rows)
@@ -1918,7 +1661,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(MissedPackedValidation)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(MissedPackedValidation)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return isMissedPacketValidationPassed;
         }
@@ -1964,32 +1707,38 @@ namespace ListenerUI.HelperClasses
                         }
                     }
                 }
+                if (Random_Instant == 0 && Random_LS == 0 && Random_DE == 0 && Random_CB == 0 && Random_Bill == 0 && receivedPackets.Count > 0)
+                {
+                    _logService.LogMessage(logBox,
+                        isPriorityPassed
+                            ? "\t✓ PUSH PACKETS PRIORITY VALIDATION: The sequence of received packets at each expected time interval is correct"
+                            : "\t✗ PUSH PACKETS PRIORITY VALIDATION: The sequence of received packets is incorrect and has failed the priority order check.",
+                        isPriorityPassed ? Color.Green : Color.Red,
+                        !isPriorityPassed);
+                }
+                if (receivedPackets.Count > 0)
+                {
+                    _logService.LogMessage(logBox,
+                isOpticalValidationPassed
+                    ? (TestProfiles != "Instant") ? "\t✓ PUSH AND OPTICAL DATA VALIDATION: The data of received push packets matches with optical data"
+                                                  : "\t✓ PUSH PACKET PARAMETER VALIDATION: Instant profile parameter count matches push packet, and energy values are in increasing order."
+                    : (TestProfiles != "Instant") ? "\t✗ PUSH AND OPTICAL DATA VALIDATION: The data of received push packets does not match with optical data"
+                                                  : "\t✗ PUSH PACKET PARAMETER VALIDATION: Instant profile parameter count or energy order mismatch",
+                isOpticalValidationPassed ? Color.Green : Color.Red,
+                !isOpticalValidationPassed);
+                }
                 _logService.LogMessage(logBox,
-                    isPriorityPassed
-                        ? "\t✓ PUSH PACKETS PRIORITY VALIDATION: The sequence of received packets at each expected time interval is correct"
-                        : "\t✗ PUSH PACKETS PRIORITY VALIDATION: The sequence of received packets is incorrect and has failed the priority order check.",
-                    isPriorityPassed ? Color.Green : Color.Red,
-                    !isPriorityPassed);
-
-                _logService.LogMessage(logBox,
-                    isOpticalValidationPassed
-                        ? "\t✓ PUSH AND OPTICAL DATA VALIDATION: The data of received push packets matches with optical data"
-                        : "\t✗ PUSH AND OPTICAL DATA VALIDATION: The data of received push packets does not match with optical data",
-                    isOpticalValidationPassed ? Color.Green : Color.Red,
-                    !isOpticalValidationPassed);
-
-                _logService.LogMessage(logBox,
-                    isMissedPacketValidationPassed
-                        ? "\t✓ EXPECTED PUSH PACKETS VALIDATION: All Expected packets have been received, no missing packet available"
-                        : "\t✗ EXPECTED PUSH PACKETS VALIDATION: There are differences in expected packets and received packets",
-                    isMissedPacketValidationPassed ? Color.Green : Color.Red,
-                    !isMissedPacketValidationPassed);
+                isMissedPacketValidationPassed
+                    ? "\t✓ EXPECTED PUSH PACKETS VALIDATION: All Expected packets have been received, no missing packet available"
+                    : "\t✗ EXPECTED PUSH PACKETS VALIDATION: There are differences in expected packets and received packets",
+                isMissedPacketValidationPassed ? Color.Green : Color.Red,
+                !isMissedPacketValidationPassed);
                 _logService.LogMessage(logBox, "-------------------------------------------------------------------------------------------------------------------------\n", Color.DeepPink, true);
                 return statusOfTest.All(x => x);
             }
             catch (Exception ex)
             {
-                log.Error($"Error while summarizing the test - {ex.Message}", ex);
+                log.Error($"Error while summarizing the test - {ex.Message} TRACE:{ex.StackTrace}");
                 return false;
             }
         }
@@ -2053,12 +1802,12 @@ namespace ListenerUI.HelperClasses
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Error while exporting expected datatable for priority verification - {ex.Message.ToString()}");
+                    log.Error($"Error while exporting expected datatable for priority verification - {ex.Message} TRACE:{ex.StackTrace}");
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(BuildExpectedDataTable)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(BuildExpectedDataTable)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return table;
         }
@@ -2095,7 +1844,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(ReorderByPriority)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(ReorderByPriority)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
 
             return reordered;
@@ -2146,7 +1895,10 @@ namespace ListenerUI.HelperClasses
                         .Select(kvp => kvp.Key)
                         .OrderBy(p => priorityOrder.IndexOf(p))
                         .ToList();
-
+                    // if other profile push time in between 
+                    //var addOrder = expectedProfiles.SelectMany(kvp => kvp.Value.Where(t => t > windowStart && t < windowEnd).Select(t => new { Profile = kvp.Key }).OrderBy(p => priorityOrder.IndexOf(p)).ToList());
+                    var addOrder = expectedProfiles.SelectMany(kvp => kvp.Value.Where(t => t > windowStart && t < windowEnd).Select(t => new { Profile = kvp.Key })).OrderBy(p => priorityOrder.IndexOf(p.Profile)).ToList();
+                    expectedOrder.AddRange(addOrder.Select(a => a.Profile));
                     var receivedItems = receivedProfiles
                         .SelectMany(kvp => kvp.Value
                             .Where(t => t >= windowStart && t < windowEnd)
@@ -2175,7 +1927,8 @@ namespace ListenerUI.HelperClasses
                     }
                     else if (receivedOrder.Count > 1)
                     {
-                        var indexes = receivedOrder.Select(p => priorityOrder.IndexOf(p)).ToList();
+                        var indexes = receivedOrder.Select(p => expectedOrder.IndexOf(p)).ToList();
+                        //var indexes = receivedOrder.Select(p => priorityOrder.IndexOf(p)).ToList();
                         for (int j = 1; j < indexes.Count; j++)
                         {
                             if (indexes[j] < indexes[j - 1])
@@ -2217,7 +1970,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error($"[{nameof(ValidateReceivedOrderInWindows)}] - {ex.Message}", ex);
+                log.Error($"[{nameof(ValidateReceivedOrderInWindows)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return dt_PriorityOrderReport;
         }
@@ -2227,118 +1980,292 @@ namespace ListenerUI.HelperClasses
         public void GetProfileDataUsingOptical(ref DLMSComm DLMSReaderWriter, string startdate, string enddate)
         {
             _logService.LogMessage(logBox, $"\nPush and Optical Data Validation:", Color.Brown, true);
-            DataTable resultTable = new DataTable();
-            DLMSReaderWriter.SignOnDLMS();
+            //DataTable resultTable = new DataTable();
+            //DLMSReaderWriter.SignOnDLMS();
             try
             {
-                if (TestProfiles == "All" || TestProfiles == "LS")
+                List<string> excludeProfiles = new List<string> { "Alert", "Tamper"/*, "CB"*/ };
+                if (!isCurrentBillAvailable)
+                    excludeProfiles.Add("CB");
+                foreach (var profiles in profileDetails)
                 {
-                    _logService.LogMessage(logBox, $"\tDownloading Load Survey through Optical", Color.Black);
-                    //var LS = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.1.0.255", "1.0.94.91.4.255", 0, 0, (byte)1, startdate, enddate);
-                    var LS = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.1.0.255", "1.0.94.91.4.255", 0, 0, (byte)0);
-                    dtRec_Optical_LS = (DataTable)LS["DataTable"];
-                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_LS, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Load Survey");
-                }
-                if (TestProfiles == "All" || TestProfiles == "DE")
-                {
-                    _logService.LogMessage(logBox, $"\tDownloading Daily Energy through Optical", Color.Black);
-                    //  var DE = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.2.0.255", "1.0.94.91.5.255", 0, 0, (byte)1, startdate, enddate);
-                    var DE = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.2.0.255", "1.0.94.91.5.255", 0, 0, (byte)0);
-                    dtRec_Optical_DE = (DataTable)DE["DataTable"];
-                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_DE, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Daily Energy");
-                }
-                if (TestProfiles == "All" || TestProfiles == "Bill")
-                {
-                    int inUseEntries = Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, 7, "1.0.98.1.0.255", 7)));
-                    if (inUseEntries > 1)
+                    if (excludeProfiles.Contains(profiles.Name))
+                        continue;
+                    if (profiles.ReceivedList.Count > 0)
                     {
-                        _logService.LogMessage(logBox, $"\tDownloading Billing Profile through Optical", Color.Black);
-                        var Bill = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.98.1.0.255", "1.0.94.91.6.255", 1, inUseEntries - 1, (byte)2);
-                        dtRec_Optical_Bill = (DataTable)Bill["DataTable"];
-                        DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Bill, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Billing");
+                        _logService.LogMessage(logBox, $"\t✓ Downloading {profiles.DisplayName} through Optical", Color.Black);
+                        switch (profiles.Name)
+                        {
+                            case "LS":
+                                var LS = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.1.0.255", "1.0.94.91.4.255", 0, 0, (byte)0);
+                                dtRec_Optical_LS = (DataTable)LS["DataTable"];
+                                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_LS, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.DisplayName}");
+                                if (dtPushSetup_LS.Rows.Count > 3)
+                                    dtRec_AppendedOpt_LS = GetAdditionalPSObjetcs(ref DLMSReaderWriter, dtPushSetup_LS, dtRec_Optical_LS, "LS");
+                                break;
+                            case "DE":
+                                var DE = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.2.0.255", "1.0.94.91.5.255", 0, 0, (byte)0);
+                                dtRec_Optical_DE = (DataTable)DE["DataTable"];
+                                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_DE, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.DisplayName}");
+                                if (dtPushSetup_DE.Rows.Count > 3)
+                                    dtRec_AppendedOpt_DE = GetAdditionalPSObjetcs(ref DLMSReaderWriter, dtPushSetup_DE, dtRec_Optical_DE, "DE");
+                                break;
+                            case "Bill":
+                                int inUseEntries = Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, 7, "1.0.98.1.0.255", 7)));
+                                if (inUseEntries > 1)
+                                {
+                                    var Bill = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.98.1.0.255", "1.0.94.91.6.255", 1, inUseEntries - 1, (byte)2);
+                                    dtRec_Optical_Bill = (DataTable)Bill["DataTable"];
+                                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Bill, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.DisplayName}");
+                                    if (dtPushSetup_Bill.Rows.Count > 3)
+                                        dtRec_AppendedOpt_Bill = GetAdditionalPSObjetcs(ref DLMSReaderWriter, dtPushSetup_Bill, dtRec_Optical_Bill, "Bill");
+                                }
+                                break;
+                            case "SR":
+                                if (dtPushSetup_SR.Rows.Count > 3 && dtPushSetup_SR.Columns.Count > 4)
+                                {
+                                    if (dtRec_Optical_SR.Columns.Count == 0)
+                                    {
+                                        dtRec_Optical_SR.Columns.Add("SN");
+                                        for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
+                                        {
+                                            dtRec_Optical_SR.Columns.Add($"{dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()}");
+                                        }
+                                    }
+                                    DataRow srRow = dtRec_Optical_SR.NewRow();
+                                    srRow["SN"] = dtRec_Optical_SR.Rows.Count + 1;
+                                    for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
+                                    {
+                                        int objClass = Convert.ToInt32(dtPushSetup_SR.Rows[i]["CLASS"]);
+                                        string obis = dtPushSetup_SR.Rows[i]["OBIS"].ToString();
+                                        int attribute = Convert.ToInt32(dtPushSetup_SR.Rows[i]["ATTRIBUTE"]);
+                                        string recString = SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, objClass, obis, attribute);
+                                        if (recString.Length > 4)
+                                        {
+
+                                            int counter = 0;
+                                            if (recString.Substring(0, 4) == "0101")
+                                                counter = 4;
+                                            srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = parse.GetProfileValueString(recString.Substring(counter));
+                                        }
+                                        else
+                                            srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = recString;
+                                    }
+                                    dtRec_Optical_SR.Rows.Add(srRow);
+                                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_SR, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.Name}");
+                                }
+                                break;
+                            case "Instant":
+                                var instant = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.94.91.0.255", "1.0.94.91.3.255", 0, 0, 0);
+                                dtRec_Optical_Instant = (DataTable)instant["DataTable"];
+                                var networkColumn = dtRec_Optical_Instant.Columns.Cast<DataColumn>().FirstOrDefault(c => c.ColumnName.Contains("0.0.96.12.131.255"));
+                                if (networkColumn != null)
+                                {
+                                    string networkInfoString = dtRec_Optical_Instant.Rows[0][networkColumn].ToString();
+                                    if (!string.IsNullOrEmpty(networkInfoString))
+                                    {
+                                        List<string> splittedDataStructure = new List<string>();
+                                        List<string> convertedSplittedData = new List<string>();
+                                        int start = 4;
+                                        for (int i = 0; i < Convert.ToInt32(networkInfoString.Substring(2, 2), 16); i++)
+                                        {
+                                            splittedDataStructure.Add(parse.GetProfileDataString(networkInfoString, ref start));
+                                            convertedSplittedData.Add(parse.GetProfileValueString(splittedDataStructure[i].ToString().Trim()));
+                                        }
+                                        dtRec_Optical_Instant.Rows[0][networkColumn] = string.Join(", ", convertedSplittedData);
+                                    }
+                                }
+                                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Instant, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.DisplayName}");
+                                break;
+                            case "CB":
+                                inUseEntries = Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, 7, "1.0.98.1.0.255", 7)));
+                                var currentBill = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.98.1.0.255", "1.0.94.91.6.255", inUseEntries, inUseEntries, (byte)2);
+                                dtRec_Optical_CB = (DataTable)currentBill["DataTable"];
+                                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_CB, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"{profiles.DisplayName}");
+                                if (dtPushSetup_Bill.Rows.Count > 3)
+                                    dtRec_AppendedOpt_CB = GetAdditionalPSObjetcs(ref DLMSReaderWriter, dtPushSetup_Bill, dtRec_Optical_CB, "CB");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        _logService.LogMessage(logBox, $"\t✗ No packet received for {profiles.DisplayName}", Color.Black);
                     }
                 }
-                if (TestProfiles == "All" || TestProfiles == "SR")
-                {
-                    if (dtPushSetup_SR.Rows.Count > 3 && dtPushSetup_SR.Columns.Count > 4)
-                    {
-                        _logService.LogMessage(logBox, $"\tDownloading Self Registration parameters through Optical", Color.Black);
-                        if (dtRec_Optical_SR.Columns.Count == 0)
-                        {
-                            dtRec_Optical_SR.Columns.Add("SN");
-                            for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
-                            {
-                                dtRec_Optical_SR.Columns.Add($"{dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()}");
-                            }
-                        }
-                        DataRow srRow = dtRec_Optical_SR.NewRow();
-                        srRow["SN"] = dtRec_Optical_SR.Rows.Count + 1;
-                        for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
-                        {
-                            int objClass = Convert.ToInt32(dtPushSetup_SR.Rows[i]["CLASS"]);
-                            string obis = dtPushSetup_SR.Rows[i]["OBIS"].ToString();
-                            int attribute = Convert.ToInt32(dtPushSetup_SR.Rows[i]["ATTRIBUTE"]);
-                            string recString = SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, objClass, obis, attribute);
-                            if (recString.Length > 4)
-                            {
-                                int counter = 0;
-                                if (recString.Substring(0, 4) == "0101")
-                                    counter = 4;
-                                srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = parse.GetProfileValueString(recString.Substring(counter));
-                            }
-                            else
-                                srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = recString;
-                        }
-                        dtRec_Optical_SR.Rows.Add(srRow);
-                        DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_SR, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"SR");
-                    }
-                }
-                if (TestProfiles == "All" || TestProfiles == "Instant")
-                {
-                    _logService.LogMessage(logBox, $"\tDownloading Instant profile through Optical", Color.Black);
-                    var instant = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.94.91.0.255", "1.0.94.91.3.255", 0, 0, 0);
-                    dtRec_Optical_Instant = (DataTable)instant["DataTable"];
-                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Instant, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Instant");
-                }
+                UpdateProfileDetails();
+                /* if (lst_ReceivedPacketTiming_LS.Count > 0)
+                 {
+                     //if (TestProfiles == "All" || TestProfiles == "LS" || lst_ReceivedPacketTiming_LS.Count > 0)
+                     //{
+                     _logService.LogMessage(logBox, $"\tDownloading Load Survey through Optical", Color.Black);
+                     //var LS = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.1.0.255", "1.0.94.91.4.255", 0, 0, (byte)1, startdate, enddate);
+                     var LS = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.1.0.255", "1.0.94.91.4.255", 0, 0, (byte)0);
+                     dtRec_Optical_LS = (DataTable)LS["DataTable"];
+                     DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_LS, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Load Survey");
+                     //}
+                 }
+                 if (lst_ReceivedPacketTiming_DE.Count > 0)
+                 {
+                     //if (TestProfiles == "All" || TestProfiles == "DE" || lst_ReceivedPacketTiming_DE.Count > 0)
+                     //{
+                     _logService.LogMessage(logBox, $"\tDownloading Daily Energy through Optical", Color.Black);
+                     //  var DE = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.2.0.255", "1.0.94.91.5.255", 0, 0, (byte)1, startdate, enddate);
+                     var DE = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.99.2.0.255", "1.0.94.91.5.255", 0, 0, (byte)0);
+                     dtRec_Optical_DE = (DataTable)DE["DataTable"];
+                     DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_DE, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Daily Energy");
+                     //}
+                 }
+                 if (lst_ReceivedPacketTiming_Bill.Count > 0)
+                 {
+                     //if (TestProfiles == "All" || TestProfiles == "Bill" || lst_ReceivedPacketTiming_Bill.Count > 0)
+                     //{
+                     int inUseEntries = Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, 7, "1.0.98.1.0.255", 7)));
+                     if (inUseEntries > 1)
+                     {
+                         _logService.LogMessage(logBox, $"\tDownloading Billing Profile through Optical", Color.Black);
+                         var Bill = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.98.1.0.255", "1.0.94.91.6.255", 1, inUseEntries - 1, (byte)2);
+                         dtRec_Optical_Bill = (DataTable)Bill["DataTable"];
+                         DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Bill, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Billing");
+                     }
+                     //}
+                 }
+                 if (lst_ReceivedPacketTiming_SR.Count > 0)
+                 {
+                     //if (TestProfiles == "All" || TestProfiles == "SR" || lst_ReceivedPacketTiming_SR.Count > 0)
+                     //{
+                     if (dtPushSetup_SR.Rows.Count > 3 && dtPushSetup_SR.Columns.Count > 4)
+                     {
+                         _logService.LogMessage(logBox, $"\tDownloading Self Registration parameters through Optical", Color.Black);
+                         if (dtRec_Optical_SR.Columns.Count == 0)
+                         {
+                             dtRec_Optical_SR.Columns.Add("SN");
+                             for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
+                             {
+                                 dtRec_Optical_SR.Columns.Add($"{dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()}");
+                             }
+                         }
+                         DataRow srRow = dtRec_Optical_SR.NewRow();
+                         srRow["SN"] = dtRec_Optical_SR.Rows.Count + 1;
+                         for (int i = 3; i < dtPushSetup_SR.Rows.Count; i++)
+                         {
+                             int objClass = Convert.ToInt32(dtPushSetup_SR.Rows[i]["CLASS"]);
+                             string obis = dtPushSetup_SR.Rows[i]["OBIS"].ToString();
+                             int attribute = Convert.ToInt32(dtPushSetup_SR.Rows[i]["ATTRIBUTE"]);
+                             string recString = SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, objClass, obis, attribute);
+                             if (recString.Length > 4)
+                             {
+                                 int counter = 0;
+                                 if (recString.Substring(0, 4) == "0101")
+                                     counter = 4;
+                                 srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = parse.GetProfileValueString(recString.Substring(counter));
+                             }
+                             else
+                                 srRow[dtPushSetup_SR.Rows[i]["DESCRIPTION"].ToString()] = recString;
+                         }
+                         dtRec_Optical_SR.Rows.Add(srRow);
+                         DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_SR, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"SR");
+                     }
+                     //}
+                 }
+                 if (lst_ReceivedPacketTiming_Instant.Count > 0)
+                 {
+                     //if (TestProfiles == "All" || TestProfiles == "Instant" || lst_ReceivedPacketTiming_Instant.Count > 0)
+                     //{
+                     _logService.LogMessage(logBox, $"\tDownloading Instant profile through Optical", Color.Black);
+                     var instant = DLMSProfileGenericHelper.GetProfileDataTable(ref DLMSReaderWriter, "1.0.94.91.0.255", "1.0.94.91.3.255", 0, 0, 0);
+                     dtRec_Optical_Instant = (DataTable)instant["DataTable"];
+                     var networkColumn = dtRec_Optical_Instant.Columns.Cast<DataColumn>().FirstOrDefault(c => c.ColumnName.Contains("0.0.96.12.131.255"));
+                     if (networkColumn != null)
+                     {
+                         string networkInfoString = dtRec_Optical_Instant.Rows[0][networkColumn].ToString();
+                         if (!string.IsNullOrEmpty(networkInfoString))
+                         {
+                             List<string> splittedDataStructure = new List<string>();
+                             List<string> convertedSplittedData = new List<string>();
+                             int start = 4;
+                             for (int i = 0; i < Convert.ToInt32(networkInfoString.Substring(2, 2), 16); i++)
+                             {
+                                 splittedDataStructure.Add(parse.GetProfileDataString(networkInfoString, ref start));
+                                 convertedSplittedData.Add(parse.GetProfileValueString(splittedDataStructure[i].ToString().Trim()));
+                             }
+                             dtRec_Optical_Instant.Rows[0][networkColumn] = string.Join(", ", convertedSplittedData);
+                         }
+                     }
+                     DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Optical_Instant, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Instant");
+                     //}
+                 } */
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                log.Error($"[{nameof(GetProfileDataUsingOptical)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
         }
         public bool ValidatePushAndOpticalProfiles()
         {
             bool isOpticalValidationPassed = true;
             List<bool> isAllProfileOpticalPassed = new List<bool>();
-            DataTable recPushLSTable = dtRec_Push_LS.Copy();
-            DataTable recPushDETable = TransposeDataTable(dtRec_Push_DE.Copy());
-            DataTable recPushBillTable = TransposeDataTable(dtRec_Push_Bill.Copy());
-            DataTable recPushSRTable = TransposeDataTable(dtRec_Push_SR.Copy());
-            DataTable optLSData = dtRec_Optical_LS.Copy();
-            DataTable optDEData = dtRec_Optical_DE.Copy();
-            DataTable optBillData = dtRec_Optical_Bill.Copy();
-            DataTable optSRData = dtRec_Optical_SR.Copy();
             try
             {
-                if (TestProfiles == "All" || TestProfiles == "LS")
+                if (lst_ReceivedPacketTiming_LS.Count > 0)
                 {
-                    DataTable filteredPushLSDT = FilterRecPushDT(recPushLSTable, dtPushSetup_LS.Rows.Count + 1, dt_Appended_LS.Rows.Count, alternateRow: 1);
-                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushLSDT, optLSData, "LS"));
+                    //if (TestProfiles == "All" || TestProfiles == "LS" || lst_ReceivedPacketTiming_LS.Count > 0)
+                    //{
+                    //DataTable filteredPushLSDT = FilterRecPushDT(dtRec_Push_LS.Copy(), dtPushSetup_LS.Rows.Count + 1, dt_Appended_LS.Rows.Count, alternateRow: 1);
+                    //isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushLSDT, dtRec_Optical_LS.Copy(), "LS"));
+                    DataTable filteredPushLSDT = FilterRecPushDT(dtRec_Push_LS.Copy(), 3 + 1, dt_Appended_LS.Rows.Count, alternateRow: 1);
+                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushLSDT, (dtPushSetup_LS.Rows.Count > 3) ? dtRec_AppendedOpt_LS.Copy() : dtRec_Optical_LS.Copy(), "LS"));
+                    //}
                 }
-                if (TestProfiles == "All" || TestProfiles == "DE")
+                if (lst_ReceivedPacketTiming_DE.Count > 0)
                 {
-                    DataTable filteredPushDEDT = FilterRecPushDT(recPushDETable, dtPushSetup_DE.Rows.Count + 1, dt_Appended_DE.Columns.Count + 1, alternateRow: 2);
-                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushDEDT, optDEData, "DE"));
+                    //if (TestProfiles == "All" || TestProfiles == "DE" || lst_ReceivedPacketTiming_DE.Count > 0)
+                    //{
+                    //DataTable filteredPushDEDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_DE.Copy()), dtPushSetup_DE.Rows.Count + 1, dt_Appended_DE.Columns.Count + 1, alternateRow: 2);
+                    //isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushDEDT, dtRec_Optical_DE.Copy(), "DE"));
+                    DataTable filteredPushDEDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_DE.Copy()), 3 + 1, dt_Appended_DE.Columns.Count + 1, alternateRow: 2);
+                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushDEDT, (dtPushSetup_DE.Rows.Count > 3) ? dtRec_AppendedOpt_DE.Copy() : dtRec_Optical_DE.Copy(), "DE"));
+                    //}
                 }
-                if (TestProfiles == "All" || TestProfiles == "Bill")
+                if (lst_ReceivedPacketTiming_Bill.Count > 0)
                 {
-                    DataTable filteredPushBillDT = FilterRecPushDT(recPushBillTable, dtPushSetup_Bill.Rows.Count + 1, dt_Appended_Bill.Columns.Count + 1, alternateRow: 2);
-                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushBillDT, optBillData, "Bill"));
+                    //if (TestProfiles == "All" || TestProfiles == "Bill" || lst_ReceivedPacketTiming_Bill.Count > 0)
+                    //{
+                    //DataTable filteredPushBillDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_Bill.Copy()), dtPushSetup_Bill.Rows.Count + 1, dt_Appended_Bill.Columns.Count + 1, alternateRow: 2);
+                    //isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushBillDT, dtRec_Optical_Bill.Copy(), "Bill"));
+                    DataTable filteredPushBillDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_Bill.Copy()), 3 + 1, dt_Appended_Bill.Columns.Count + 1, alternateRow: 2);
+                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushBillDT, (dtPushSetup_Bill.Rows.Count > 3) ? dtRec_AppendedOpt_Bill.Copy() : dtRec_Optical_Bill.Copy(), "Bill"));
+                    //}
                 }
-                if (TestProfiles == "All" || TestProfiles == "SR")
+                if (lst_ReceivedPacketTiming_SR.Count > 0)
                 {
-                    DataTable filteredPushSRDT = FilterRecPushDT(recPushSRTable, 4, dtPushSetup_SR.Columns.Count + 1, alternateRow: 2);  // colStart =4 as device id, rtc, and send destination
-                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushSRDT, optSRData, "SR"));
+                    //if (TestProfiles == "All" || TestProfiles == "SR" || lst_ReceivedPacketTiming_SR.Count > 0)
+                    //{
+                    DataTable filteredPushSRDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_SR.Copy()), 4, dtPushSetup_SR.Columns.Count + 1, alternateRow: 2);  // colStart =4 as device id, rtc, and send destination
+                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushSRDT, dtRec_Optical_SR.Copy(), "SR"));
+                    //}
+                }
+                if (lst_ReceivedPacketTiming_Instant.Count > 0)
+                {
+                    //if (TestProfiles == "All" || TestProfiles == "Instant" || lst_ReceivedPacketTiming_Instant.Count > 0)
+                    //{
+                    if (isInstantProfile)
+                    {
+                        DataTable filterPushInstantDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_Instant.Copy()), dtPushSetup_Instant.Rows.Count + 1, dt_Appended_Instant.Columns.Count + 1, alternateRow: 2);  // colStart =4 as device id, rtc, and send destination
+                        isAllProfileOpticalPassed.Add(ComparePushOpticalData(filterPushInstantDT, dtRec_Optical_Instant.Copy(), "Instant"));
+                    }
+                    else
+                    {
+                        DataTable filterPushInstantDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_Instant.Copy()), 3 /*dtPushSetup_Instant.Rows.Count*/ + 1, dtPushSetup_Instant.Columns.Count + 1, alternateRow: 2); // as per IS , r3 parameters device id, destination and RTC are fixed
+                        isAllProfileOpticalPassed.Add(ComparePushOpticalData(filterPushInstantDT, dtRec_Optical_Instant.Copy(), "Instant"));
+                    }
+                    //}
+                }
+                if (lst_ReceivedPacketTiming_CB.Count > 0)
+                {
+                    DataTable filteredPushCBDT = FilterRecPushDT(TransposeDataTable(dtRec_Push_CB.Copy()), 3 + 1, dt_Appended_Bill.Columns.Count + 1, alternateRow: 2);
+                    isAllProfileOpticalPassed.Add(ComparePushOpticalData(filteredPushCBDT, (dtPushSetup_Bill.Rows.Count > 3) ? dtRec_AppendedOpt_CB.Copy() : dtRec_Optical_CB.Copy(), "CB"));
                 }
                 if (isAllProfileOpticalPassed.All(passed => passed))
                 {
@@ -2351,29 +2278,33 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                log.Error($"[{nameof(ValidatePushAndOpticalProfiles)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return isOpticalValidationPassed;
         }
-        private bool ComparePushOpticalData(DataTable pushData, DataTable opticalData, string profile)
+        private bool ComparePushOpticalData(DataTable pushData, DataTable opticalData, string profileName)
         {
+            var profile = profileDetails.Find(p => p.Name == profileName);
             bool isOpticalValidationPassed = true;
             List<string> misMatchedData = new List<string>();
             if (opticalData.Columns.Count > 0)
                 opticalData.Columns.RemoveAt(0);
 
-            misMatchedData = BuildAndComparePushOpticalDT(pushData, opticalData, profile);
+            misMatchedData = BuildAndComparePushOpticalDT(pushData, opticalData, profileName);
+            string message = "";
             if (misMatchedData.Count == 0)
             {
-                _logService.LogMessage(logBox, $"\t{profile} Data Comparison: Push and Optical data match.", Color.Black, true);
+                message = (profileName == "Instant" || profileName == "CB") ? "Push Data: Energy values are consistent, non-decreasing, less than optical values and PF within limit." : "Comparison: Push and Optical data match successfully.";
+                _logService.LogMessage(logBox, $"\t{profileName} {message}", Color.Black, true);
             }
             else
             {
                 isOpticalValidationPassed = false;
-                _logService.LogMessage(logBox, $"\t{profile} Data Comparison: Push and Optical data do not match.", Color.Red, true);
+                message = (profileName == "Instant" || profileName == "CB") ? "Push Data: Either energy values are inconsistent or PF is not within limit." : "Comparison: Push and Optical data do not match.";
+                _logService.LogMessage(logBox, $"\t{profileName} {message}", Color.Red, true);
                 foreach (var mismatch in misMatchedData)
                 {
-                    _logService.LogMessage(logBox, $"\t{mismatch}", Color.Red);
+                    _logService.LogMessage(logBox, $"\t\t{mismatch}", Color.Red, true);
                 }
             }
             return isOpticalValidationPassed;
@@ -2422,6 +2353,13 @@ namespace ListenerUI.HelperClasses
                     string header = recPushDT.Rows[0][col]?.ToString();
                     if (string.IsNullOrWhiteSpace(header))
                         header = $"Col{col}";
+                    //string finalHeader = header;
+                    int counter = 1;
+                    while (result.Columns.Contains(header))
+                    {
+                        header = $"{header}_{counter}";
+                        counter++;
+                    }
                     result.Columns.Add(header);
                 }
                 for (int row = rowStart; row < recPushDT.Rows.Count; row += alternateRow)
@@ -2437,7 +2375,7 @@ namespace ListenerUI.HelperClasses
                     DateTime dt = DateTime.Now;
                     for (int colIndex = 0; colIndex < result.Columns.Count; colIndex++)
                     {
-                        if (DateTime.TryParseExact(row[colIndex].ToString().Trim(), "dd/MM/yyyy hh:mm:ss tt", null, System.Globalization.DateTimeStyles.None, out outTime))
+                        if (DateTime.TryParseExact(row[colIndex].ToString().Trim(), Constants.timeStamp12Hours, null, System.Globalization.DateTimeStyles.None, out outTime))
                         {
                             row[colIndex] = outTime.ToString("dd/MM/yyyy HH:mm:ss");
                         }
@@ -2446,7 +2384,7 @@ namespace ListenerUI.HelperClasses
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                log.Error($"[{nameof(FilterRecPushDT)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
             return result;
         }
@@ -2459,6 +2397,7 @@ namespace ListenerUI.HelperClasses
         /// <returns></returns>
         public List<string> BuildAndComparePushOpticalDT(DataTable pushData, DataTable opticalData, string profileName)
         {
+            var profile = profileDetails.Find(p => p.Name == profileName);
             List<string> misMatchData = new List<string>();
             DataTable pushOptDT = new DataTable();
             try
@@ -2468,140 +2407,594 @@ namespace ListenerUI.HelperClasses
                     misMatchData.Add($"Error in {profileName}: {(pushData.Rows.Count == 0 ? "Push data" : "Optical data")} not received.");
                     return misMatchData;
                 }
-                if (pushData.Columns.Count != opticalData.Columns.Count)
+                if (isInstantProfile || profileName != "Instant")
                 {
-                    misMatchData.Add($"Error in {profileName}: Parameter count mismatch between Push and Optical Datatables.");
-                    return misMatchData;
-                }
-                foreach (DataColumn col in pushData.Columns)
-                {
-                    pushOptDT.Columns.Add($"(Push)-{col.ColumnName}");
-                    pushOptDT.Columns.Add($"(Optical)-{col.ColumnName}");
-                }
-
-                int pushStartIndex = -1;
-                string pushStartVal = "";
-                if (TestProfiles == "SR" || profileName == "SR")
-                {
-                    DataRow pushRow = pushData.Rows[0];
-                    DataRow opticalRow = opticalData.Rows[0];
-                    DataRow newRow = pushOptDT.NewRow();
-
-                    for (int col = 0; col < pushData.Columns.Count; col++)
+                    if (pushData.Columns.Count != opticalData.Columns.Count)
                     {
-                        string pushVal = pushRow[col]?.ToString()?.Trim() ?? "";
-                        string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
-
-                        newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
-                        newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
-                        if (optVal == "0B" || optVal == "0D") optVal = "0";
-                        if (pushVal != optVal)
-                        {
-                            misMatchData.Add($"Column '{pushData.Columns[col].ColumnName}': Push='{pushVal}', Optical='{optVal}'");
-                        }
+                        misMatchData.Add($"Error in {profileName}: Parameter count mismatch between Push and Optical Datatables.");
+                        return misMatchData;
                     }
-                    pushOptDT.Rows.Add(newRow);
-                }  // as row[0]col[0] is not date time format
+                }
+                if (profileName == "Instant" || profileName == "CB")
+                {
+                    pushOptDT = pushData;
+                    misMatchData = ValidateEnergyColumns(pushData, opticalData);
+                }
+                /* else
+                 {
+                     foreach (DataColumn col in pushData.Columns)
+                     {
+                         pushOptDT.Columns.Add($"(Push)-{col.ColumnName}");
+                         pushOptDT.Columns.Add($"(Optical)-{col.ColumnName}");
+                     }
+
+                     int pushStartIndex = -1;
+                     string pushStartVal = "";
+                     if (TestProfiles == "SR" || profileName == "SR")
+                     {
+                         DataRow pushRow = pushData.Rows[0];
+                         DataRow opticalRow = opticalData.Rows[0];
+                         DataRow newRow = pushOptDT.NewRow();
+
+                         for (int col = 0; col < pushData.Columns.Count; col++)
+                         {
+                             string pushVal = pushRow[col]?.ToString()?.Trim() ?? "";
+                             string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
+
+                             newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
+                             newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
+                             if (optVal == "0B" || optVal == "0D") optVal = "0";
+                             if (pushVal != optVal)
+                             {
+                                 misMatchData.Add($"Column '{pushData.Columns[col].ColumnName}': Push='{pushVal}', Optical='{optVal}'");
+                             }
+                         }
+                         pushOptDT.Rows.Add(newRow);
+                     }  // as row[0]col[0] is not date time format
+                     else
+                     {
+                         for (int i = 0; i < pushData.Rows.Count; i++)
+                         {
+                             string value = pushData.Rows[i][0]?.ToString()?.Trim();
+                             if (!string.IsNullOrEmpty(value) && DateTime.TryParseExact(value, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime dt))
+                             {
+                                 pushStartIndex = i;
+                                 pushStartVal = value;
+                                 break;
+                             }
+                         }
+                         if (pushStartIndex == -1)
+                         {
+                             misMatchData.Add($"Error in {profileName}: Could not find a valid DateTime in received Push data.");
+                             return misMatchData;
+                         }
+
+                         int startIndex = -1;
+                         for (int i = 0; i < opticalData.Rows.Count; i++)
+                         {
+                             if (opticalData.Rows[i][0]?.ToString() == pushStartVal)
+                             {
+                                 startIndex = i;
+                                 break;
+                             }
+                         }
+                         if (startIndex == -1)
+                         {
+                             misMatchData.Add("Error: Could not align Push and Optical DataTables (first column mismatch).");
+                             return misMatchData;
+                         }
+
+                         for (int i = 0; i < pushData.Rows.Count - pushStartIndex; i++)
+                         {
+                             int opticalRowIndex = startIndex + i;
+                             int pushRowIndex = pushStartIndex + i;
+                             if (opticalRowIndex >= opticalData.Rows.Count)
+                             {
+                                 misMatchData.Add($"Row {i + 1}: Missing row in Optical data (Push Table has more rows).");
+                                 break;
+                             }
+
+                             DataRow newRow = pushOptDT.NewRow();
+                             DataRow pushRow = pushData.Rows[pushRowIndex];
+                             DataRow opticalRow = opticalData.Rows[opticalRowIndex];
+
+                             for (int col = 0; col < pushData.Columns.Count; col++)
+                             {
+                                 string pushVal = pushRow[col]?.ToString()?.Trim() ?? "";
+                                 string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
+
+                                 newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
+                                 newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
+
+                                 if (pushVal != optVal)
+                                 {
+                                     misMatchData.Add($"Row {i + 1}, Column '{pushData.Columns[col].ColumnName}': Push='{pushVal}', Optical='{optVal}'");
+                                 }
+                             }
+                             pushOptDT.Rows.Add(newRow);
+                         }
+                     }
+                 } */
                 else
                 {
-                    for (int i = 0; i < pushData.Rows.Count; i++)
+                    foreach (DataColumn col in pushData.Columns)
                     {
-                        string value = pushData.Rows[i][0]?.ToString()?.Trim();
-                        if (!string.IsNullOrEmpty(value) && DateTime.TryParseExact(value, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime dt))
-                        {
-                            pushStartIndex = i;
-                            pushStartVal = value;
-                            break;
-                        }
+                        pushOptDT.Columns.Add($"(Optical)-{col.ColumnName}");
+                        pushOptDT.Columns.Add($"(Push)-{col.ColumnName}");
                     }
-                    if (pushStartIndex == -1)
+                    pushOptDT.Columns.Add("Status");
+                    int pushStartIndex = -1;
+                    string pushStartVal = "";
+                    if (TestProfiles == "SR" || profileName == "SR")
                     {
-                        misMatchData.Add($"Error in {profileName}: Could not find a valid DateTime in received Push data.");
-                        return misMatchData;
-                    }
+                        DataRow opticalRow = opticalData.Rows[0];
 
-                    int startIndex = -1;
-                    for (int i = 0; i < opticalData.Rows.Count; i++)
-                    {
-                        if (opticalData.Rows[i][0]?.ToString() == pushStartVal)
+                        for (int i = 0; i < pushData.Rows.Count; i++)
                         {
-                            startIndex = i;
-                            break;
-                        }
-                    }
-                    if (startIndex == -1)
-                    {
-                        misMatchData.Add("Error: Could not align Push and Optical DataTables (first column mismatch).");
-                        return misMatchData;
-                    }
-
-                    for (int i = 0; i < pushData.Rows.Count - pushStartIndex; i++)
-                    {
-                        int opticalRowIndex = startIndex + i;
-                        int pushRowIndex = pushStartIndex + i;
-                        if (opticalRowIndex >= opticalData.Rows.Count)
-                        {
-                            misMatchData.Add($"Row {i + 1}: Missing row in Optical data (Push Table has more rows).");
-                            break;
-                        }
-
-                        DataRow newRow = pushOptDT.NewRow();
-                        DataRow pushRow = pushData.Rows[pushRowIndex];
-                        DataRow opticalRow = opticalData.Rows[opticalRowIndex];
-
-                        for (int col = 0; col < pushData.Columns.Count; col++)
-                        {
-                            string pushVal = pushRow[col]?.ToString()?.Trim() ?? "";
-                            string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
-
-                            newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
-                            newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
-                            if (pushVal != optVal)
+                            DataRow pushRow = pushData.Rows[i];
+                            DataRow newRow = pushOptDT.NewRow();
+                            bool anyMismatch = false;
+                            bool pushMissing = pushRow == null;
+                            for (int col = 0; col < pushData.Columns.Count; col++)
                             {
-                                misMatchData.Add($"Row {i + 1}, Column '{pushData.Columns[col].ColumnName}': Push='{pushVal}', Optical='{optVal}'");
+                                string pushVal = pushRow[col]?.ToString()?.Trim() ?? "";
+                                string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
+
+                                newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
+                                newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
+                                if (optVal == "0B" || optVal == "0D") optVal = "0";
+                                if (!pushMissing && pushVal != optVal)
+                                    anyMismatch = true;
                             }
+                            if (pushMissing)
+                            {
+                                newRow["Status"] = "Push data missing";
+                                misMatchData.Add($"Push packet missing at row{i + 1}");
+                            }
+                            else if (anyMismatch)
+                            {
+                                newRow["Status"] = "Not match";
+                                misMatchData.Add($"Optical and Push value not matched at row{i + 1}");
+                            }
+                            else
+                                newRow["Status"] = "Match";
+
+                            pushOptDT.Rows.Add(newRow);
                         }
-                        pushOptDT.Rows.Add(newRow);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < pushData.Rows.Count; i++)
+                        {
+                            //string value = pushData.Rows[i][0]?.ToString()?.Trim();
+                            //if (!string.IsNullOrEmpty(value) && DateTime.TryParseExact(value, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime dt))
+                            //{
+                            //    pushStartIndex = i;
+                            //    pushStartVal = value;
+                            //    break;
+                            //}
+                            bool breakLoop = false; // new logic in case of push additional objects
+                            for (int col = 0; col < pushData.Columns.Count; col++)
+                            {
+                                string value = pushData.Rows[i][col]?.ToString()?.Trim();
+                                if (!string.IsNullOrEmpty(value) && DateTime.TryParseExact(value, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime dt))
+                                {
+                                    pushStartIndex = i;
+                                    pushStartVal = value;
+                                    breakLoop = true;
+                                    break;
+                                }
+                            }
+                            if (breakLoop)
+                                break;
+                        }
+                        if (pushStartIndex == -1)
+                        {
+                            misMatchData.Add($"Error in {profileName}: Could not find a valid DateTime in received Push data.");
+                            return misMatchData;
+                        }
+                        int startIndex = -1;
+                        for (int i = 0; i < opticalData.Rows.Count; i++)
+                        {
+                            //if (opticalData.Rows[i][0]?.ToString() == pushStartVal)
+                            //{
+                            //    startIndex = i;
+                            //    break;
+                            //}
+                            bool breakLoop = false;  // new logic in case of push additional objects
+                            for (int col = 0; col < opticalData.Columns.Count; col++)
+                            {
+                                if (opticalData.Rows[i][col]?.ToString() == pushStartVal)
+                                {
+                                    startIndex = i;
+                                    breakLoop = true;
+                                    break;
+                                }
+                            }
+                            if (breakLoop)
+                                break;
+                        }
+                        if (startIndex == -1)
+                        {
+                            misMatchData.Add("Error: Could not align Push and Optical DataTables (first column mismatch).");
+                            return misMatchData;
+                        }
+
+                        DateTime optEndDT = DateTime.Now;
+                        DateTime expEndDT = DateTime.Now;
+                        //string lastValue = string.Empty;
+                        //string endDateTime = string.Empty;
+                        bool isExpEndDTAbsent = false;
+                        int endIndex = -1;
+                        if (profileName == "LS" && lst_ExpectedPacketTiming_LS.Count > 0)
+                        {
+                            //lastValue = lst_ExpectedPacketTiming_LS.Last().ToString("dd/MM/yyyy HH:mm:ss").Trim();
+                            if (Random_LS == 0)
+                                expEndDT = lst_ExpectedPacketTiming_LS.Last();
+                            else
+                                expEndDT = lst_ExpectedPacketTiming_LS.Last().AddMinutes(-Random_LS);
+                        }
+                        else if (profileName == "DE" && lst_ExpectedPacketTiming_DE.Count > 0)
+                        {
+                            //lastValue = lst_ExpectedPacketTiming_DE.Last().ToString("dd/MM/yyyy HH:mm:ss").Trim();
+                            if (Random_DE == 0)
+                                expEndDT = lst_ExpectedPacketTiming_DE.Last();
+                            else
+                                expEndDT = lst_ExpectedPacketTiming_DE.Last().AddMinutes(-Random_DE);
+                        }
+                        else if (profileName == "Bill" && lst_ExpectedPacketTiming_Bill.Count > 0)
+                        {
+                            //lastValue = lst_ExpectedPacketTiming_Bill.Last().ToString("dd/MM/yyyy HH:mm:ss").Trim();
+                            if (Random_Bill == 0)
+                                expEndDT = lst_ExpectedPacketTiming_Bill.Last();
+                            else
+                                expEndDT = lst_ExpectedPacketTiming_Bill.Last().AddMinutes(-Random_Bill);
+                        }
+                        else
+                            isExpEndDTAbsent = true;
+
+
+                        //if (!string.IsNullOrEmpty(lastValue) && DateTime.TryParseExact(lastValue, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outTime))
+                        //{
+                        //endDateTime = outTime.ToString("dd/MM/yyyy HH:mm:ss");
+                        if (!isExpEndDTAbsent)
+                        {
+                            for (int i = 0; i < opticalData.Rows.Count; i++)
+                            {
+                                //if (opticalData.Rows[i][0]?.ToString() == endDateTime)
+                                //{
+                                //    endIndex = i;
+                                //    break;
+                                //}
+                                bool breakLoop = false;  // new logic in case of push additional objects
+                                for (int col = 0; col < opticalData.Columns.Count; col++)
+                                {
+                                    DateTime.TryParseExact(opticalData.Rows[i][col]?.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out optEndDT);
+                                    if (optEndDT >= expEndDT)
+                                    {
+                                        endIndex = i - 1;
+                                        breakLoop = true;
+                                        break;
+                                    }
+                                }
+                                if (breakLoop)
+                                    break;
+                            }
+                            if (endIndex == -1)
+                            {
+                                endIndex = opticalData.Rows.Count - 1;
+                                //misMatchData.Add("Error: Could not align Push and Optical DataTables.");  // in case of LS_freq  - 15, LSIP - 30
+                                //return misMatchData;
+                            }
+                            //}
+                        }
+                        else
+                            endIndex = opticalData.Rows.Count - 1;
+
+                        for (int i = startIndex; i <= endIndex; i++)
+                        //for (int i = startIndex; i < opticalData.Rows.Count; i++)
+                        {
+                            //string opticalTime = opticalData.Rows[i][0]?.ToString()?.Trim();
+                            //DataRow opticalRow = opticalData.Rows[i];
+                            //DataRow pushRow = pushData.AsEnumerable().FirstOrDefault(r => r[0]?.ToString()?.Trim() == opticalTime);
+                            string opticalTime = "";   // new logic in case of push additional objects
+                            for (int col = 0; col < opticalData.Columns.Count; col++)
+                            {
+                                opticalTime = opticalData.Rows[i][col]?.ToString()?.Trim();
+                                if ((!string.IsNullOrEmpty(opticalTime)) && (DateTime.TryParseExact(opticalTime, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime dt)))
+                                    break;
+                            }
+                            DataRow opticalRow = opticalData.Rows[i];
+                            DataRow pushRow = null;
+                            foreach (DataRow row in pushData.Rows)
+                            {
+                                for (int col = 0; col < pushData.Columns.Count; col++)
+                                {
+                                    if (row[col]?.ToString()?.Trim() == opticalTime)
+                                    {
+                                        pushRow = row;
+                                        break;
+                                    }
+                                }
+                                if (pushRow != null)
+                                    break;
+                            }
+
+                            DataRow newRow = pushOptDT.NewRow();
+                            bool anyMismatch = false;
+                            bool pushMissing = pushRow == null;
+
+                            for (int col = 0; col < pushData.Columns.Count; col++)
+                            {
+                                string optVal = opticalRow[col]?.ToString()?.Trim() ?? "";
+                                string pushVal = pushMissing ? "" : pushRow[col]?.ToString()?.Trim() ?? "";
+
+                                newRow[$"(Optical)-{pushData.Columns[col].ColumnName}"] = optVal;
+                                newRow[$"(Push)-{pushData.Columns[col].ColumnName}"] = pushVal;
+
+                                if (!pushMissing && pushVal != optVal)
+                                    anyMismatch = true;
+                            }
+                            if (pushMissing)
+                            {
+                                newRow["Status"] = "Push data missing";
+                                //misMatchData.Add($"Push packet missing {opticalRow[0]?.ToString()?.Trim() ?? ""}");
+                                misMatchData.Add($"Push packet missing at row {pushOptDT.Rows.Count + 1}");
+                            }
+                            else if (anyMismatch)
+                            {
+                                newRow["Status"] = "Not match";
+                                misMatchData.Add($"Optical and Push value not matched at row {pushOptDT.Rows.Count + 1}");
+                                //misMatchData.Add($"Optical and Push value not matched at {opticalRow[0]?.ToString()?.Trim() ?? ""}");
+                            }
+                            else
+                                newRow["Status"] = "Match";
+
+                            pushOptDT.Rows.Add(newRow);
+                        }
                     }
                 }
                 DataTableOperations.ExportDataTableToExcelWithDifferentSheet(pushOptDT, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Validation and Verification Reports\\Push_Optical_Reports.xlsx"), $"{profileName} Push Optical");
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                log.Error($"[{nameof(BuildAndComparePushOpticalDT)}] - {ex.Message} TRACE:{ex.StackTrace}");
                 misMatchData.Add($"Exception: {ex.Message}");
             }
             return misMatchData;
         }
-        #endregion
-        // dtRecPush datatable need to be cleared 
-        public void ResetRecPushDT()
+        public List<string> ValidateEnergyColumns(DataTable pushDT, DataTable opticalDT)
         {
-            dtRec_Push_Instant.Reset();
-            dtRec_Push_Alert.Reset();
-            dtRec_Push_Bill.Reset();
-            dtRec_Push_CB.Reset();
-            dtRec_Push_DE.Reset();
-            dtRec_Push_Instant.Reset();
-            dtRec_Push_LS.Reset();
-            dtRec_Push_SR.Reset();
+            List<string> misMatchData = new List<string>();
+            if (pushDT == null || pushDT.Rows.Count == 0 || opticalDT == null || opticalDT.Rows.Count == 0)
+            {
+                misMatchData.Add("No data available");
+                return misMatchData;
+            }
+
+            var energyColumns = pushDT.Columns.Cast<DataColumn>().Where(c => c.ColumnName.ToLower().Contains("energy"));
+            if (pushDT.Rows.Count > 1)
+            {
+                foreach (var col in energyColumns)
+                {
+                    for (int i = 1; i < pushDT.Rows.Count; i++)
+                    {
+                        double previousEnergy = Convert.ToDouble(pushDT.Rows[i - 1][col]);
+                        double currentEnergy = Convert.ToDouble(pushDT.Rows[i][col]);
+
+                        if (currentEnergy < previousEnergy)
+                            misMatchData.Add($"Column '{col.ColumnName}' row {i + 1}: {currentEnergy} < {previousEnergy}");
+                    }
+                }
+            }
+
+            if (opticalDT.Rows.Count == 1)
+            {
+                foreach (var col in energyColumns)
+                {
+                    var opticalCol = opticalDT.Columns.Cast<DataColumn>().FirstOrDefault(c => c.ColumnName.ToLower().Contains(col.ColumnName.ToLower()));
+                    if (opticalCol == null)
+                        continue;
+
+                    double opticalEnergy = Convert.ToDouble(opticalDT.Rows[0][opticalCol]);
+                    double pushLastEnergy = Convert.ToDouble(pushDT.Rows[pushDT.Rows.Count - 1][col]);
+
+                    if (pushLastEnergy > opticalEnergy)
+                        misMatchData.Add($"Column '{col.ColumnName}': Push last value {pushLastEnergy} > Optical value {opticalEnergy}");
+                }
+            }
+
+            var powerFactorColumns = pushDT.Columns.Cast<DataColumn>().Where(c => c.ColumnName.ToLower().Contains("power factor"));
+            foreach (var col in powerFactorColumns)
+            {
+                for (int i = 1; i < pushDT.Rows.Count; i++)
+                {
+                    double pf = Convert.ToDouble(pushDT.Rows[i][col]);
+                    if (!(pf >= -1 && pf <= 1))
+                        misMatchData.Add($"Column '{col.ColumnName}' row {i + 1}: Power Factor is {pf}");
+                }
+            }
+            return misMatchData;
         }
-        public void ExportReports(string filepath, Chart chart = null)
+        public DataTable GetAdditionalPSObjetcs(ref DLMSComm DLMSReaderWriter, DataTable pushSetUpObjectsDT, DataTable profilesData, string profile)
         {
+            int counter = 0;
+            DataTable dt_AddPushOjects = new DataTable();
+            DataTable dt_FinalOptical = new DataTable();
             try
             {
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Alert, filepath, "Alert");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Instant, filepath, "Instant", chart);
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_LS, filepath, "Load Survey");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_DE, filepath, "Daily Energy");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_SR, filepath, "Self Registration");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_CB, filepath, "Current Bill");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Bill, filepath, "Billing");
-                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Tamper, filepath, "Tamper");
+                if (profile == "LS")   // as in LS, multiple entries in one push packet
+                {
+                    int currentLSIP = (Convert.ToInt32(parse.GetProfileValueString(SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, 1, "1.0.0.8.4.255", 2))) / 60);
+                    counter = freq_LS / currentLSIP;
+                    if (counter == 0)  // for eg - lsip = 30 min , freq_LS = 15 min
+                        counter = 1;
+                }
+
+                for (int i = 3; i < pushSetUpObjectsDT.Rows.Count; i++)
+                {
+                    dt_AddPushOjects.Columns.Add($"{pushSetUpObjectsDT.Rows[i]["DESCRIPTION"].ToString()}");
+                }
+                DataRow newRow = dt_AddPushOjects.NewRow();
+                for (int i = 3; i < pushSetUpObjectsDT.Rows.Count; i++)
+                {
+                    int objClass = Convert.ToInt32(pushSetUpObjectsDT.Rows[i]["CLASS"]);
+                    string obis = pushSetUpObjectsDT.Rows[i]["OBIS"].ToString();
+                    int attribute = Convert.ToInt32(pushSetUpObjectsDT.Rows[i]["ATTRIBUTE"]);
+                    string recString = SetGetFromMeter.GetDataFromObject(ref DLMSReaderWriter, objClass, obis, attribute);
+                    if (recString.Length > 4)
+                        newRow[pushSetUpObjectsDT.Rows[i]["DESCRIPTION"].ToString()] = parse.GetProfileValueString(recString);
+                    else
+                        newRow[pushSetUpObjectsDT.Rows[i]["DESCRIPTION"].ToString()] = recString;
+                }
+                dt_AddPushOjects.Rows.Add(newRow);
+
+                dt_FinalOptical.Columns.Add("SN", typeof(int));
+                foreach (DataColumn col in dt_AddPushOjects.Columns)
+                {
+                    string colName = col.ColumnName;
+                    int suffix = 1;
+                    while (dt_FinalOptical.Columns.Contains(colName))
+                        colName = $"{col.ColumnName}_{suffix++}";
+                    dt_FinalOptical.Columns.Add(colName, col.DataType);
+                }
+                if (profilesData.Columns.Count > 0 && profilesData.Columns[0].ColumnName.Trim().Equals("SN", StringComparison.OrdinalIgnoreCase))
+                    profilesData.Columns.RemoveAt(0);
+                foreach (DataColumn col in profilesData.Columns)
+                {
+                    string colName = col.ColumnName;
+                    int suffix = 1;
+                    while (dt_FinalOptical.Columns.Contains(colName))
+                        colName = $"{col.ColumnName}_{suffix++}";
+                    dt_FinalOptical.Columns.Add(colName, col.DataType);
+                }
+
+                for (int i = 0; i < profilesData.Rows.Count; i++)
+                {
+                    DataRow finalRow = dt_FinalOptical.NewRow();
+                    finalRow["SN"] = i + 1;
+                    int colIndex = 1;
+                    DataRow addRow = dt_AddPushOjects.Rows[0];
+
+                    for (int col = 0; col < dt_AddPushOjects.Columns.Count; col++)//1
+                    {
+                        if (profile == "LS" && counter != 1)
+                        {
+                            if (i % counter == 0)
+                                finalRow[colIndex++] = addRow[col];
+                            else
+                                finalRow[colIndex++] = "";
+                        }
+                        else
+                        {
+                            finalRow[colIndex++] = addRow[col];
+                        }
+                    }
+
+                    for (int col = 0; col < profilesData.Columns.Count; col++)
+                    {
+                        finalRow[colIndex++] = profilesData.Rows[i][col];
+                    }
+                    dt_FinalOptical.Rows.Add(finalRow);
+                }
+                DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dt_FinalOptical, Path.Combine(_logService.LOG_DIRECTORY, $"DownloadedData\\{TestName}\\Profile Reports\\Optical_{DeviceID}.xlsx"), $"Appended_{profile}");
             }
             catch (Exception ex)
             {
-                log.Error("Error in exporting data" + ex.Message.ToString());
+                log.Error($"[{nameof(GetAdditionalPSObjetcs)}] - {ex.Message} - {ex.StackTrace}");
+            }
+            return dt_FinalOptical;
+        }
+        #endregion
+
+        #region Additional Methods (NOT IN USE) 
+        /// <summary>
+        /// For debug and testing purpose, Print datatble in console
+        /// </summary>
+        /// <param name="data"></param>
+        public void print_results(DataTable data)
+        {
+            Console.WriteLine();
+            Dictionary<string, int> colWidths = new Dictionary<string, int>();
+
+            foreach (DataColumn col in data.Columns)
+            {
+                Console.Write(col.ColumnName);
+                var maxLabelSize = data.Rows.OfType<DataRow>()
+                        .Select(m => (m.Field<object>(col.ColumnName)?.ToString() ?? "").Length)
+                        .OrderByDescending(m => m).FirstOrDefault();
+
+                colWidths.Add(col.ColumnName, maxLabelSize);
+                for (int i = 0; i < maxLabelSize - col.ColumnName.Length + 10; i++) Console.Write(" ");
+            }
+
+            Console.WriteLine();
+
+            foreach (DataRow dataRow in data.Rows)
+            {
+                for (int j = 0; j < dataRow.ItemArray.Length; j++)
+                {
+                    Console.Write(dataRow.ItemArray[j]);
+                    for (int i = 0; i < colWidths[data.Columns[j].ColumnName] - dataRow.ItemArray[j].ToString().Length + 10; i++) Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+        }
+        #endregion
+        public void ResetRecPushDT()
+        {
+            dtRec_Push_Instant.Reset(); dtRec_Push_Alert.Reset();
+            dtRec_Push_Bill.Reset(); dtRec_Push_CB.Reset();
+            dtRec_Push_DE.Reset(); dtRec_Push_LS.Reset();
+            dtRec_Push_SR.Reset(); dtRec_Push_Tamper.Reset();
+        }
+        public static void UpdateProfileDetails()
+        {
+            int BillFreq = freq_Bill.Substring(0, 2) != "00" ? 1 : 0;
+            profileDetails[0] = ("Instant", "Instant", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.Instant)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.Instant)}04", freq_Instant, Random_Instant, lst_ExpectedPacketTiming_Instant, lst_ReceivedPacketTiming_Instant);
+            profileDetails[1] = ("LS", "Load Survey", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.LoadSurvey)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.LoadSurvey)}04", freq_LS, Random_LS, lst_ExpectedPacketTiming_LS, lst_ReceivedPacketTiming_LS);
+            profileDetails[2] = ("DE", "Daily Energy", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.DailyEnergy)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.DailyEnergy)}04", freq_DE, Random_DE, lst_ExpectedPacketTiming_DE, lst_ReceivedPacketTiming_DE);
+            profileDetails[3] = ("SR", "Self Registration", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.SelfRegistration)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.SelfRegistration)}04", freq_SR, 0, lst_ExpectedPacketTiming_SR, lst_ReceivedPacketTiming_SR);
+            profileDetails[4] = ("CB", "Current Bill", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.CurrentBill)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.CurrentBill)}04", freq_CB, Random_CB, lst_ExpectedPacketTiming_CB, lst_ReceivedPacketTiming_CB);
+            profileDetails[5] = ("Bill", "Bill", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.Billing)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.Billing)}04", BillFreq, Random_Bill, lst_ExpectedPacketTiming_Bill, lst_ReceivedPacketTiming_Bill);
+            profileDetails[6] = ("Alert", "Alert", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.Alert)}", null, 0, 0, null, lst_ReceivedPacketTiming_Alert);
+            profileDetails[7] = ("Tamper", "Tamper", $"0028{GetPS_Obis(PushSetupObisCodes.PushSetupObject.Tamper)}", $"0016{GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject.Instant)}04", 0, 0, null, lst_ReceivedPacketTiming_Tamper);
+
+            string GetPS_Obis(PushSetupObisCodes.PushSetupObject obj)
+            {
+                string obisHex = DLMSParser.ConvertDecObisToHexObis(PushSetupObisCodes.Get(obj));
+                return obisHex;
+            }
+            string GetAS_Obis(ActionScheduleObisCodes.ActionScheduleObject obj)
+            {
+                string obisHex = DLMSParser.ConvertDecObisToHexObis(ActionScheduleObisCodes.Get(obj));
+                return obisHex;
+            }
+        }
+        public void ExportReports(string filepath)
+        {
+            try
+            {
+                if (!(dtRec_Push_Alert.Rows.Count < 1 || dtRec_Push_Alert.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Alert.Copy(), filepath, "Alert");
+                if (!(dtRec_Push_Instant.Rows.Count < 1 || dtRec_Push_Instant.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Instant.Copy(), filepath, "Instant");
+                if (!(dtRec_Push_LS.Rows.Count < 1 || dtRec_Push_LS.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_LS.Copy(), filepath, "Load Survey");
+                if (!(dtRec_Push_DE.Rows.Count < 1 || dtRec_Push_DE.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_DE.Copy(), filepath, "Daily Energy");
+                if (!(dtRec_Push_SR.Rows.Count < 1 || dtRec_Push_SR.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_SR.Copy(), filepath, "Self Registration");
+                if (!(dtRec_Push_CB.Rows.Count < 1 || dtRec_Push_CB.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_CB.Copy(), filepath, "Current Bill");
+                if (!(dtRec_Push_Bill.Rows.Count < 1 || dtRec_Push_Bill.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Bill.Copy(), filepath, "Billing");
+                if (!(dtRec_Push_Tamper.Rows.Count < 1 || dtRec_Push_Tamper.Columns.Count < 1))
+                    DataTableOperations.ExportDataTableToExcelWithDifferentSheet(dtRec_Push_Tamper.Copy(), filepath, "Tamper");
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Error in exporting data [{nameof(ExportReports)}] - {ex.Message} TRACE:{ex.StackTrace}");
             }
         }
     }

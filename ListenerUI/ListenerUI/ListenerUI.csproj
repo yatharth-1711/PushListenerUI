@@ -64,9 +64,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Indali on SVN\MeterComm\Lib\AesLib.dll</HintPath>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.Crypto.dll.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v24.2, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v24.2, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Drawing.v24.2, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v24.2.Core, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Sparkline.v24.2.Core, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v24.2, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v24.2, Version=24.2.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="EPPlus, Version=7.1.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.7.1.2\lib\net462\EPPlus.dll</HintPath>
     </Reference>
@@ -216,8 +223,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dlmsinterfaceclasses\ActionSchedule\ActionScheduleObisCodes.cs" />
+    <Compile Include="dlmsinterfaceclasses\DLMSAssociationLN.cs" />
+    <Compile Include="dlmsinterfaceclasses\ImageTransfer\DLMSImageTransfer.cs" />
+    <Compile Include="dlmsinterfaceclasses\ImageTransfer\DLMSImageTransferCollection.cs" />
+    <Compile Include="dlmsinterfaceclasses\ImageTransfer\DLMSImageTransferHelper.cs" />
+    <Compile Include="dlmsinterfaceclasses\ProfileGeneric\DLMSProfileGeneric.cs" />
+    <Compile Include="dlmsinterfaceclasses\ProfileGeneric\DLMSProfileGenericCollection.cs" />
+    <Compile Include="dlmsinterfaceclasses\ProfileGeneric\DLMSProfileGenericHelper.cs" />
+    <Compile Include="dlmsinterfaceclasses\ProfileGeneric\DLMSProfileGenericObisCodes.cs" />
+    <Compile Include="dlmsinterfaceclasses\PushSetup\PushSetupObisCodes.cs" />
     <Compile Include="DLMSNetSerialComunication\AesGcmParameter.cs" />
-    <Compile Include="DLMSNetSerialComunication\DLMSAssociationLN.cs" />
     <Compile Include="DLMSNetSerialComunication\GXCommonNotDefinedMethods.cs" />
     <Compile Include="DLMSNetSerialComunication\GXDLMSCiphering.cs" />
     <Compile Include="DLMSNetSerialComunication\GXDLMSCipheringStream.cs" />
@@ -232,6 +248,18 @@
     <Compile Include="DLMS\DLMSComm.cs" />
     <Compile Include="DLMS\DLMSInfo.cs" />
     <Compile Include="DLMS\MeterSerialCommunication.cs" />
+    <Compile Include="FGComparerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FGComparerForm.Designer.cs">
+      <DependentUpon>FGComparerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FGConfigurationsFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FGConfigurationsFrm.Designer.cs">
+      <DependentUpon>FGConfigurationsFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HelperClasses\CloneableDictionary.cs" />
     <Compile Include="HelperClasses\DataGridViewOperations.cs" />
     <Compile Include="HelperClasses\DataTableOperations.cs" />
@@ -250,15 +278,21 @@
     <Compile Include="HelperClasses\WrapperParser.cs" />
     <Compile Include="interfaces\IDlmsTest.cs" />
     <Compile Include="interfaces\ITestLogger.cs" />
+    <Compile Include="ListenerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListenerForm.Designer.cs">
+      <DependentUpon>ListenerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="manufacturerconfigurableparameters\ManufacturerConfigParameterCollection.cs" />
     <Compile Include="manufacturerconfigurableparameters\ManufacturerParameterInfo.cs" />
     <Compile Include="manufacturerconfigurableparameters\ManufConfigParamHelper.cs" />
-    <Compile Include="MeterSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MeterSettings.Designer.cs">
-      <DependentUpon>MeterSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="nicconfiguration\Enum\FOTAEnumInfo.cs" />
     <Compile Include="nicconfiguration\Enum\MODULEFOTAStatus.cs" />
     <Compile Include="nicconfiguration\Enum\NICAPNProtocol.cs" />
@@ -281,56 +315,50 @@
     <Compile Include="nicconfiguration\FOTAHelper.cs" />
     <Compile Include="nicconfiguration\FOTAInfo.cs" />
     <Compile Include="nicconfiguration\NicConfigIDs.cs" />
-    <Compile Include="PushPacketDecrypter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PushPacketDecrypter.Designer.cs">
-      <DependentUpon>PushPacketDecrypter.cs</DependentUpon>
-    </Compile>
     <Compile Include="PushPacketDecrypterFrm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PushPacketDecrypterFrm.Designer.cs">
       <DependentUpon>PushPacketDecrypterFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PushSetupandActionScheduleConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PushSetupandActionScheduleConfig.Designer.cs">
+      <DependentUpon>PushSetupandActionScheduleConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TamperConfigFGForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TamperConfigFGForm.Designer.cs">
+      <DependentUpon>TamperConfigFGForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolboxUI.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UIStyler.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="ListenerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListenerForm.Designer.cs">
-      <DependentUpon>ListenerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="objects\CountType.cs" />
     <Compile Include="objects\GXDLMSTranslatorStructure.cs" />
     <Compile Include="objects\SecuritySuite.cs" />
     <Compile Include="objects\Standard.cs" />
-    <Compile Include="profilegeneric\DLMSProfileGeneric.cs" />
-    <Compile Include="profilegeneric\DLMSProfileGenericCollection.cs" />
-    <Compile Include="profilegeneric\DLMSProfileGenericHelper.cs" />
-    <Compile Include="profilegeneric\DLMSProfileGenericObisCodes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="VisualUI\ChartsAndPlots.cs" />
+    <EmbeddedResource Include="FGComparerForm.resx">
+      <DependentUpon>FGComparerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FGConfigurationsFrm.resx">
+      <DependentUpon>FGConfigurationsFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListenerForm.resx">
       <DependentUpon>ListenerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MeterSettings.resx">
-      <DependentUpon>MeterSettings.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -341,12 +369,33 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="PushPacketDecrypter.resx">
-      <DependentUpon>PushPacketDecrypter.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PushPacketDecrypterFrm.resx">
       <DependentUpon>PushPacketDecrypterFrm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PushSetupandActionScheduleConfig.resx">
+      <DependentUpon>PushSetupandActionScheduleConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TamperConfigFGForm.resx">
+      <DependentUpon>TamperConfigFGForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="dlmsinterfaceclasses\.svn\entries" />
+    <None Include="dlmsinterfaceclasses\.svn\format" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\2a\2adfe57e50b09de4cdf698552876f40d316d3daf.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\31\31fb76e5d9babe97a11fea041081f96ce426107a.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\3e\3ecd0abf72ff744a29ee022c334aa2e27427fc89.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\42\421fce7563a89b8074c91487a4a9d9ebd4862090.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\66\665d3a59f993d7883f61071e5ab79d3d61ff828b.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\6f\6f87d44924abf903e6f52fac199c7ef8dd8e372c.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\7a\7a750a85e9fac9baece85cddb3a3ccdfea6c1fb8.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\98\981a7203e56c860247e4656edeb1b621af458275.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\a0\a0a14beaa69a57f63e88b734ae54f3c58ca5ae18.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\b4\b4ee3a79ab51dccbbee7d0e5165d1d5c8d290e93.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\db\dbc018ff5dde346382819436025e5bd59ffca737.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\e1\e1a26face96b4f8914eed234b58f5df39e1f20ea.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\ee\eef7b9bf788ea591be218bdee614d99db73989f3.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\pristine\fd\fd0a2145495264947cf89652e4e26ecb1ba00b9c.svn-base" />
+    <None Include="dlmsinterfaceclasses\.svn\wc.db" />
+    <None Include="dlmsinterfaceclasses\.svn\wc.db-journal" />
     <None Include="manufacturerconfigurableparameters\.svn\entries" />
     <None Include="manufacturerconfigurableparameters\.svn\format" />
     <None Include="manufacturerconfigurableparameters\.svn\pristine\2e\2ed5fee8ca44f5cd5fbd39a4e96de0c023d72d7c.svn-base" />
@@ -399,16 +448,6 @@
     <None Include="nicconfiguration\.svn\wc.db-journal" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-    <None Include="profilegeneric\.svn\entries" />
-    <None Include="profilegeneric\.svn\format" />
-    <None Include="profilegeneric\.svn\pristine\08\0889dff6c2f6ba6b1efaee8c9a242efa160cf289.svn-base" />
-    <None Include="profilegeneric\.svn\pristine\1e\1e69367dc1760a8c4e83ea91e2a670ac7bf9a0f7.svn-base" />
-    <None Include="profilegeneric\.svn\pristine\36\36695373ea4360d69a53cef0200f380cd2e3ec90.svn-base" />
-    <None Include="profilegeneric\.svn\pristine\38\3833eee6a60b9b028ba10ce46df84d241705c67e.svn-base" />
-    <None Include="profilegeneric\.svn\pristine\89\89372ba17ab66aef8cdb8d569c46f5344c8d7077.svn-base" />
-    <None Include="profilegeneric\.svn\pristine\bc\bc64e88793cae9b98bcc2f3cb37c8be48eab801d.svn-base" />
-    <None Include="profilegeneric\.svn\wc.db" />
-    <None Include="profilegeneric\.svn\wc.db-journal" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -425,12 +464,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AllObisList.txt" />
-    <Content Include="profilegeneric\ProfileGeneric.xml" />
+    <Content Include="dlmsinterfaceclasses\ProfileGeneric\ProfileGeneric.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="dlmsinterfaceclasses\.svn\tmp\" />
     <Folder Include="manufacturerconfigurableparameters\.svn\tmp\" />
     <Folder Include="nicconfiguration\.svn\tmp\" />
-    <Folder Include="profilegeneric\.svn\tmp\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">

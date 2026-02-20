@@ -1,5 +1,4 @@
-﻿using ListenerUI;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace MeterReader.HelperForms
 {
@@ -24,12 +23,11 @@ namespace MeterReader.HelperForms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PushPacketDecrypterFrm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tablelayout_Header = new System.Windows.Forms.TableLayoutPanel();
             this.headerTitle = new System.Windows.Forms.Label();
             this.lblSubtitle = new System.Windows.Forms.Label();
@@ -38,11 +36,12 @@ namespace MeterReader.HelperForms
             this.grpCipherInput = new System.Windows.Forms.GroupBox();
             this.txtCipherPacket = new System.Windows.Forms.RichTextBox();
             this.pnlButtons = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnDecrypt = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.chkIsDecryptedPacket = new System.Windows.Forms.CheckBox();
             this.btnImportFile = new System.Windows.Forms.Button();
+            this.btnDecrypt = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.pnlSettings = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblSystemTitle = new System.Windows.Forms.Label();
@@ -78,16 +77,16 @@ namespace MeterReader.HelperForms
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tablelayout_Header.SuspendLayout();
             this.panel1.SuspendLayout();
             this.pnlCipherPacket.SuspendLayout();
             this.grpCipherInput.SuspendLayout();
             this.pnlButtons.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.pnlSettings.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlPacketCounts.SuspendLayout();
@@ -154,10 +153,10 @@ namespace MeterReader.HelperForms
             this.panel1.Controls.Add(this.pnlCipherPacket);
             this.panel1.Controls.Add(this.pnlButtons);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 114);
+            this.panel1.Location = new System.Drawing.Point(0, 110);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(8, 8, 8, 4);
-            this.panel1.Size = new System.Drawing.Size(1348, 193);
+            this.panel1.Size = new System.Drawing.Size(1348, 190);
             this.panel1.TabIndex = 10;
             // 
             // pnlCipherPacket
@@ -166,7 +165,7 @@ namespace MeterReader.HelperForms
             this.pnlCipherPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCipherPacket.Location = new System.Drawing.Point(8, 8);
             this.pnlCipherPacket.Name = "pnlCipherPacket";
-            this.pnlCipherPacket.Size = new System.Drawing.Size(1153, 181);
+            this.pnlCipherPacket.Size = new System.Drawing.Size(1153, 178);
             this.pnlCipherPacket.TabIndex = 2;
             // 
             // grpCipherInput
@@ -179,7 +178,7 @@ namespace MeterReader.HelperForms
             this.grpCipherInput.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.grpCipherInput.Name = "grpCipherInput";
             this.grpCipherInput.Padding = new System.Windows.Forms.Padding(10, 8, 10, 8);
-            this.grpCipherInput.Size = new System.Drawing.Size(1153, 181);
+            this.grpCipherInput.Size = new System.Drawing.Size(1153, 178);
             this.grpCipherInput.TabIndex = 3;
             this.grpCipherInput.TabStop = false;
             this.grpCipherInput.Text = "📦 Encrypted Push Packet Data";
@@ -189,118 +188,65 @@ namespace MeterReader.HelperForms
             this.txtCipherPacket.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtCipherPacket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCipherPacket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtCipherPacket.Font = new System.Drawing.Font("Consolas", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCipherPacket.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCipherPacket.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.txtCipherPacket.Location = new System.Drawing.Point(10, 27);
             this.txtCipherPacket.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCipherPacket.Name = "txtCipherPacket";
-            this.txtCipherPacket.Size = new System.Drawing.Size(1133, 146);
+            this.txtCipherPacket.Size = new System.Drawing.Size(1133, 143);
             this.txtCipherPacket.TabIndex = 0;
             this.txtCipherPacket.Text = "";
             this.toolTip1.SetToolTip(this.txtCipherPacket, "Paste your encrypted packet data here (hex format)");
             // 
             // pnlButtons
             // 
-            this.pnlButtons.Controls.Add(this.tableLayoutPanel2);
+            this.pnlButtons.Controls.Add(this.flowLayoutPanel1);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlButtons.Location = new System.Drawing.Point(1161, 8);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.pnlButtons.Size = new System.Drawing.Size(179, 181);
+            this.pnlButtons.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.pnlButtons.Size = new System.Drawing.Size(179, 178);
             this.pnlButtons.TabIndex = 1;
             // 
-            // tableLayoutPanel2
+            // flowLayoutPanel1
             // 
-            this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.btnExport, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.btnClear, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.btnDecrypt, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.btnImportFile, 0, 1);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(8, 0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(171, 181);
-            this.tableLayoutPanel2.TabIndex = 0;
+            this.flowLayoutPanel1.Controls.Add(this.chkIsDecryptedPacket);
+            this.flowLayoutPanel1.Controls.Add(this.btnImportFile);
+            this.flowLayoutPanel1.Controls.Add(this.btnDecrypt);
+            this.flowLayoutPanel1.Controls.Add(this.btnClear);
+            this.flowLayoutPanel1.Controls.Add(this.btnExport);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(175, 178);
+            this.flowLayoutPanel1.TabIndex = 1;
             // 
-            // btnExport
+            // chkIsDecryptedPacket
             // 
-            this.btnExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(130)))), ((int)(((byte)(180)))));
-            this.btnExport.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnExport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnExport.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(110)))), ((int)(((byte)(160)))));
-            this.btnExport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(100)))), ((int)(((byte)(140)))));
-            this.btnExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(145)))), ((int)(((byte)(195)))));
-            this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExport.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExport.ForeColor = System.Drawing.Color.White;
-            this.btnExport.Location = new System.Drawing.Point(3, 144);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(165, 34);
-            this.btnExport.TabIndex = 12;
-            this.btnExport.Text = "💾 Export Data";
-            this.toolTip1.SetToolTip(this.btnExport, "Export decrypted packets to file");
-            this.btnExport.UseVisualStyleBackColor = false;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnClear
-            // 
-            this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(53)))), ((int)(((byte)(69)))));
-            this.btnClear.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnClear.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(40)))), ((int)(((byte)(55)))));
-            this.btnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(33)))), ((int)(((byte)(49)))));
-            this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(68)))), ((int)(((byte)(84)))));
-            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.Location = new System.Drawing.Point(3, 107);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(165, 31);
-            this.btnClear.TabIndex = 11;
-            this.btnClear.Text = "🗑️ Clear All";
-            this.toolTip1.SetToolTip(this.btnClear, "Clear all data and reset");
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // btnDecrypt
-            // 
-            this.btnDecrypt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(167)))), ((int)(((byte)(69)))));
-            this.btnDecrypt.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnDecrypt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDecrypt.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(147)))), ((int)(((byte)(59)))));
-            this.btnDecrypt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(137)))), ((int)(((byte)(49)))));
-            this.btnDecrypt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(182)))), ((int)(((byte)(84)))));
-            this.btnDecrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDecrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecrypt.ForeColor = System.Drawing.Color.White;
-            this.btnDecrypt.Location = new System.Drawing.Point(3, 70);
-            this.btnDecrypt.Name = "btnDecrypt";
-            this.btnDecrypt.Size = new System.Drawing.Size(165, 31);
-            this.btnDecrypt.TabIndex = 10;
-            this.btnDecrypt.Text = "🔓 &Decrypt";
-            this.toolTip1.SetToolTip(this.btnDecrypt, "Decrypt the packet data using provided keys");
-            this.btnDecrypt.UseVisualStyleBackColor = false;
-            this.btnDecrypt.Click += new System.EventHandler(this.btnDecrypt_Click);
+            this.chkIsDecryptedPacket.AutoSize = true;
+            this.chkIsDecryptedPacket.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkIsDecryptedPacket.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkIsDecryptedPacket.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            this.chkIsDecryptedPacket.Location = new System.Drawing.Point(3, 3);
+            this.chkIsDecryptedPacket.Name = "chkIsDecryptedPacket";
+            this.chkIsDecryptedPacket.Size = new System.Drawing.Size(163, 22);
+            this.chkIsDecryptedPacket.TabIndex = 13;
+            this.chkIsDecryptedPacket.Text = "Decrypted Packet";
+            this.chkIsDecryptedPacket.UseVisualStyleBackColor = true;
+            this.chkIsDecryptedPacket.CheckedChanged += new System.EventHandler(this.chkIsDecryptedPacket_CheckedChanged);
             // 
             // btnImportFile
             // 
-            this.btnImportFile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(123)))), ((int)(((byte)(255)))));
+            this.btnImportFile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
             this.btnImportFile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnImportFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnImportFile.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnImportFile.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(220)))));
             this.btnImportFile.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(90)))), ((int)(((byte)(200)))));
             this.btnImportFile.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(138)))), ((int)(((byte)(255)))));
             this.btnImportFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImportFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImportFile.ForeColor = System.Drawing.Color.White;
-            this.btnImportFile.Location = new System.Drawing.Point(3, 33);
+            this.btnImportFile.Location = new System.Drawing.Point(3, 31);
             this.btnImportFile.Name = "btnImportFile";
             this.btnImportFile.Size = new System.Drawing.Size(165, 31);
             this.btnImportFile.TabIndex = 9;
@@ -309,6 +255,66 @@ namespace MeterReader.HelperForms
             this.btnImportFile.UseVisualStyleBackColor = false;
             this.btnImportFile.Click += new System.EventHandler(this.btnImportFile_Click);
             // 
+            // btnDecrypt
+            // 
+            this.btnDecrypt.BackColor = System.Drawing.Color.Green;
+            this.btnDecrypt.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnDecrypt.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDecrypt.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(147)))), ((int)(((byte)(59)))));
+            this.btnDecrypt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(137)))), ((int)(((byte)(49)))));
+            this.btnDecrypt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(182)))), ((int)(((byte)(84)))));
+            this.btnDecrypt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDecrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecrypt.ForeColor = System.Drawing.Color.White;
+            this.btnDecrypt.Location = new System.Drawing.Point(3, 68);
+            this.btnDecrypt.Name = "btnDecrypt";
+            this.btnDecrypt.Size = new System.Drawing.Size(165, 31);
+            this.btnDecrypt.TabIndex = 10;
+            this.btnDecrypt.Text = "🔓 &Decrypt";
+            this.toolTip1.SetToolTip(this.btnDecrypt, "Decrypt the packet data using provided keys (Ctrl + D)");
+            this.btnDecrypt.UseVisualStyleBackColor = false;
+            this.btnDecrypt.Click += new System.EventHandler(this.btnDecrypt_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.BackColor = System.Drawing.Color.DarkRed;
+            this.btnClear.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClear.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnClear.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(40)))), ((int)(((byte)(55)))));
+            this.btnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(33)))), ((int)(((byte)(49)))));
+            this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(68)))), ((int)(((byte)(84)))));
+            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.ForeColor = System.Drawing.Color.White;
+            this.btnClear.Location = new System.Drawing.Point(3, 105);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(165, 31);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "🗑️ Clear All";
+            this.toolTip1.SetToolTip(this.btnClear, "Clear all data and reset (Ctrl + Delete)");
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.BackColor = System.Drawing.Color.Teal;
+            this.btnExport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnExport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnExport.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(110)))), ((int)(((byte)(160)))));
+            this.btnExport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(100)))), ((int)(((byte)(140)))));
+            this.btnExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(145)))), ((int)(((byte)(195)))));
+            this.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExport.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExport.ForeColor = System.Drawing.Color.White;
+            this.btnExport.Location = new System.Drawing.Point(3, 142);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(165, 31);
+            this.btnExport.TabIndex = 12;
+            this.btnExport.Text = "💾 Export Data";
+            this.toolTip1.SetToolTip(this.btnExport, "Export decrypted packets to file (Ctrl + E)");
+            this.btnExport.UseVisualStyleBackColor = false;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // pnlSettings
             // 
             this.pnlSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(248)))), ((int)(((byte)(250)))));
@@ -316,8 +322,8 @@ namespace MeterReader.HelperForms
             this.pnlSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSettings.Location = new System.Drawing.Point(0, 70);
             this.pnlSettings.Name = "pnlSettings";
-            this.pnlSettings.Padding = new System.Windows.Forms.Padding(8);
-            this.pnlSettings.Size = new System.Drawing.Size(1348, 44);
+            this.pnlSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.pnlSettings.Size = new System.Drawing.Size(1348, 40);
             this.pnlSettings.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -337,12 +343,12 @@ namespace MeterReader.HelperForms
             this.tableLayoutPanel1.Controls.Add(this.txtSystemTitle, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtBlockCipherKey, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 8);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1332, 28);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1342, 34);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
             // lblSystemTitle
@@ -350,11 +356,11 @@ namespace MeterReader.HelperForms
             this.lblSystemTitle.AutoSize = true;
             this.lblSystemTitle.BackColor = System.Drawing.Color.White;
             this.lblSystemTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSystemTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSystemTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            this.lblSystemTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSystemTitle.ForeColor = System.Drawing.Color.Black;
             this.lblSystemTitle.Location = new System.Drawing.Point(3, 0);
             this.lblSystemTitle.Name = "lblSystemTitle";
-            this.lblSystemTitle.Size = new System.Drawing.Size(216, 28);
+            this.lblSystemTitle.Size = new System.Drawing.Size(217, 34);
             this.lblSystemTitle.TabIndex = 0;
             this.lblSystemTitle.Text = "System Title (Hex):";
             this.lblSystemTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -363,11 +369,11 @@ namespace MeterReader.HelperForms
             // 
             this.lblBlockCipherKey.AutoSize = true;
             this.lblBlockCipherKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBlockCipherKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockCipherKey.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            this.lblBlockCipherKey.Location = new System.Drawing.Point(446, 0);
+            this.lblBlockCipherKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBlockCipherKey.ForeColor = System.Drawing.Color.Black;
+            this.lblBlockCipherKey.Location = new System.Drawing.Point(448, 0);
             this.lblBlockCipherKey.Name = "lblBlockCipherKey";
-            this.lblBlockCipherKey.Size = new System.Drawing.Size(216, 28);
+            this.lblBlockCipherKey.Size = new System.Drawing.Size(218, 34);
             this.lblBlockCipherKey.TabIndex = 1;
             this.lblBlockCipherKey.Text = "Block Cipher Key (Ek):";
             this.lblBlockCipherKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -376,11 +382,11 @@ namespace MeterReader.HelperForms
             // 
             this.lblAuthenticationKey.AutoSize = true;
             this.lblAuthenticationKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAuthenticationKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuthenticationKey.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            this.lblAuthenticationKey.Location = new System.Drawing.Point(890, 0);
+            this.lblAuthenticationKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAuthenticationKey.ForeColor = System.Drawing.Color.Black;
+            this.lblAuthenticationKey.Location = new System.Drawing.Point(895, 0);
             this.lblAuthenticationKey.Name = "lblAuthenticationKey";
-            this.lblAuthenticationKey.Size = new System.Drawing.Size(216, 28);
+            this.lblAuthenticationKey.Size = new System.Drawing.Size(217, 34);
             this.lblAuthenticationKey.TabIndex = 2;
             this.lblAuthenticationKey.Text = "Authentication Key (Ak):";
             this.lblAuthenticationKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -390,12 +396,12 @@ namespace MeterReader.HelperForms
             this.txtAuthenticationKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtAuthenticationKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAuthenticationKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAuthenticationKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAuthenticationKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtAuthenticationKey.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtAuthenticationKey.Location = new System.Drawing.Point(1112, 2);
-            this.txtAuthenticationKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtAuthenticationKey.Location = new System.Drawing.Point(1118, 5);
+            this.txtAuthenticationKey.Margin = new System.Windows.Forms.Padding(3, 5, 3, 2);
             this.txtAuthenticationKey.Name = "txtAuthenticationKey";
-            this.txtAuthenticationKey.Size = new System.Drawing.Size(217, 25);
+            this.txtAuthenticationKey.Size = new System.Drawing.Size(221, 27);
             this.txtAuthenticationKey.TabIndex = 5;
             this.toolTip1.SetToolTip(this.txtAuthenticationKey, "Enter the Authentication Key (Ak) in hexadecimal format");
             // 
@@ -404,12 +410,12 @@ namespace MeterReader.HelperForms
             this.txtSystemTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtSystemTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSystemTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSystemTitle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSystemTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSystemTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtSystemTitle.Location = new System.Drawing.Point(225, 2);
-            this.txtSystemTitle.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtSystemTitle.Location = new System.Drawing.Point(226, 5);
+            this.txtSystemTitle.Margin = new System.Windows.Forms.Padding(3, 5, 3, 2);
             this.txtSystemTitle.Name = "txtSystemTitle";
-            this.txtSystemTitle.Size = new System.Drawing.Size(215, 25);
+            this.txtSystemTitle.Size = new System.Drawing.Size(216, 27);
             this.txtSystemTitle.TabIndex = 3;
             this.toolTip1.SetToolTip(this.txtSystemTitle, "Enter the System Title in hexadecimal format");
             // 
@@ -418,12 +424,12 @@ namespace MeterReader.HelperForms
             this.txtBlockCipherKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtBlockCipherKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBlockCipherKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBlockCipherKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBlockCipherKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBlockCipherKey.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtBlockCipherKey.Location = new System.Drawing.Point(668, 2);
-            this.txtBlockCipherKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtBlockCipherKey.Location = new System.Drawing.Point(672, 5);
+            this.txtBlockCipherKey.Margin = new System.Windows.Forms.Padding(3, 5, 3, 2);
             this.txtBlockCipherKey.Name = "txtBlockCipherKey";
-            this.txtBlockCipherKey.Size = new System.Drawing.Size(216, 25);
+            this.txtBlockCipherKey.Size = new System.Drawing.Size(217, 27);
             this.txtBlockCipherKey.TabIndex = 4;
             this.toolTip1.SetToolTip(this.txtBlockCipherKey, "Enter the Block Cipher Key (Ek) in hexadecimal format");
             // 
@@ -432,12 +438,13 @@ namespace MeterReader.HelperForms
             this.splitter1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
             this.splitter1.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter1.Location = new System.Drawing.Point(0, 307);
+            this.splitter1.Location = new System.Drawing.Point(0, 300);
             this.splitter1.Margin = new System.Windows.Forms.Padding(4);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(1348, 5);
             this.splitter1.TabIndex = 11;
             this.splitter1.TabStop = false;
+            this.splitter1.SplitterMoving += new System.Windows.Forms.SplitterEventHandler(this.splitter1_SplitterMoving);
             // 
             // pnlPacketCounts
             // 
@@ -506,9 +513,9 @@ namespace MeterReader.HelperForms
             this.btnTamper.BackColor = System.Drawing.Color.White;
             this.btnTamper.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnTamper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTamper.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnTamper.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnTamper.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnTamper.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnTamper.FlatAppearance.BorderSize = 2;
+            this.btnTamper.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnTamper.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTamper.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTamper.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -526,9 +533,9 @@ namespace MeterReader.HelperForms
             this.btnAlert.BackColor = System.Drawing.Color.White;
             this.btnAlert.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnAlert.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnAlert.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnAlert.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnAlert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnAlert.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnAlert.FlatAppearance.BorderSize = 2;
+            this.btnAlert.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnAlert.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAlert.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAlert.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -546,9 +553,9 @@ namespace MeterReader.HelperForms
             this.btnCB.BackColor = System.Drawing.Color.White;
             this.btnCB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnCB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCB.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnCB.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnCB.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnCB.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnCB.FlatAppearance.BorderSize = 2;
+            this.btnCB.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -566,9 +573,9 @@ namespace MeterReader.HelperForms
             this.btnSR.BackColor = System.Drawing.Color.White;
             this.btnSR.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnSR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSR.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnSR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnSR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnSR.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnSR.FlatAppearance.BorderSize = 2;
+            this.btnSR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnSR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSR.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -586,9 +593,9 @@ namespace MeterReader.HelperForms
             this.btnBill.BackColor = System.Drawing.Color.White;
             this.btnBill.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnBill.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnBill.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnBill.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnBill.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnBill.FlatAppearance.BorderSize = 2;
+            this.btnBill.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnBill.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBill.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBill.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -606,9 +613,9 @@ namespace MeterReader.HelperForms
             this.btnDE.BackColor = System.Drawing.Color.White;
             this.btnDE.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnDE.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDE.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnDE.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnDE.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnDE.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnDE.FlatAppearance.BorderSize = 2;
+            this.btnDE.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnDE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDE.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -626,9 +633,9 @@ namespace MeterReader.HelperForms
             this.btnLS.BackColor = System.Drawing.Color.White;
             this.btnLS.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnLS.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnLS.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnLS.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnLS.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnLS.FlatAppearance.BorderSize = 2;
+            this.btnLS.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnLS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLS.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLS.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -646,9 +653,9 @@ namespace MeterReader.HelperForms
             this.btnInstant.BackColor = System.Drawing.Color.White;
             this.btnInstant.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnInstant.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnInstant.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.btnInstant.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.btnInstant.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.btnInstant.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.btnInstant.FlatAppearance.BorderSize = 2;
+            this.btnInstant.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.btnInstant.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInstant.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInstant.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
@@ -666,10 +673,10 @@ namespace MeterReader.HelperForms
             this.pnlSummarizedPacketTable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(248)))), ((int)(((byte)(250)))));
             this.pnlSummarizedPacketTable.Controls.Add(this.tableLayoutPanel3);
             this.pnlSummarizedPacketTable.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlSummarizedPacketTable.Location = new System.Drawing.Point(0, 312);
+            this.pnlSummarizedPacketTable.Location = new System.Drawing.Point(0, 305);
             this.pnlSummarizedPacketTable.Name = "pnlSummarizedPacketTable";
             this.pnlSummarizedPacketTable.Padding = new System.Windows.Forms.Padding(8, 0, 4, 8);
-            this.pnlSummarizedPacketTable.Size = new System.Drawing.Size(891, 306);
+            this.pnlSummarizedPacketTable.Size = new System.Drawing.Size(891, 313);
             this.pnlSummarizedPacketTable.TabIndex = 13;
             // 
             // tableLayoutPanel3
@@ -684,7 +691,7 @@ namespace MeterReader.HelperForms
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(879, 298);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(879, 305);
             this.tableLayoutPanel3.TabIndex = 11;
             // 
             // dgPacketsSummary
@@ -694,28 +701,29 @@ namespace MeterReader.HelperForms
             this.dgPacketsSummary.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgPacketsSummary.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgPacketsSummary.BackgroundColor = System.Drawing.Color.White;
+            this.dgPacketsSummary.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgPacketsSummary.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgPacketsSummary.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgPacketsSummary.ColumnHeadersHeight = 40;
             this.dgPacketsSummary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgPacketsSummary.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgPacketsSummary.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgPacketsSummary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgPacketsSummary.EnableHeadersVisualStyles = false;
             this.dgPacketsSummary.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(248)))), ((int)(((byte)(250)))));
@@ -724,19 +732,19 @@ namespace MeterReader.HelperForms
             this.dgPacketsSummary.MultiSelect = false;
             this.dgPacketsSummary.Name = "dgPacketsSummary";
             this.dgPacketsSummary.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dgPacketsSummary.RowHeadersVisible = false;
             this.dgPacketsSummary.RowHeadersWidth = 51;
             this.dgPacketsSummary.RowTemplate.Height = 32;
             this.dgPacketsSummary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgPacketsSummary.Size = new System.Drawing.Size(873, 259);
+            this.dgPacketsSummary.Size = new System.Drawing.Size(873, 266);
             this.dgPacketsSummary.TabIndex = 2;
             this.dgPacketsSummary.SelectionChanged += new System.EventHandler(this.dgvPackets_SelectionChanged);
             // 
@@ -757,7 +765,7 @@ namespace MeterReader.HelperForms
             this.lblFilePath.AutoEllipsis = true;
             this.lblFilePath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFilePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilePath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.lblFilePath.ForeColor = System.Drawing.Color.Black;
             this.lblFilePath.Location = new System.Drawing.Point(8, 5);
             this.lblFilePath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFilePath.MinimumSize = new System.Drawing.Size(100, 23);
@@ -775,12 +783,12 @@ namespace MeterReader.HelperForms
             this.tabResults.Controls.Add(this.tabXML);
             this.tabResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabResults.Location = new System.Drawing.Point(891, 312);
+            this.tabResults.Location = new System.Drawing.Point(891, 305);
             this.tabResults.Margin = new System.Windows.Forms.Padding(0);
             this.tabResults.Name = "tabResults";
             this.tabResults.Padding = new System.Drawing.Point(12, 6);
             this.tabResults.SelectedIndex = 0;
-            this.tabResults.Size = new System.Drawing.Size(457, 306);
+            this.tabResults.Size = new System.Drawing.Size(457, 313);
             this.tabResults.TabIndex = 14;
             // 
             // tabMP
@@ -791,7 +799,7 @@ namespace MeterReader.HelperForms
             this.tabMP.Margin = new System.Windows.Forms.Padding(0);
             this.tabMP.Name = "tabMP";
             this.tabMP.Padding = new System.Windows.Forms.Padding(4);
-            this.tabMP.Size = new System.Drawing.Size(449, 266);
+            this.tabMP.Size = new System.Drawing.Size(449, 273);
             this.tabMP.TabIndex = 2;
             this.tabMP.Text = "📦 Packet Detail";
             // 
@@ -804,28 +812,29 @@ namespace MeterReader.HelperForms
             this.dgPacketsDetail.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgPacketsDetail.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgPacketsDetail.BackgroundColor = System.Drawing.Color.White;
+            this.dgPacketsDetail.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgPacketsDetail.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgPacketsDetail.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(5);
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsDetail.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsDetail.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgPacketsDetail.ColumnHeadersHeight = 38;
             this.dgPacketsDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgPacketsDetail.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgPacketsDetail.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgPacketsDetail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgPacketsDetail.EnableHeadersVisualStyles = false;
             this.dgPacketsDetail.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(248)))), ((int)(((byte)(250)))));
@@ -837,7 +846,7 @@ namespace MeterReader.HelperForms
             this.dgPacketsDetail.RowHeadersWidth = 50;
             this.dgPacketsDetail.RowTemplate.Height = 28;
             this.dgPacketsDetail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgPacketsDetail.Size = new System.Drawing.Size(441, 258);
+            this.dgPacketsDetail.Size = new System.Drawing.Size(441, 265);
             this.dgPacketsDetail.TabIndex = 7;
             // 
             // tabPlain
@@ -848,7 +857,7 @@ namespace MeterReader.HelperForms
             this.tabPlain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPlain.Name = "tabPlain";
             this.tabPlain.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPlain.Size = new System.Drawing.Size(449, 268);
+            this.tabPlain.Size = new System.Drawing.Size(449, 272);
             this.tabPlain.TabIndex = 0;
             this.tabPlain.Text = "📄 Decrypted Packets";
             // 
@@ -857,13 +866,13 @@ namespace MeterReader.HelperForms
             this.txtPlainResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtPlainResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPlainResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPlainResult.Font = new System.Drawing.Font("Consolas", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPlainResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPlainResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.txtPlainResult.Location = new System.Drawing.Point(4, 4);
             this.txtPlainResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPlainResult.Name = "txtPlainResult";
             this.txtPlainResult.ReadOnly = true;
-            this.txtPlainResult.Size = new System.Drawing.Size(441, 260);
+            this.txtPlainResult.Size = new System.Drawing.Size(441, 264);
             this.txtPlainResult.TabIndex = 0;
             this.txtPlainResult.Text = "";
             // 
@@ -875,7 +884,7 @@ namespace MeterReader.HelperForms
             this.tabXML.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabXML.Name = "tabXML";
             this.tabXML.Padding = new System.Windows.Forms.Padding(4);
-            this.tabXML.Size = new System.Drawing.Size(449, 268);
+            this.tabXML.Size = new System.Drawing.Size(449, 272);
             this.tabXML.TabIndex = 1;
             this.tabXML.Text = "📋 XML View";
             // 
@@ -884,13 +893,13 @@ namespace MeterReader.HelperForms
             this.txtXmlResult.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(252)))), ((int)(((byte)(255)))));
             this.txtXmlResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtXmlResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtXmlResult.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtXmlResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtXmlResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.txtXmlResult.Location = new System.Drawing.Point(4, 4);
             this.txtXmlResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtXmlResult.Name = "txtXmlResult";
             this.txtXmlResult.ReadOnly = true;
-            this.txtXmlResult.Size = new System.Drawing.Size(441, 260);
+            this.txtXmlResult.Size = new System.Drawing.Size(441, 264);
             this.txtXmlResult.TabIndex = 0;
             this.txtXmlResult.Text = "";
             // 
@@ -898,10 +907,10 @@ namespace MeterReader.HelperForms
             // 
             this.splitter2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
             this.splitter2.Cursor = System.Windows.Forms.Cursors.VSplit;
-            this.splitter2.Location = new System.Drawing.Point(891, 312);
+            this.splitter2.Location = new System.Drawing.Point(891, 305);
             this.splitter2.Margin = new System.Windows.Forms.Padding(4);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(4, 306);
+            this.splitter2.Size = new System.Drawing.Size(4, 313);
             this.splitter2.TabIndex = 15;
             this.splitter2.TabStop = false;
             // 
@@ -911,8 +920,9 @@ namespace MeterReader.HelperForms
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar,
-            this.toolStripStatusTime});
+            this.toolStripStatusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 695);
+            this.statusStrip1.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStrip1.Size = new System.Drawing.Size(1348, 26);
@@ -921,19 +931,11 @@ namespace MeterReader.HelperForms
             // 
             // toolStripProgressBar
             // 
+            this.toolStripProgressBar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(233, 18);
+            this.toolStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.toolStripProgressBar.Visible = false;
-            // 
-            // toolStripStatusTime
-            // 
-            this.toolStripStatusTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.toolStripStatusTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.toolStripStatusTime.Name = "toolStripStatusTime";
-            this.toolStripStatusTime.Size = new System.Drawing.Size(1057, 20);
-            this.toolStripStatusTime.Spring = true;
-            this.toolStripStatusTime.Text = "00:00:00";
-            this.toolStripStatusTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // openFileDialog
             // 
@@ -945,6 +947,15 @@ namespace MeterReader.HelperForms
             this.saveFileDialog.DefaultExt = "txt";
             this.saveFileDialog.Filter = "Text Files|*.txt|XML Files|*.xml|All Files|*.*";
             this.saveFileDialog.Title = "Export Decrypted Data";
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(94)))), ((int)(((byte)(168)))));
+            this.toolStripStatusLabel.Margin = new System.Windows.Forms.Padding(1, 4, 1, 4);
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(56, 18);
+            this.toolStripStatusLabel.Text = "Status";
             // 
             // PushPacketDecrypterFrm
             // 
@@ -961,11 +972,12 @@ namespace MeterReader.HelperForms
             this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.tablelayout_Header);
             this.Controls.Add(this.statusStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(1200, 700);
             this.Name = "PushPacketDecrypterFrm";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Push Packet Decrypter v1.0";
+            this.Text = "Push Packet Decrypter";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.PushPacketDecrypter_Load);
             this.tablelayout_Header.ResumeLayout(false);
@@ -974,7 +986,8 @@ namespace MeterReader.HelperForms
             this.pnlCipherPacket.ResumeLayout(false);
             this.grpCipherInput.ResumeLayout(false);
             this.pnlButtons.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.pnlSettings.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -1014,7 +1027,6 @@ namespace MeterReader.HelperForms
         private System.Windows.Forms.TextBox txtBlockCipherKey;
         private System.Windows.Forms.GroupBox grpCipherInput;
         private System.Windows.Forms.RichTextBox txtCipherPacket;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button btnImportFile;
         private System.Windows.Forms.Button btnDecrypt;
         private System.Windows.Forms.Button btnExport;
@@ -1045,10 +1057,12 @@ namespace MeterReader.HelperForms
         private System.Windows.Forms.Button btnLS;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTime;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Panel pnlFileHeader;
+        private CheckBox chkIsDecryptedPacket;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private ToolStripStatusLabel toolStripStatusLabel;
     }
 }
